@@ -1,0 +1,65 @@
+(eval-when-compile
+  (require 'color-theme))
+
+
+(defun color-theme-borland-cpp ()
+  "Borland/Turbo C++ - like theme."
+  (interactive)
+  (color-theme-install
+	 '(color-theme-borland-cpp
+	   (
+      (foreground-color . "gold")
+      (background-color . "MidnightBlue")
+      (background-mode . dark)
+      (cursor-color . "green"))
+	   (default ((t (nil))))
+	   (region ((t (:foreground "black" :background "LightGrey"))))
+	   (underline ((t (:underline t))))
+	   (italic ((t (:italic t))))
+	   (bold-italic ((t (:bold t :italic t))))
+	   (bold ((t (:bold))))
+	   (fringe ((t (:background "MidnightBlue"))))
+	   (vertical-border ((t (:foreground "white"))))
+	   ;; ecb customizations
+	   (ecb-default-highlight-face ((t (:background "DarkSlateGray" :box (:line-width 1 :style released-button)))))
+	   (ecb-default-general-face ((t (:foreground "white"))))
+	   ;; coding customizations
+	   (font-lock-comment-face ((t (:foreground "LightGrey"))))
+	   (font-lock-comment-delimiter-face ((t (:foreground "LightGrey"))))
+	   (font-lock-doc-face ((t (:foreground "SandyBrown"))))
+	   (font-lock-keyword-face ((t (:foreground "white"))))
+	   (font-lock-preprocessor-face ((t (:foreground "green"))))
+	   (font-lock-string-face ((t (:foreground "cyan1"))))
+	   (font-lock-type-face ((t (:foreground "white"))))
+	   (font-lock-builtin-face ((t (:foreground "white"))))
+	   (font-lock-function-name-face ((t (:foreground "gold" :italic t))))
+     ;; (font-lock-function-name-face ((t (:foreground "selectedControlColor"))))
+	   ;; (font-lock-variable-name-face ((t (:foreground "green"))))
+	   ;; (font-lock-negation-char-face ((t (:foreground "white"))))
+	   (font-lock-number-face ((t (:foreground "cyan1"))))
+	   (font-lock-constant-face ((t (:foreground "gold"))))
+	   (font-lock-warning-face ((t (:foreground "red"))))
+	   (font-lock-operator-face ((t (:foreground "white"))))
+	   (font-lock-end-statement ((t (:foreground "white"))))
+	   ;; info-mode customization
+	   (info-menu-header ((t (:foreground "white"))))
+	   (info-title-1 ((t (:foreground "white"))))
+	   (info-title-2 ((t (:foreground "white"))))
+	   (info-title-3 ((t (:foreground "white"))))
+	   (info-title-4 ((t (:foreground "white"))))
+     (diredp-file-name ((t (:foreground "cyan1"))))
+     (diredp-file-suffix ((t (:foreground "cyan1"))))
+     (diredp-dir-heading ((t (:foreground "white" :background "MidnightBlue" :underline t ))))
+     (diredp-dir-priv ((t (:foreground "white" :background "MidnightBlue"))))
+     ;; file attributes in the dired
+     (diredp-read-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+     (diredp-write-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+     (diredp-exec-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+     ;; no attribute set
+     (diredp-no-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+     (diredp-flag-mark-line ((t (:background "MidnightBlue"))))
+     (diredp-flag-mark ((t (:background "MidnightBlue"))))
+     (diredp-inode+size ((t (:foreground "white"))))
+     (diredp-compressed-file-suffix ((t (:foreground "cyan1"))))
+     (diredp-ignored-file-name ((t (:foreground "cyan1"))))
+     )))

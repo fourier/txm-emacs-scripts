@@ -71,8 +71,10 @@
 (global-set-key [S-f8] 'txm-restore-bookmark)
 (global-set-key "\C-c\C-]" 'slime-close-all-parens-in-sexp)
 (global-set-key "\C-x\C-m" 'execute-extended-command)
-;; Fullscreen
-(global-set-key "\M-\r" 'ns-toggle-fullscreen)
+;; Fullscreen in Mac OS X 
+;; works only in special build of Emacs
+(when (fboundp 'ns-toggle-fullscreen)
+  (global-set-key "\M-\r" 'ns-toggle-fullscreen))
 ;; Switch btw frames like in Mac OS X
 (global-set-key "\M-`" 'other-frame)
 ;; begin/end of defun, alternative to Ctrl+Alt+A/E
@@ -440,7 +442,8 @@
 ;; In the end on initialization:
 (when (and window-system (eq system-type 'darwin))
   ;; 1) set fullscreen
-  (ns-toggle-fullscreen)
+  (when (fboundp 'ns-toggle-fullscreen)
+    (ns-toggle-fullscreen))
   ;; 2) split window
   (split-window-horizontally))
 

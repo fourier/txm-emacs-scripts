@@ -223,12 +223,11 @@
 ;; Do not create backup files (with ~ sign at the end)
 (setq make-backup-files nil)
 
-;; Switch off toolbar in windowed system
+;; Switch off toolbar
+(tool-bar-mode 0)
 ;; and off menu in console
 (if window-system
 		(progn
-			;; turn off toolbar
-			(tool-bar-mode 0)
 			;; turn on menu in window system 
 			(menu-bar-mode t)
 			;; turn off scrollbar

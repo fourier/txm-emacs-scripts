@@ -267,8 +267,7 @@ in both of them."
 (define-key dired-mode-map [delete] 'dired-do-delete)
 (define-key dired-mode-map [kp-delete] 'dired-do-delete)
 (unless window-system
-    (define-key dired-mode-map [deletechar] 'dired-do-delete))
-
+  (define-key dired-mode-map [deletechar] 'dired-do-delete))
 
 ;; compress hotkey as in FAR
 (define-key dired-mode-map [(S-f1)] 'txm-dired-compress-marked)
@@ -311,10 +310,15 @@ in both of them."
 ;; Backspace as in FAR - directory up
 (define-key dired-mode-map (kbd "<backspace>")
   'txm-dired-go-up-dir)
-
+;; in terminal "backspace" acts as <del>
 (unless window-system
-  (define-key dired-mode-map "\177"
+  (define-key dired-mode-map (kbd "<del>")
     'txm-dired-go-up-dir))
+
+;; Select other window like in FAR Alt-f1/f2
+(define-key dired-mode-map [(C-f1)] 'dired-other-window)
+(define-key dired-mode-map [(C-f2)] 'dired-other-window)
+
 
 
 ;; Ctrl-W switches to wdired-mode

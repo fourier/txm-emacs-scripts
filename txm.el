@@ -164,7 +164,8 @@
   (setq c-basic-offset 4)
   ;; always insert spaces signs when TAB is pressed
   (setq indent-tabs-mode nil)
-  (c-set-offset 'innamespace 0))
+  (c-set-offset 'innamespace 0)
+  (c-set-offset 'inline-open 0))
   ;(setq compile-command "make -k"))
 
 ;; add hook to C-modes
@@ -237,3 +238,6 @@
 (load "txm-colors.el")
 (color-theme-borland-cpp)
 
+
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/tup_cfg.el"))
+  (load "tup_cfg.el"))

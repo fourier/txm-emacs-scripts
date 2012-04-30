@@ -14,6 +14,7 @@
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
+;; (push (substitute-in-file-name "~/.emacs.d/cc-mode-5.32") load-path)
 (push "/opt/local/bin" exec-path)
 (push "/opt/local/lib/postgresql83/bin" exec-path)
 
@@ -45,6 +46,7 @@
 ;; bind Hyper modfier to Alt on Mac OS X
 (setq mac-option-modifier 'hyper)
 
+;(global-set-key [C-tab] 'other-window)
 (global-set-key [f6] 'other-window)
 ;; for terminal w/o function keys
 ;; C-_ and C-/ will be other-window
@@ -60,7 +62,7 @@
 (global-set-key [M-down] 'scroll-other-window-up-1) ; Alt-Up moves text in other window down
 (global-set-key [M-f4] 'save-buffers-kill-emacs)
 (global-set-key [S-f7] 'query-replace)
-(global-set-key [f2] 'save-buffer)
+(global-set-key [f2] 'eshell)
 (global-set-key "\C-b" 'ido-switch-buffer)
 (global-set-key "\C-xj" 'join-line)
 ;; Tags keybindings
@@ -80,7 +82,12 @@
 ;;(global-set-key "\M-]" 'end-of-defun)
 (global-set-key [M-left] 'backward-sexp)
 (global-set-key [M-right] 'forward-sexp)
-
+;; keypad insert acts as C-x r i to insert from register
+(global-set-key [kp-insert] 'insert-register)
+;; Ctrl + keypad insert acts as C-x r s to store to register
+(global-set-key [C-kp-insert] 'copy-to-register)
+(global-set-key "\C-j" 'indent-new-comment-line)
+;;
 
 ;;__________________________________________________________________________
 
@@ -266,6 +273,7 @@
   ;; (setq inferior-lisp-program "alisp")
   ;; (setq inferior-lisp-program (substitute-in-file-name "~/AllegroCL/mlisp"))
   (setq inferior-lisp-program "sbcl")
+  ;; (setq inferior-lisp-program "~/Sources/sbcl-1.0.29-x86-darwin/run-sbcl.sh")
   ;; (setq inferior-lisp-program "clisp -K full")
   (setq ns-use-system-highlight-color nil))
 

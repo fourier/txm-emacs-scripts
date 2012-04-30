@@ -312,7 +312,8 @@ in both of them."
   'txm-dired-go-up-dir)
 ;; in terminal "backspace" acts as <del>
 (unless window-system
-  (define-key dired-mode-map (kbd "<del>")
+;;  (define-key dired-mode-map (kbd "<del>")
+  (define-key dired-mode-map "\177"
     'txm-dired-go-up-dir))
 
 ;; Select other window like in FAR Alt-f1/f2

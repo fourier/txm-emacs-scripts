@@ -366,10 +366,22 @@
 (require 'tex-site)
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq TeX-save-query nil)
+(setq TeX-PDF-mode t)
+(setq TeX-output-view-style
+      (quote
+       (("^pdf$" "." "xdg-open %o")
+        ("^html?$" "." "chromium-browser %o"))))
 
- 
+
+
 (load "txm.el")
 (load "txm-dired.el")
+(let ((gnus-config-name "~/.emacs.d/txm-gnus.el"))
+  (when (file-exists-p gnus-config-name)
+    (load gnus-config-name)))
 
 ;; Mathematica
 ;;(setq mathematica-command-line "/Applications/Mathematica Home Edition.app/Contents/MacOS/MathKernel")
@@ -386,7 +398,7 @@
 
 (defun txm-set-frame-font ()
   (cond ((eq system-type 'gnu/linux)
-         (set-frame-font "Monospace-12:antialias=none"))
+         (set-frame-font "Monospace-14:antialias=none"))
         ((eq system-type 'darwin)
          (progn
            (setq mac-allow-anti-aliasing nil)
@@ -444,3 +456,15 @@
   ;; 2) split window
   (split-window-horizontally))
 
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4"))))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )

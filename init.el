@@ -14,9 +14,14 @@
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
+(push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path)
+
+;; Configuration for MacPorts
+(when (eq system-type 'darwin)
+  (push "/opt/local/bin" exec-path)
+  (push "/opt/local/lib/postgresql83/bin" exec-path)
+  (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH"))))
 ;; (push (substitute-in-file-name "~/.emacs.d/cc-mode-5.32") load-path)
-(push "/opt/local/bin" exec-path)
-(push "/opt/local/lib/postgresql83/bin" exec-path)
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
@@ -37,14 +42,17 @@
 ;;(require 'tuareg)
 ;; hex-view
 (require 'hexview-mode)
+(require 'anything-config)
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
 
-;; my keybindings
-;; bind Meta to Command on Mac OS X
-(setq mac-command-modifier 'meta)
-;; bind Hyper modfier to Alt on Mac OS X
-(setq mac-option-modifier 'hyper)
+
+;; Mac keybindings
+(when (eq system-type 'darwin)
+  ;; bind Meta to Command on Mac OS X
+  (setq mac-command-modifier 'meta)
+  ;; bind Hyper modfier to Alt on Mac OS X
+  (setq mac-option-modifier 'hyper))
 
 ;(global-set-key [C-tab] 'other-window)
 (global-set-key [f6] 'other-window)
@@ -73,8 +81,10 @@
 (global-set-key [S-f8] 'txm-restore-bookmark)
 (global-set-key "\C-c\C-]" 'slime-close-all-parens-in-sexp)
 (global-set-key "\C-x\C-m" 'execute-extended-command)
-;; Fullscreen
-(global-set-key "\M-\r" 'ns-toggle-fullscreen)
+;; Fullscreen in Mac OS X 
+;; works only in special build of Emacs
+(when (fboundp 'ns-toggle-fullscreen)
+  (global-set-key "\M-\r" 'ns-toggle-fullscreen))
 ;; Switch btw frames like in Mac OS X
 (global-set-key "\M-`" 'other-frame)
 ;; begin/end of defun, alternative to Ctrl+Alt+A/E
@@ -196,7 +206,7 @@
 (show-paren-mode)
 
 ; parenthesis mode. see mic-paren for description
-(when (or (string-match "XEmacs\\|Lucid" emacs-version) window-system)
+(when window-system
   ;; 
 	(paren-activate)     ; activating
 	;; (setq paren-match-face '(underline paren-face))
@@ -305,8 +315,6 @@
 (set (make-local-variable lisp-indent-function)
 	 'common-lisp-indent-function)
 
-(setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH")))
-
 ;; Python customization 
 (defun python-mode-customization ()
   ;; set proper tab width in Python mode
@@ -373,16 +381,13 @@
 (require 'tex-site)
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
+;; compile documents to pdf
+(setq TeX-PDF-mode t)
+(setq TeX-view-program-list '(("Open" "open %o")))
+(setq TeX-view-program-selection '((output-pdf "Open")))
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
-(setq TeX-PDF-mode t)
-(setq TeX-output-view-style
-      (quote
-       (("^pdf$" "." "xdg-open %o")
-        ("^html?$" "." "chromium-browser %o"))))
-
-
 
 (load "txm.el")
 (load "txm-dired.el")
@@ -428,8 +433,9 @@
 ;; doesn't work. why?
 ;; (add-to-list 'Info-default-directory-list "/opt/local/share/info")
 ;; (add-to-list 'Info-directory-list "/opt/local/share/info")
-(eval-after-load 'info
-  '(add-to-list 'Info-default-directory-list "/opt/local/share/info"))
+(when (eq system-type 'darwin)
+  (eval-after-load 'info
+    '(add-to-list 'Info-default-directory-list "/opt/local/share/info")))
 
 ;; set the 'locate' command to use Spotlight via cmd-line utility mdfind
 (when (eq system-type 'darwin)
@@ -459,7 +465,8 @@
 ;; In the end on initialization:
 (when (and window-system (eq system-type 'darwin))
   ;; 1) set fullscreen
-  (ns-toggle-fullscreen)
+  (when (fboundp 'ns-toggle-fullscreen)
+    (ns-toggle-fullscreen))
   ;; 2) split window
   (split-window-horizontally))
 

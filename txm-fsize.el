@@ -36,7 +36,7 @@
 and returns the string with the number of bytes"
   (message (concat "Processing " path "..."))
   (let ((du-command
-         (if (string= system-type "darwin")
+         (if (eq system-type 'darwin)
              "/opt/local/bin/gdu"
            "du")))
     (with-temp-buffer

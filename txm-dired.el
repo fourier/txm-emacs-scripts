@@ -37,7 +37,7 @@
   "Calculate size of the directory or file using Unix 'wc' tool"
   (message (concat "Processing " path "..."))
   (let ((du-command
-         (if (string= system-type "darwin")
+         (if (eq system-type 'darwin)
              "/opt/local/bin/gdu"
            "du")))
     (with-temp-buffer

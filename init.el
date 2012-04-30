@@ -14,8 +14,14 @@
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
-(push "/opt/local/bin" exec-path)
-(push "/opt/local/lib/postgresql83/bin" exec-path)
+(push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path)
+
+;; Configuration for MacPorts
+(when (eq system-type 'darwin)
+  (push "/opt/local/bin" exec-path)
+  (push "/opt/local/lib/postgresql83/bin" exec-path)
+  (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH"))))
+
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
@@ -36,14 +42,17 @@
 ;;(require 'tuareg)
 ;; hex-view
 (require 'hexview-mode)
+(require 'anything-config)
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
 
-;; my keybindings
-;; bind Meta to Command on Mac OS X
-(setq mac-command-modifier 'meta)
-;; bind Hyper modfier to Alt on Mac OS X
-(setq mac-option-modifier 'hyper)
+
+;; Mac keybindings
+(when (eq system-type 'darwin)
+  ;; bind Meta to Command on Mac OS X
+  (setq mac-command-modifier 'meta)
+  ;; bind Hyper modfier to Alt on Mac OS X
+  (setq mac-option-modifier 'hyper))
 
 (global-set-key [f6] 'other-window)
 ;; for terminal w/o function keys
@@ -191,7 +200,7 @@
 (show-paren-mode)
 
 ; parenthesis mode. see mic-paren for description
-(when (or (string-match "XEmacs\\|Lucid" emacs-version) window-system)
+(when window-system
   ;; 
 	(paren-activate)     ; activating
 	;; (setq paren-match-face '(underline paren-face))
@@ -300,8 +309,6 @@
 (set (make-local-variable lisp-indent-function)
 	 'common-lisp-indent-function)
 
-(setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH")))
-
 ;; Python customization 
 (defun python-mode-customization ()
   ;; set proper tab width in Python mode
@@ -368,8 +375,12 @@
 (require 'tex-site)
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
+;; compile documents to pdf
+(setq TeX-PDF-mode t)
+(setq TeX-view-program-list '(("Open" "open %o")))
+(setq TeX-view-program-selection '((output-pdf "Open")))
 
- 
+
 (load "txm.el")
 (load "txm-dired.el")
 
@@ -411,8 +422,9 @@
 ;; doesn't work. why?
 ;; (add-to-list 'Info-default-directory-list "/opt/local/share/info")
 ;; (add-to-list 'Info-directory-list "/opt/local/share/info")
-(eval-after-load 'info
-  '(add-to-list 'Info-default-directory-list "/opt/local/share/info"))
+(when (eq system-type 'darwin)
+  (eval-after-load 'info
+    '(add-to-list 'Info-default-directory-list "/opt/local/share/info")))
 
 ;; set the 'locate' command to use Spotlight via cmd-line utility mdfind
 (when (eq system-type 'darwin)

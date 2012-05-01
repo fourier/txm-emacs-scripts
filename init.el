@@ -384,8 +384,26 @@
 (load "preview-latex.el" nil t t)
 ;; compile documents to pdf
 (setq TeX-PDF-mode t)
-(setq TeX-view-program-list '(("Open" "open %o")))
-(setq TeX-view-program-selection '((output-pdf "Open")))
+(cond ((eq system-type 'gnu/linux)
+       (progn
+         (setq TeX-view-program-selection
+               '((output-dvi "DVI Viewer")
+                 (output-pdf "PDF Viewer")
+                 (output-html "Chromium Browser")))
+         (setq TeX-view-program-list
+               '(("DVI Viewer" "xdg-open %o")
+                 ("PDF Viewer" "xdg-open %o")
+                 ("Chromium Browser" "chromium-browser %o")))))
+      ((eq system-type 'darwin)
+       (progn
+         (setq TeX-view-program-selection
+               '((output-dvi "DVI Viewer")
+                 (output-pdf "PDF Viewer")
+                 (output-html "Safari")))
+         (setq TeX-view-program-list
+               '(("DVI Viewer" "open %o")
+                 ("PDF Viewer" "open %o")
+                 ("Safari" "safari %o"))))))
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)

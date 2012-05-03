@@ -184,7 +184,9 @@
 (global-set-key [(meta z)] 'undo)
 (global-set-key [(control z)] 'undo)
 (global-set-key [(meta c)] 'copy-region-as-kill)
+(global-set-key [(super c)] 'copy-region-as-kill)
 (global-set-key [(meta v)] 'yank)
+(global-set-key [(super v)] 'yank)
 
 ;; Scroll settings like in ordinary applications
 (setq scroll-step 1)
@@ -385,10 +387,26 @@
 (load "preview-latex.el" nil t t)
 ;; compile documents to pdf
 (setq TeX-PDF-mode t)
-(setq TeX-view-program-list '(("Open" "xdg-open %o")))
-(setq TeX-view-program-selection '((output-pdf "Open")))
-
-
+(cond ((eq system-type 'gnu/linux)
+       (progn
+         (setq TeX-view-program-selection
+               '((output-dvi "DVI Viewer")
+                 (output-pdf "PDF Viewer")
+                 (output-html "Chromium Browser")))
+         (setq TeX-view-program-list
+               '(("DVI Viewer" "xdg-open %o")
+                 ("PDF Viewer" "xdg-open %o")
+                 ("Chromium Browser" "chromium-browser %o")))))
+      ((eq system-type 'darwin)
+       (progn
+         (setq TeX-view-program-selection
+               '((output-dvi "DVI Viewer")
+                 (output-pdf "PDF Viewer")
+                 (output-html "Safari")))
+         (setq TeX-view-program-list
+               '(("DVI Viewer" "open %o")
+                 ("PDF Viewer" "open %o")
+                 ("Safari" "safari %o"))))))
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
@@ -485,4 +503,4 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- )
+ '(preview-reference-face ((t (:foreground "white")))))

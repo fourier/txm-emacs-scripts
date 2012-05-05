@@ -30,6 +30,8 @@
 	   (font-lock-keyword-face ((t (:foreground "white"))))
 	   (font-lock-preprocessor-face ((t (:foreground "green"))))
 	   (font-lock-string-face ((t (:foreground "cyan1"))))
+     (font-latex-string-face ((t (:foreground "cyan1"))))
+     (font-latex-math-face ((t (:foreground "aquamarine1"))))
 	   (font-lock-type-face ((t (:foreground "white"))))
 	   (font-lock-builtin-face ((t (:foreground "white"))))
 	   (font-lock-function-name-face ((t (:foreground "gold" :italic t))))

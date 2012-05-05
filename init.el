@@ -14,7 +14,8 @@
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
-(push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path)
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/anything-config/"))
+  (push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path))
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
@@ -42,7 +43,8 @@
 ;;(require 'tuareg)
 ;; hex-view
 (require 'hexview-mode)
-(require 'anything-config)
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/anything-config/"))
+  (require 'anything-config))
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
 
@@ -183,7 +185,9 @@
 (global-set-key [(meta z)] 'undo)
 (global-set-key [(control z)] 'undo)
 (global-set-key [(meta c)] 'copy-region-as-kill)
+(global-set-key [(super c)] 'copy-region-as-kill)
 (global-set-key [(meta v)] 'yank)
+(global-set-key [(super v)] 'yank)
 
 ;; Scroll settings like in ordinary applications
 (setq scroll-step 1)
@@ -234,12 +238,11 @@
 ;; Do not create backup files (with ~ sign at the end)
 (setq make-backup-files nil)
 
-;; Switch off toolbar in windowed system
+;; Switch off toolbar
+(tool-bar-mode 0)
 ;; and off menu in console
 (if window-system
 		(progn
-			;; turn off toolbar
-			(tool-bar-mode 0)
 			;; turn on menu in window system 
 			(menu-bar-mode t)
 			;; turn off scrollbar
@@ -501,4 +504,4 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- )
+ '(preview-reference-face ((t (:foreground "white")))))

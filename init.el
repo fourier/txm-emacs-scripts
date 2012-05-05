@@ -71,7 +71,8 @@
 (global-set-key [M-f4] 'save-buffers-kill-emacs)
 (global-set-key [S-f7] 'query-replace)
 (global-set-key [f2] 'eshell)
-(global-set-key "\C-b" 'ido-switch-buffer)
+;; commented - I don't use it anyways
+;;(global-set-key "\C-b" 'ido-switch-buffer)
 (global-set-key "\C-xj" 'join-line)
 ;; Tags keybindings
 ;;(global-set-key [(control ?.)] 'txm-goto-tag-at-point)

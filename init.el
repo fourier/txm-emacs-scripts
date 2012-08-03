@@ -438,7 +438,9 @@
          (progn
            (setq mac-allow-anti-aliasing nil)
            (setq mac-allow-anti-aliasing t)
-           (set-frame-font "Monaco-12")))
+           (if (string= (getenv "HOSTNAME") "veroveli-mbp.local")
+               (set-frame-font "Monaco-14")
+             (set-frame-font "Monaco-12")))
         ((eq system-type 'windows-nt)
          (message "windows-nt"))))
 

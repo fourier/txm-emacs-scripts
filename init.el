@@ -1,15 +1,10 @@
 ;;__________________________________________________________________________
-;; Additional directories to search for emacs extensions
-
-;; (eval-and-compile
-;;   (unless (fboundp 'declare-function) declare-function (&rest  r)))
+;;;; Additional directories to search for emacs extensions
 
 (push (substitute-in-file-name "~/.emacs.d/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/color-theme-6.6.0") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
-;; elib needed for avltree in JDE
-;; (push (substitute-in-file-name "~/.emacs.d/elib-1.0") load-path)
 (push (substitute-in-file-name "~/.emacs.d/yasnippet-0.6.1c/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
@@ -47,6 +42,7 @@
   (require 'anything-config))
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
+
 (autoload 'markdown-mode "markdown-mode.el"
    "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
@@ -60,11 +56,8 @@
   ;; bind Hyper modfier to Alt on Mac OS X
   (setq mac-option-modifier 'hyper))
 
-;(global-set-key [C-tab] 'other-window)
 (global-set-key [f6] 'other-window)
 ;; for terminal w/o function keys
-;; C-_ and C-/ will be other-window
-;(global-set-key (kbd "\C-_") 'other-window)
 (global-set-key (kbd "\C-x\C-o") 'other-window)
 (global-set-key "\C-xg" 'goto-line)
 (global-set-key "\r" 'newline-and-indent)
@@ -77,7 +70,6 @@
 (global-set-key [M-f4] 'save-buffers-kill-emacs)
 (global-set-key [S-f7] 'query-replace)
 (global-set-key [f2] 'eshell)
-(global-set-key "\C-b" 'ido-switch-buffer)
 (global-set-key "\C-xj" 'join-line)
 ;; Tags keybindings
 ;;(global-set-key [(control ?.)] 'txm-goto-tag-at-point)
@@ -163,9 +155,6 @@
 
 ;; set autosave timeout to 2 minutes
 (setq auto-save-timeout 120)
-; C/C++ indentation
-(setq c-default-style
-           '((java-mode . "java") (other . "stroustrup")))
       
 ;; Save desktop status
 ;; set default directory for saving desktop files
@@ -215,7 +204,6 @@
 
 ; parenthesis mode. see mic-paren for description
 (when window-system
-  ;; 
 	(paren-activate)     ; activating
 	;; (setq paren-match-face '(underline paren-face))
 	;; (setq paren-sexp-mode t)
@@ -254,16 +242,18 @@
 		(menu-bar-mode 0))
 
 ;; Misc customizations
-(fset 'yes-or-no-p 'y-or-n-p)           ;replace y-e-s by y
-(setq inhibit-startup-message t)        ;no splash screen
-(defconst use-backup-dir t)             ;use backup directory
-(defconst query-replace-highlight t)    ;highlight during query
-(defconst search-highlight t)           ;highlight incremental search
+(fset 'yes-or-no-p 'y-or-n-p)           ; replace y-e-s by y
+(setq inhibit-startup-message t)        ; no splash screen
+(defconst use-backup-dir t)             ; use backup directory
+(defconst query-replace-highlight t)    ; highlight during query
+(defconst search-highlight t)           ; highlight incremental search
 
 ;; workaround: do not start tramp even having tramp'ed files in
 ;; previous session
 (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-(recentf-mode 1)                        ;recently edited files in menu
+
+;; recently edited files in menu
+(recentf-mode 1)                        
 
 
 
@@ -436,11 +426,16 @@
 
 ;; Automatically reread changed files from disk
 (global-auto-revert-mode t)
-;; Language environoment
-(set-language-environment "UTF-8")
 
 ;; Ediff customizations
 (setq ediff-split-window-function 'split-window-horizontally)
+
+(defun txm-hostname ()
+  (let ((hostname))
+    (with-temp-buffer
+      (call-process "hostname" nil (current-buffer))
+      (setq hostname (buffer-substring 1 (1- (point-max))))
+      hostname)))
 
 
 (defun txm-set-frame-font ()
@@ -450,7 +445,9 @@
          (progn
            (setq mac-allow-anti-aliasing nil)
            (setq mac-allow-anti-aliasing t)
-           (set-frame-font "Monaco-12")))
+           (if (string= (txm-hostname) "veroveli-mbp.local")
+               (set-frame-font "Monaco-14")
+             (set-frame-font "Monaco-12"))))
         ((eq system-type 'windows-nt)
          (message "windows-nt"))))
 
@@ -465,7 +462,7 @@
 ;; Qt Project files mode
 (add-to-list 'auto-mode-alist '("\\.pr[io]$" . qt-pro-mode))
 
-;; doesn't work. why?
+;; TODO: doesn't work. why?
 ;; (add-to-list 'Info-default-directory-list "/opt/local/share/info")
 ;; (add-to-list 'Info-directory-list "/opt/local/share/info")
 (when (eq system-type 'darwin)
@@ -494,16 +491,16 @@
 (when (getenv "STY")
    (define-key function-key-map (kbd "<select>") (kbd "<end>"))
    (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
-
        
 
 ;; In the end on initialization:
 (when (and window-system (eq system-type 'darwin))
-  ;; 1) set fullscreen
+  ;; full-screen options
   (when (fboundp 'ns-toggle-fullscreen)
-    (ns-toggle-fullscreen))
-  ;; 2) split window
-  (split-window-horizontally))
+    ;; 1) set fullscreen
+    (ns-toggle-fullscreen)
+    ;; 2) split window
+    (split-window-horizontally)))
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.

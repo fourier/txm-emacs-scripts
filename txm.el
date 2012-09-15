@@ -47,7 +47,7 @@
       (select-window window)
       (message  (symbol-name major-mode))
       (cond ((eq major-mode 'help-mode)
-            (View-quit))
+             (or (View-quit) (quit-window)))
             ((or (eq major-mode 'compilation-mode)
                  (eq major-mode 'completion-list-mode)
                  (eq major-mode 'Man-mode)
@@ -172,10 +172,9 @@
 (add-hook 'c-mode-hook 'txm-c-mode-customization)
 (add-hook 'c++-mode-hook 'txm-c-mode-customization)
 
-;; default indentation style
-(setq c-default-style "stroustrup")
-
-
+;; C/C++ indentation style
+(setq c-default-style
+           '((java-mode . "java") (other . "stroustrup")))
 
 
 ;;

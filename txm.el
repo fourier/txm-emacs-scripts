@@ -149,7 +149,8 @@
      (define-key c++-mode-map "\C-d" 'dired-jump)
      (define-key c-mode-map "\M-d" 'dired-jump-other-window)
      (define-key c++-mode-map "\M-d" 'dired-jump-other-window)
-     ;; redefine 
+     ;; redefine
+     (define-key c-mode-map [(f1)] 'man)
      (define-key c-mode-map [(ctrl .)] 'txm-goto-tag-at-point)
      (define-key c++-mode-map [(ctrl .)] 'txm-goto-tag-at-point)))
      ;; (define-key c-mode-map [(ctrl ,)] 'pop-tag-mark)

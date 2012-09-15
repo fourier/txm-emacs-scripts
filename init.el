@@ -47,6 +47,10 @@
   (require 'anything-config))
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+   (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 
 ;; Mac keybindings
@@ -374,6 +378,15 @@
 ;; Start emacs as a server for emacsclient application
 (server-start)
 
+;; mutt configuration
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+(add-hook 'message-mode-hook
+          '(lambda ()
+             (define-key message-mode-map "\C-c\C-c" '(lambda ()
+                                           "save and exit quickly"
+                                           (interactive)
+                                           (save-buffer)
+                                           (server-edit)))))
 ;; Spell checking
 ;; Turn on spell checking in comments
 ;;(flyspell-prog-mode)
@@ -432,7 +445,7 @@
 
 (defun txm-set-frame-font ()
   (cond ((eq system-type 'gnu/linux)
-         (set-frame-font "Monospace-14:antialias=none"))
+         (set-frame-font "Monospace-12:antialias=none"))
         ((eq system-type 'darwin)
          (progn
            (setq mac-allow-anti-aliasing nil)

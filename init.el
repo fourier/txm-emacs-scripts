@@ -9,10 +9,12 @@
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/anything-config/"))
-  (push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path))
-(push (substitute-in-file-name "~/Sources/loccur") load-path)
-
+(let ((anything-path (substitute-in-file-name "~/.emacs.d/anything-config/")))
+  (when (file-exists-p anything-path)
+    (push anything-path) load-path))
+(let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
+  (when (file-exists-p loccur-path)
+    (push loccur-path load-path)))
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
   (push "/opt/local/bin" exec-path)

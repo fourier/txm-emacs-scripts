@@ -16,6 +16,7 @@
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/anything-config/"))
   (push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path))
+(push (substitute-in-file-name "~/Sources/loccur") load-path)
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
@@ -72,6 +73,7 @@
 (global-set-key [M-down] 'scroll-other-window-up-1) ; Alt-Up moves text in other window down
 (global-set-key [M-f4] 'save-buffers-kill-emacs)
 (global-set-key [S-f7] 'query-replace)
+(global-set-key [f5] 'revert-buffer)
 (global-set-key [f2] 'eshell)
 (global-set-key "\C-b" 'ido-switch-buffer)
 (global-set-key "\C-xj" 'join-line)
@@ -261,7 +263,13 @@
 (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
 (recentf-mode 1)                        ;recently edited files in menu
 
-
+;; Lisp customization
+;; (font-lock-add-keywords
+;;  'emacs-lisp-mode
+;;  `(("\\<lambda\\>"
+;;     (0 (progn (compose-region (match-beginning 0) (match-end 0)
+;;                               ,(make-char 'greek-iso8859-7 107))
+;;               nil)))))
 
 
 ;; Haskell customization
@@ -432,7 +440,7 @@
 
 (defun txm-set-frame-font ()
   (cond ((eq system-type 'gnu/linux)
-         (set-frame-font "Monospace-14:antialias=none"))
+         (set-frame-font "Monospace-12:antialias=none"))
         ((eq system-type 'darwin)
          (progn
            (setq mac-allow-anti-aliasing nil)
@@ -497,7 +505,8 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4"))))
+ '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
+ '(safe-local-variable-values (quote ((unittest-name . anptotalpowerconssv) (unittest-name . currentsv) (unittest-name . anusupervisionserviceprovidertest) (unittest-name . feedersv) (unittest-name . CurrentMeas) (unittest-name . VSWRMeasSupervision) (unittest-name . tmaSupervision) (unittest-name . anusupervisionservicetest)))))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.

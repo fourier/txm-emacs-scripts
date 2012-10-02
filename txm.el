@@ -26,6 +26,28 @@
               (word-end (second word-pair)))
           (buffer-substring word-start word-end)))))
 
+(defun txm-goto-tag-under-mouse (event)
+  (interactive "e")
+  (let (name sp sm mouse beg end cmd mmtype)
+    (save-match-data
+      (save-excursion
+        (set-buffer (window-buffer (posn-window (event-start event))))
+        (when (or (eq major-mode 'c-mode)
+                  (eq major-mode 'c++-mode))
+          (setq mouse (goto-char (posn-point (event-start event))))
+          (goto-char mouse)
+          ;; (setq name (txm-c-identifier-at-point-string))))
+          (setq name (thing-at-point 'word))))
+      ;; check if name is null, meaning they clicked on no word
+      (if (or (null name)
+              (and (stringp name) (string= name "" )))
+          (error "No string to pass to function")
+        (find-tag name)))))
+
+
+(global-set-key [C-down-mouse-2] 'txm-goto-tag-under-mouse)
+;; (global-set-key [mouse-2] 'txm-goto-tag-under-mouse)
+(global-set-key [S-mouse-2] 'pop-tag-mark)
 
 (defun txm-set-bookmark ()
   (interactive)
@@ -144,7 +166,8 @@
 
 (eval-after-load "cc-mode"
   '(progn
-     (define-key c-mode-map [f7] 'compile)
+     (define-key c-mode-map [f7] 'lrci-compile)
+     (define-key c++-mode-map [f7] 'lrci-compile)
      (define-key c-mode-map "\C-d" 'dired-jump)
      (define-key c++-mode-map "\C-d" 'dired-jump)
      (define-key c-mode-map "\M-d" 'dired-jump-other-window)

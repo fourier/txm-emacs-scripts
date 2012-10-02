@@ -9,6 +9,8 @@
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
 (push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
+(push (substitute-in-file-name "~/.emacs.d/scala-mode") load-path)
+(push (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp") load-path)
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/anything-config/"))
   (push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path))
 
@@ -34,6 +36,8 @@
 (require 'recentf)
 (require 'yasnippet)
 (require 'fill-column-indicator)
+(require 'scala-mode-auto)
+(require 'ensime)
 ;; for OCAML
 ;;(require 'tuareg)
 ;; hex-view
@@ -475,6 +479,14 @@
 
 ;; set the default mode for new buffers to text-mode instead of Fundamental
 (setq-default major-mode 'text-mode)
+
+
+;; Scala and Ensime customization
+;; This step causes the ensime-mode to be started whenever
+;; scala-mode is started for a buffer. You may have to customize this step
+;; if you're not using the standard scala mode.
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+
 
 ;; ERC customization:
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))

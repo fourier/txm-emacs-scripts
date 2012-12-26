@@ -29,7 +29,7 @@
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
-(require 'quack)
+;;(require 'quack)
 (require 'flymake)
 (require 'python-mode)
 (require 'color-theme)
@@ -357,6 +357,7 @@
 
 
 
+
 ;; Custom functions to move line-wise buffers in other window
 ;; shall be used with keystrokes like Alt-up and Alt-down
 (defun scroll-other-window-up-1 ()
@@ -470,6 +471,11 @@
 
 (txm-set-frame-font)
 
+;; not need to be commited/merged!!!
+(when (string= (txm-hostname) "txmhub.com")
+  (setenv "_JAVA_OPTIONS" "-Xms64m -Xmx128m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewSize=10m -XX:MaxNewSize=10m -XX:SurvivorRatio=6 -XX:TargetSurvivorRatio=80 -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled"))
+
+
 ;; replace buffers menu with ibuffer
 (defalias 'list-buffers 'ibuffer)
 
@@ -500,6 +506,11 @@
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
+;; Flex/jlex customization
+(autoload 'jflex-mode "jflex-mode" nil t)
+(setq auto-mode-alist (cons '("\\(\\.flex\\|\\.jflex\\|\\.jlex\\|\\.lex\\)\\'" . jflex-mode) auto-mode-alist))
+
+
 
 ;; ERC customization:
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
@@ -528,15 +539,16 @@
     (split-window-horizontally)))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
+ '(quack-programs (quote ("gui" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "gu" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
  '(safe-local-variable-values (quote ((unittest-name . anptotalpowerconssv) (unittest-name . currentsv) (unittest-name . anusupervisionserviceprovidertest) (unittest-name . feedersv) (unittest-name . CurrentMeas) (unittest-name . VSWRMeasSupervision) (unittest-name . tmaSupervision) (unittest-name . anusupervisionservicetest)))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(preview-reference-face ((t (:foreground "white")))))

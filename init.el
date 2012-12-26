@@ -11,11 +11,9 @@
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/scala-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp") load-path)
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/anything-config/"))
-  (push (substitute-in-file-name "~/.emacs.d/anything-config/") load-path))
 (let ((anything-path (substitute-in-file-name "~/.emacs.d/anything-config/")))
   (when (file-exists-p anything-path)
-    (push anything-path) load-path))
+    (push anything-path load-path)))
 (let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
@@ -44,6 +42,7 @@
 (require 'fill-column-indicator)
 (require 'scala-mode-auto)
 (require 'ensime)
+(require 'cl)
 ;; for OCAML
 ;;(require 'tuareg)
 ;; hex-view
@@ -57,6 +56,10 @@
    "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
    (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
+;; Swap "C-u" and "C-x", so it's easier to type on Dvorak layout
+(keyboard-translate ?\C-u ?\C-x)
+(keyboard-translate ?\C-x ?\C-u)
 
 
 ;; Mac keybindings

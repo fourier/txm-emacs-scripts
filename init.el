@@ -94,7 +94,8 @@
 (global-set-key [f8] 'txm-set-bookmark)
 (global-set-key [S-f8] 'txm-restore-bookmark)
 (global-set-key "\C-c\C-]" 'slime-close-all-parens-in-sexp)
-(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\M-u" 'execute-extended-command)
+
 ;; Fullscreen in Mac OS X 
 ;; works only in special build of Emacs
 (when (fboundp 'ns-toggle-fullscreen)

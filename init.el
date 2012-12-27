@@ -41,8 +41,10 @@
 (require 'recentf)
 (require 'yasnippet)
 (require 'fill-column-indicator)
-(require 'scala-mode-auto)
-(require 'ensime)
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/scala-mode/"))
+  (require 'scala-mode-auto))
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp"))
+  (require 'ensime))
 (require 'cl)
 ;; for OCAML
 ;;(require 'tuareg)

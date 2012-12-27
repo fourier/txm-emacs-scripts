@@ -13,9 +13,12 @@
 (let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
   (when (file-exists-p helm-path)
     (push helm-path load-path)))
+(push (substitute-in-file-name "~/.emacs.d/scala-mode") load-path)
+(push (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp") load-path)
 (let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
+
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
   (push "/opt/local/bin" exec-path)
@@ -25,7 +28,7 @@
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
-(require 'quack)
+;;(require 'quack)
 (require 'flymake)
 (require 'python-mode)
 (require 'color-theme)
@@ -38,6 +41,9 @@
 (require 'recentf)
 (require 'yasnippet)
 (require 'fill-column-indicator)
+(require 'scala-mode-auto)
+(require 'ensime)
+(require 'cl)
 ;; for OCAML
 ;;(require 'tuareg)
 ;; hex-view
@@ -52,6 +58,10 @@
    "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
    (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
+;; Swap "C-u" and "C-x", so it's easier to type on Dvorak layout
+(keyboard-translate ?\C-u ?\C-x)
+(keyboard-translate ?\C-x ?\C-u)
 
 
 ;; Mac keybindings
@@ -352,6 +362,7 @@
 
 
 
+
 ;; Custom functions to move line-wise buffers in other window
 ;; shall be used with keystrokes like Alt-up and Alt-down
 (defun scroll-other-window-up-1 ()
@@ -465,6 +476,10 @@
 
 (txm-set-frame-font)
 
+;; reduced java machine options to run Scala on machine with small RAM
+(setenv "_JAVA_OPTIONS" "-Xms64m -Xmx128m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewSize=10m -XX:MaxNewSize=10m -XX:SurvivorRatio=6 -XX:TargetSurvivorRatio=80 -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled")
+
+
 ;; replace buffers menu with ibuffer
 (defalias 'list-buffers 'ibuffer)
 
@@ -487,6 +502,19 @@
 
 ;; set the default mode for new buffers to text-mode instead of Fundamental
 (setq-default major-mode 'text-mode)
+
+
+;; Scala and Ensime customization
+;; This step causes the ensime-mode to be started whenever
+;; scala-mode is started for a buffer. You may have to customize this step
+;; if you're not using the standard scala mode.
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+
+;; Flex/jlex customization
+(autoload 'jflex-mode "jflex-mode" nil t)
+(setq auto-mode-alist (cons '("\\(\\.flex\\|\\.jflex\\|\\.jlex\\|\\.lex\\)\\'" . jflex-mode) auto-mode-alist))
+
+
 
 ;; ERC customization:
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
@@ -515,15 +543,16 @@
     (split-window-horizontally)))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
+ '(quack-programs (quote ("gui" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "gu" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
  '(safe-local-variable-values (quote ((unittest-name . anptotalpowerconssv) (unittest-name . currentsv) (unittest-name . anusupervisionserviceprovidertest) (unittest-name . feedersv) (unittest-name . CurrentMeas) (unittest-name . VSWRMeasSupervision) (unittest-name . tmaSupervision) (unittest-name . anusupervisionservicetest)))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(preview-reference-face ((t (:foreground "white")))))

@@ -73,6 +73,10 @@
   ;; bind Hyper modfier to Alt on Mac OS X
   (setq mac-option-modifier 'hyper))
 
+(when (and (eq system-type 'gnu/linux) window-system)
+  (global-set-key "\M-\\" 'dabbrev-expand) 
+  (setq x-super-keysym 'meta))
+
 (global-set-key [f6] 'other-window)
 ;; for terminal w/o function keys
 (global-set-key (kbd "\C-x\C-o") 'other-window)

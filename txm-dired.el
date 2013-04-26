@@ -8,7 +8,8 @@
 ;; in future?
 (load "dired+.el")
 (require 'dired-aux)
-
+(require 'dired-details)
+;;(dired-details-install)
 
 (defconst +kilobyte+ 1024)
 (defconst +megabyte+ (* 1024 1024))
@@ -235,7 +236,7 @@ in both of them."
       (if (and (file-directory-p fname) 
                (eq (txm-count-similar-windows) 1))
           (dired-find-alternate-file)
-        ;; else (file or > 1 opened windwos with the same buffer
+        ;; else (file or > 1 opened windows with the same buffer
         ;; - do not close dired buffer
         (dired-find-file))))
 
@@ -259,7 +260,17 @@ in both of them."
 ;; Suggest the directory to copy files from the 2nd window
 (setq dired-dwim-target t)
 
+(setq dired-details-hidden-string "")
+(setq dired-details-hide-link-targets nil)
 
+
+;; Set the mode to hide hidden files. requires dired-x.el
+(setq dired-omit-files "^\\...+$")
+;; hide hidden files by default
+(add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+
+;; Alt-h toggle between hide/show hidden files
+(define-key dired-mode-map [(C-f5)] 'dired-omit-mode)
 ;; f3 to view files or calculating directory size
 (define-key dired-mode-map [f3] 'txm-dired-view-file-or-dir)
 
@@ -320,11 +331,14 @@ in both of them."
 (define-key dired-mode-map [(C-f1)] 'dired-other-window)
 (define-key dired-mode-map [(C-f2)] 'dired-other-window)
 
+;; toggle show of file details in panel
+(define-key dired-mode-map "`" 'dired-details-toggle)
 
 
 ;; Ctrl-W switches to wdired-mode
 (define-key dired-mode-map "\C-w" 'wdired-change-to-wdired-mode)
 
+;; Call ediff on 2 files
 (define-key dired-mode-map "\S-c" 'txm-dired-ediff-files)
 
 ;; Ctrl-D shall always open dired in current file's directory

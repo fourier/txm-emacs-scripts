@@ -5,9 +5,6 @@
 (push (substitute-in-file-name "~/.emacs.d/color-theme-6.6.0") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
-(push (substitute-in-file-name "~/.emacs.d/yasnippet-0.6.1c/") load-path)
-(push (substitute-in-file-name "~/.emacs.d/auctex-11.86") load-path)
-(push (substitute-in-file-name "~/.emacs.d/auctex-11.86/preview") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/helm") load-path)
 (let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
@@ -19,18 +16,20 @@
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
 
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
+
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
   (push "/opt/local/bin" exec-path)
   (push "/opt/local/lib/postgresql83/bin" exec-path)
   (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH"))))
-;; (push (substitute-in-file-name "~/.emacs.d/cc-mode-5.32") load-path)
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
 ;;(require 'quack)
 (require 'flymake)
 (require 'python-mode)
+(require 'nxml-mode)
 (require 'color-theme)
 (require 'vc-ediff)
 (require 'qt-pro)
@@ -39,7 +38,7 @@
 (require 'slime-autoloads)
 (require 'slime)
 (require 'recentf)
-(require 'yasnippet)
+;;(require 'yasnippet)
 (require 'fill-column-indicator)
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/scala-mode/"))
   (require 'scala-mode-auto))
@@ -68,10 +67,10 @@
 
 ;; Mac keybindings
 (when (eq system-type 'darwin)
-  ;; bind Meta to Command on Mac OS X
-  (setq mac-command-modifier 'meta)
-  ;; bind Hyper modfier to Alt on Mac OS X
-  (setq mac-option-modifier 'hyper))
+  ;; bind Command to Control on Mac OS X
+  (setq mac-command-modifier 'control)
+  ;; bind Alt to Meta on Mac OS X
+  (setq mac-option-modifier 'meta))
 
 (global-set-key [f6] 'other-window)
 ;; for terminal w/o function keys
@@ -160,7 +159,7 @@
 ;; (fci-mode)
 (setq-default fill-column 80)
 ;; use 80-column indication in C-mode only
-(add-hook 'c-mode-hook 'fci-mode)
+;;(add-hook 'c-mode-hook 'fci-mode)
 ;; define indication globally
 ;; (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode t)))
 ;;   (global-fci-mode t)
@@ -313,21 +312,23 @@
 ;; http://habib.posterous.com/refer-to-cl-documentation-from
 ;; HyperSpec local path
 ;; 1) Configure w3m to use documentation in Emacs window
-(require 'w3m-load)
-;; without this loads w3m failed to open pages
-(load "w3m-util.el")
-(load "w3m-proc.el")
-;; helper function to open web pages in other window
-(setq browse-url-browser-function 'w3m-browse-url-other-window)
-(defun w3m-browse-url-other-window (url &optional newwin)
-  (let ((w3m-pop-up-windows t))
-    ;; (if (one-window-p) (split-window))
-    (split-window)
-    (other-window 1)
-    (w3m-browse-url url newwin)))
+(when nil
+  (require 'w3m-load)
+  ;; without this loads w3m failed to open pages
+  (load "w3m-util.el")
+  (load "w3m-proc.el")
+  ;; helper function to open web pages in other window
+  (setq browse-url-browser-function 'w3m-browse-url-other-window)
+  (defun w3m-browse-url-other-window (url &optional newwin)
+    (let ((w3m-pop-up-windows t))
+      ;; (if (one-window-p) (split-window))
+      (split-window)
+      (other-window 1)
+      (w3m-browse-url url newwin)))
 
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+  (setq browse-url-browser-function 'w3m-browse-url)
+  (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t))
+
 (setq common-lisp-hyperspec-root (substitute-in-file-name "$HOME/.emacs.d/HyperSpec/"))
 (setq common-lisp-hyperspec-symbol-table (concat common-lisp-hyperspec-root "Data/Map_Sym.txt"))
 (define-key lisp-mode-map [(f1)] 'slime-documentation-lookup)
@@ -363,7 +364,7 @@
 ;; Automatically set closed date when closing TODO task
 ;; (setq org-log-done t)
 
-
+(setq auto-mode-alist (cons '("\\.svg\\'" . xml-mode) auto-mode-alist))
 
 
 ;; Custom functions to move line-wise buffers in other window
@@ -383,9 +384,9 @@
 
 
 ;; YASnippet customization
-(setq yas/root-directory (substitute-in-file-name "$HOME/.emacs.d/yasnippet-0.6.1c/snippets"))
-(yas/load-directory yas/root-directory)
-(yas/global-mode t)
+;;(setq yas/root-directory (substitute-in-file-name "$HOME/.emacs.d/yasnippet-0.6.1c/snippets"))
+;;(yas/load-directory yas/root-directory)
+;;(yas/global-mode t)
 
 
 ;; Turn on showing current function in modeline
@@ -411,9 +412,9 @@
 (setq ispell-list-command "list")
 
 ;; AucTeX
-(require 'tex-site)
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;; (require 'tex-site)
+;; (load "auctex.el" nil t t)
+;; (load "preview-latex.el" nil t t)
 ;; compile documents to pdf
 (setq TeX-PDF-mode t)
 (cond ((eq system-type 'gnu/linux)
@@ -439,12 +440,6 @@
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
-
-(load "txm.el")
-(load "txm-dired.el")
-(let ((gnus-config-name "~/.emacs.d/txm-gnus.el"))
-  (when (file-exists-p gnus-config-name)
-    (load gnus-config-name)))
 
 ;; Mathematica
 ;;(setq mathematica-command-line "/Applications/Mathematica Home Edition.app/Contents/MacOS/MathKernel")
@@ -534,16 +529,24 @@
 (when (getenv "STY")
    (define-key function-key-map (kbd "<select>") (kbd "<end>"))
    (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
-       
+
+
+(load "txm.el")
+(load "txm-dired.el")
+(let ((gnus-config-name "~/.emacs.d/txm-gnus.el"))
+  (when (file-exists-p gnus-config-name)
+    (load gnus-config-name)))
+
+
 
 ;; In the end on initialization:
-(when (and window-system (eq system-type 'darwin))
-  ;; full-screen options
-  (when (fboundp 'ns-toggle-fullscreen)
-    ;; 1) set fullscreen
-    (ns-toggle-fullscreen)
-    ;; 2) split window
-    (split-window-horizontally)))
+;; (when (and window-system (eq system-type 'darwin))
+;;   ;; full-screen options
+;;   (when (fboundp 'ns-toggle-fullscreen)
+;;     ;; 1) set fullscreen
+;;     (ns-toggle-fullscreen)
+;;     ;; 2) split window
+;;     (split-window-horizontally)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

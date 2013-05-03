@@ -264,3 +264,23 @@
 
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/tup_cfg.el"))
   (load "tup_cfg.el"))
+
+
+
+;; Autocomplete with clang configuration
+(when (and (boundp 'txm-autocomplete-installed)
+           (boundp 'txm-clang-autocomplete-installed)
+           txm-clang-autocomplete-executable)
+  (require 'auto-complete-clang-async)
+
+  (defun ac-cc-mode-setup ()
+    (setq ac-clang-complete-executable txm-clang-autocomplete-executable)
+    (setq ac-sources '(ac-source-clang-async))
+    (ac-clang-launch-completion-process))
+
+  (defun txm-ac-config ()
+    (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
+    (add-hook 'auto-complete-mode-hook 'ac-common-setup)
+    (global-auto-complete-mode t))
+  ;; turn on autocomplete-clang
+  (txm-ac-config))

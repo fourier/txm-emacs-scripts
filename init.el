@@ -6,7 +6,7 @@
 (push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
-(let ((autocomplete-path (substitute-in-file-name "~/.emacs.d/auto-complete-1.3.1/")))
+(let ((autocomplete-path (substitute-in-file-name "~/.emacs.d/auto-complete")))
   (when (file-exists-p autocomplete-path)
     (push autocomplete-path load-path)
     (setq txm-autocomplete-installed t)))
@@ -17,7 +17,6 @@
     (push clang-autocomplete-path load-path)
     (setq txm-clang-autocomplete-installed t
           txm-clang-autocomplete-executable clang-autocomplete-executable)))
-
 
 (let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
   (when (file-exists-p helm-path)
@@ -547,7 +546,7 @@
    (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
 
 ;; Autocomplete configuration
-(when txm-autocomplete-installed
+(when (boundp 'txm-autocomplete-installed)
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
   (require 'auto-complete-config)
   (ac-config-default))

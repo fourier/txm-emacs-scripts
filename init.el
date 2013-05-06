@@ -23,7 +23,7 @@
     (push helm-path load-path)))
 (push (substitute-in-file-name "~/.emacs.d/scala-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp") load-path)
-(let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
+(let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
 

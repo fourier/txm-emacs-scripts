@@ -2,7 +2,6 @@
 ;;;; Additional directories to search for emacs extensions
 
 (push (substitute-in-file-name "~/.emacs.d/") load-path)
-(push (substitute-in-file-name "~/.emacs.d/color-theme-6.6.0") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
@@ -41,7 +40,6 @@
 (require 'flymake)
 (require 'python-mode)
 (require 'nxml-mode)
-(require 'color-theme)
 (require 'vc-ediff)
 (require 'qt-pro)
 ;;(require 'w3m-load)

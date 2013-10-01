@@ -257,11 +257,14 @@
 (define-key global-map "\C-\M-o" 'loccur)
 (define-key global-map [(control shift o)] 'loccur-previous-match)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Color theme
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(load-theme 'borland-cpp-alike t)
 
-(load "txm-colors.el")
-(color-theme-borland-cpp)
-
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Project dependent configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/tup_cfg.el"))
   (load "tup_cfg.el"))
 
@@ -284,3 +287,7 @@
     (global-auto-complete-mode t))
   ;; turn on autocomplete-clang
   (txm-ac-config))
+
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/tmux-cfg.el"))
+  (load "tmux-cfg.el"))
+

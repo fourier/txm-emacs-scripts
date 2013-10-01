@@ -6,6 +6,7 @@
 (push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
+(push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (let ((autocomplete-path (substitute-in-file-name "~/.emacs.d/auto-complete")))
   (when (file-exists-p autocomplete-path)
     (push autocomplete-path load-path)
@@ -218,8 +219,8 @@
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq scroll-preserve-screen-position 't)
-(setq scroll-up-aggressively 0)
-(setq scroll-down-aggressively 0)
+(setq scroll-up-aggressively 0.0)
+(setq scroll-down-aggressively 0.0)
 (setq scroll-margin 0)
 
 ;; scroll *combilation* as output appears
@@ -457,8 +458,8 @@
 (setq TeX-save-query nil)
 
 ;; Mathematica
-;;(setq mathematica-command-line "/Applications/Mathematica Home Edition.app/Contents/MacOS/MathKernel")
-;;(load-file "~/.emacs.d/mathematica.el")
+(setq mathematica-command-line "/Applications/Mathematica.app/Contents/MacOS/MathKernel")
+(load-file "~/.emacs.d/mathematica.el")
 
 ;; Automatically reread changed files from disk
 (global-auto-revert-mode t)
@@ -481,11 +482,14 @@
          (progn
            (setq mac-allow-anti-aliasing nil)
            (setq mac-allow-anti-aliasing t)
-           (if (string= (txm-hostname) "veroveli-mbp.local")
-               (set-frame-font "Monaco-14")
-             (set-frame-font "Monaco-12"))))
+           (cond ((string= (txm-hostname) "veroveli-mbp.local")
+                  (set-frame-font "Monaco-14"))
+                 ((string-match "zoomon\\.local" (txm-hostname))
+                  (set-frame-font "Monaco-14"))
+                 (nil (set-frame-font "Monaco-12")))))
         ((eq system-type 'windows-nt)
          (message "windows-nt"))))
+
 
 (txm-set-frame-font)
 

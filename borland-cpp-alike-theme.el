@@ -31,6 +31,8 @@
  '(font-lock-warning-face ((t (:foreground "red"))))
  '(font-lock-operator-face ((t (:foreground "white"))))
  '(font-lock-end-statement ((t (:foreground "white"))))
+ ;; log4j customizations
+ '(log4j-font-lock-warn-face ((t (:foreground "Orange"))))
  ;; info-mode customization
  '(info-menu-header ((t (:foreground "white"))))
  '(info-title-1 ((t (:foreground "white"))))

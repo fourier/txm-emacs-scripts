@@ -262,6 +262,33 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-theme 'borland-cpp-alike t)
 
+(defun txm-hostname ()
+  (let ((hostname))
+    (with-temp-buffer
+      (call-process "hostname" nil (current-buffer))
+      (setq hostname (buffer-substring 1 (1- (point-max))))
+      hostname)))
+
+
+(defun txm-set-frame-font ()
+  (cond ((eq system-type 'gnu/linux)
+         (set-frame-font "Monospace-12:antialias=none"))
+        ((eq system-type 'darwin)
+         (progn
+           (setq mac-allow-anti-aliasing nil)
+           (setq mac-allow-anti-aliasing t)
+           (cond ((string= (txm-hostname) "veroveli-mbp.local")
+                  (set-frame-font "Monaco-14"))
+                 ((string-match "zoomon\\.local" (txm-hostname))
+                  (set-frame-font "Monaco-14"))
+                 (nil (set-frame-font "Monaco-12")))))
+        ((eq system-type 'windows-nt)
+         (message "windows-nt"))))
+
+
+(txm-set-frame-font)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Project dependent configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

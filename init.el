@@ -456,10 +456,10 @@
 (setq TeX-save-query nil)
 
 ;; Mathematica
-(let ((mathematica-mode-file "~/.emacs.d/mathematica.el"))
+(let ((mathematica-mode-file (substitute-in-file-name "$HOME/.emacs.d/mathematica.el")))
   (when (file-exists-p mathematica-mode-file)
     (setq mathematica-command-line "/Applications/Mathematica.app/Contents/MacOS/MathKernel")
-    (load-file )))
+    (load-file mathematica-mode-file)))
 
 ;; Automatically reread changed files from disk
 (global-auto-revert-mode t)

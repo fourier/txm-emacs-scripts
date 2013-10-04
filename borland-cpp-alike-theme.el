@@ -7,7 +7,7 @@
  '(cursor ((t (:background "green"))))
  '(region ((t (:foreground "black" :background "LightGrey"))))
  
- '(vertical-border ((t (:foreground "white"))))
+ '(vertical-border ((t (:foreground "white" :background "MidnightBlue"))))
  ;; ecb customizations
  '(ecb-default-highlight-face ((t (:background "DarkSlateGray" :box (:line-width 1 :style released-button)))))
  '(ecb-default-general-face ((t (:foreground "white"))))
@@ -39,6 +39,9 @@
  '(info-title-2 ((t (:foreground "white"))))
  '(info-title-3 ((t (:foreground "white"))))
  '(info-title-4 ((t (:foreground "white"))))
+ ;; python customizations
+ '(py-builtins-face ((t (:foreground "white"))))
+ ;; dired customizations
  '(diredp-file-name ((t (:foreground "cyan1"))))
  '(diredp-file-suffix ((t (:foreground "cyan1"))))
  '(diredp-dir-heading ((t (:foreground "white" :background "MidnightBlue" :underline t ))))

@@ -61,7 +61,8 @@
 (require 'hexview-mode)
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
   (require 'helm-config)
-  (global-set-key [f7] 'helm-mini))
+  (global-set-key [f10] 'helm-mini))
+  
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
 
@@ -92,7 +93,6 @@
 (global-set-key "\C-xg" 'goto-line)
 (global-set-key "\r" 'newline-and-indent)
 (global-set-key "\C-xf" 'recentf-open-files)
-(global-set-key [f10] 'ibuffer)
 (global-set-key [f11] 'menu-bar-mode)
 (global-set-key [C-f4] 'kill-buffer)
 (global-set-key [M-up] 'scroll-other-window-down-1) ; Alt-Up moves text in other window up

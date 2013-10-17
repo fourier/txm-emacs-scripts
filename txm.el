@@ -296,6 +296,15 @@
   (load "tup_cfg.el"))
 
 
+;; traverse upper directories from the current file and find
+;; full path (including name) to the specified file
+(defun txm-find-file-in-upper-directory(filename)
+  (let ((current-file (buffer-file-name)))
+    (when (file-regular-p current-file)
+      (let ((containing-path (locate-dominating-file current-file filename)))
+        (when containing-path
+          (concat (expand-file-name containing-path) filename))))))
+
 
 ;; Autocomplete with clang configuration
 (when (and (boundp 'txm-autocomplete-installed)

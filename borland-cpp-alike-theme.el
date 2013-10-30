@@ -40,15 +40,15 @@
  '(info-title-3 ((t (:foreground "white"))))
  '(info-title-4 ((t (:foreground "white"))))
  ;; python customizations
- '(py-builtins-face ((t (:foreground "brightwhite"))))
+ '(py-builtins-face ((t (:foreground "#ffffff"))))
  ;; helm customizations
  '(helm-selection ((t (:background "Cyan" :foreground "black"))))
- '(helm-ff-directory ((t (:foreground "brightwhite" :background "MidnightBlue"))))
+ '(helm-ff-directory ((t (:foreground "#ffffff" :background "MidnightBlue"))))
  ;; dired customizations
  '(diredp-file-name ((t (:foreground "cyan1"))))
  '(diredp-file-suffix ((t (:foreground "cyan1"))))
  '(diredp-dir-heading ((t (:foreground "white" :background "MidnightBlue" :underline t ))))
- '(diredp-dir-priv ((t (:foreground "brightwhite" :background "MidnightBlue"))))
+ '(diredp-dir-priv ((t (:foreground "#ffffff" :background "MidnightBlue"))))
  ;; file attributes in the dired
  '(diredp-read-priv ((t (:foreground "grey" :background "MidnightBlue"))))
  '(diredp-write-priv ((t (:foreground "grey" :background "MidnightBlue"))))

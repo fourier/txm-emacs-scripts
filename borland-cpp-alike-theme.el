@@ -6,8 +6,10 @@
  '(default ((t (:family "default" :foundry "default" :width normal :height 1 :weight normal :slant normal :underline nil :overline nil :strike-through nil :box nil :inverse-video nil :foreground "gold" :background "MidnightBlue" :stipple nil :inherit nil))))
  '(cursor ((t (:background "green"))))
  '(region ((t (:foreground "black" :background "LightGrey"))))
- 
+ ;; vertical line when spilt window with C-x 3 on text terminals
  '(vertical-border ((t (:foreground "white" :background "MidnightBlue"))))
+ ;; same on graphical displays
+ '(fringe ((t (:foreground "white" :background "MidnightBlue"))))
  ;; ecb customizations
  '(ecb-default-highlight-face ((t (:background "DarkSlateGray" :box (:line-width 1 :style released-button)))))
  '(ecb-default-general-face ((t (:foreground "white"))))
@@ -55,30 +57,16 @@
  '(diredp-exec-priv ((t (:foreground "grey" :background "MidnightBlue"))))
  ;; no attribute set
  '(diredp-no-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+ ;; marked file color and mark sign
  '(diredp-flag-mark-line ((t (:background "MidnightBlue"))))
- '(diredp-flag-mark ((t (:background "MidnightBlue"))))
+ '(diredp-flag-mark ((t (:foreground "gold" :background "MidnightBlue"))))
  '(diredp-inode+size ((t (:foreground "white"))))
  '(diredp-compressed-file-suffix ((t (:foreground "cyan1"))))
  '(diredp-ignored-file-name ((t (:foreground "cyan1")))))
 
- 
 
- ;; '(font-lock-builtin-face ((t (:foreground "#e5786d"))))
- ;; '(font-lock-comment-delimiter-face ((default (:inherit (font-lock-comment-face)))))
- ;; '(font-lock-comment-face ((t (:foreground "#99968b"))))
- ;; '(font-lock-constant-face ((t (:foreground "#e5786d"))))
- ;; '(font-lock-doc-face ((t (:inherit (font-lock-string-face)))))
- ;; '(font-lock-function-name-face ((t (:foreground "#cae682"))))
- ;; '(font-lock-keyword-face ((t (:weight bold :foreground "#8ac6f2"))))
- ;; '(font-lock-negation-char-face ((t nil)))
- ;; '(font-lock-preprocessor-face ((t (:inherit (font-lock-builtin-face)))))
  ;; '(font-lock-regexp-grouping-backslash ((t (:inherit (bold)))))
  ;; '(font-lock-regexp-grouping-construct ((t (:inherit (bold)))))
- ;; '(font-lock-string-face ((t (:foreground "#95e454"))))
- ;; '(font-lock-type-face ((t (:weight bold :foreground "#92a65e"))))
- ;; '(font-lock-variable-name-face ((t (:foreground "#cae682"))))
- ;; '(font-lock-warning-face ((t (:foreground "#ccaa8f" :inherit (error)))))
- ;; '(button ((t (:foreground "#f6f3e8" :background "#333333" :inherit (link)))))
  ;; '(link ((t (:underline (:color foreground-color :style line) :foreground "#8ac6f2"))))
  ;; '(link-visited ((t (:underline (:color foreground-color :style line) :foreground "#e5786d" :inherit (link)))))
  ;; '(fringe ((t (:background "#303030"))))

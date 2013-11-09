@@ -20,10 +20,6 @@
   "List of regexp for file/directory names to filter out")
 (make-variable-buffer-local 'difftree-filter-list)
 
-(defvar difftree-files-drawable-tree nil
-  "Tree representation of the visible items")
-(make-variable-buffer-local 'difftree-files-drawable-tree)
-
 ;;
 ;; Major mode definitions
 ;;
@@ -161,8 +157,8 @@ apparently shall not be visible"
                                             
 (defun difftree-insert-directory-contents (path)
   ;; insert path contents with initial offset 0
-  (setq difftree-files-drawable-tree (difftree-insert-directory-contents-1 path 0))
-  (difftree-draw-tree difftree-files-drawable-tree 0))
+  (let ((tree (difftree-insert-directory-contents-1 path 0)))
+    (difftree-draw-tree tree 0)))
 
   
 

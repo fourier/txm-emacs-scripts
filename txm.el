@@ -281,7 +281,7 @@
                   (set-frame-font "Monaco-14"))
                  ((string-match "zoomon\\.local" (txm-hostname))
                   (set-frame-font "Monaco-14"))
-                 (nil (set-frame-font "Monaco-12")))))
+                 (t (set-frame-font "Monaco-14")))))
         ((eq system-type 'windows-nt)
          (message "windows-nt"))))
 

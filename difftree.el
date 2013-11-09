@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: nil -*-
 ;; Directory tree
 
 (defvar difftree-expanded-dir-list nil
@@ -40,14 +41,16 @@
   "Search through the array of filename-line pairs and return the
 filename for the line specified"
   (let ((found (find line difftree-files-info
-                     :test '(lambda (l entry) (eq l (cdr entry))))))
+                     :test #'(lambda (l entry) (eq l (cdr entry))))))
     (when found
       (car found))))
 
 (defun difftree-is-expanded-dir (dir)
+  "Find if the directory is in the list of expanded directories"
   (find dir difftree-expanded-dir-list :test 'string-equal))
 
 (defun scroll-to-line (line)
+  "Recommended way to set the cursor to specified line"
   (goto-char (point-min))
   (forward-line (1- line)))
 
@@ -58,25 +61,18 @@ filename for the line specified"
   (let* ((line (line-number-at-pos))
          (file (difftree-find-file-in-line line)))
     (when file
-      (if (file-directory-p dir)  ; only for directories
-          (difftree-toggle-dir-state dir)
-        nil)                            ; do nothing for files for now
-      (let (top-line (line-number-at-pos (window-start)))
-        (difftree-refresh-buffer)
-        (scroll-to-line line)
-        (let ((lines-diff (- top-line (line-number-at-pos (window-start)))))
-          ;; if top-line (say 44) > current top line (say 42) - scroll up
-          (if (> lines-diff 0)
-              (scroll-up lines-diff)
-            (scroll-down (- lines-diff))))))))
-
-(message (number-to-string (line-number-at-pos (window-start))))
+      (if (file-directory-p file)  ; only for directories
+          (difftree-toggle-dir-state file)
+        nil)                            ; do nothiang for files for now
+      (let ((current-pos (window-start))) ; save the current window start position
+        (difftree-refresh-buffer line)    ; refresh buffer and scroll back to the saved line
+        (set-window-start (selected-window) current-pos))))) ; restore window start position
 
 
 (defun difftree-toggle-dir-state (dir)
   "Toggle expanded/collapsed state for directories"
   (if (difftree-is-expanded-dir dir)
-      (setq difftree-expanded-dir-list (remove-if '(lambda (x) (string-equal dir x))
+      (setq difftree-expanded-dir-list (remove-if #'(lambda (x) (string-equal dir x))
                                                   difftree-expanded-dir-list))
     (push dir difftree-expanded-dir-list)))
 
@@ -90,8 +86,8 @@ filename for the line specified"
   "Returns pair of 2 elements: list of subdirectories and
 list of files"
   (let ((files (directory-files path 'full)))
-    (cons (remove-if-not (lambda (f) (file-directory-p f)) files)
-          (remove-if (lambda (f) (file-directory-p f)) files))))
+    (cons (remove-if-not #'(lambda (f) (file-directory-p f)) files)
+          (remove-if #'(lambda (f) (file-directory-p f)) files))))
 
 (defun difftree-insert-directory-contents (path &optional full)
   (difftree-insert-directory-contents-1 path 0 t))
@@ -140,7 +136,7 @@ list of files"
   (newline))
 
 
-(defun difftree-refresh-buffer ()
+(defun difftree-refresh-buffer (&optional line)
   (interactive)
   (when (and (equal major-mode 'difftree-mode)
              (boundp 'difftree-start-dir))
@@ -150,7 +146,7 @@ list of files"
     (difftree-insert-buffer-header)
     (difftree-insert-directory-contents difftree-start-dir nil)
     (toggle-read-only)
-    (scroll-to-line 3)))
+    (scroll-to-line (if line line 3))))
 
 
 (defun difftree-tree (path)

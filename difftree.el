@@ -20,6 +20,10 @@
   "List of regexp for file/directory names to filter out")
 (make-variable-buffer-local 'difftree-filter-list)
 
+(defvar difftree-files-drawable-tree nil
+  "Tree representation of the visible items")
+(make-variable-buffer-local 'difftree-files-drawable-tree)
+
 ;;
 ;; Major mode definitions
 ;;
@@ -83,11 +87,14 @@ filename for the line specified"
                                                   difftree-expanded-dir-list))
     (push dir difftree-expanded-dir-list)))
 
-
-
 (defun file-basename (file)
   "Base file/directory name. Taken from http://lists.gnu.org/archive/html/emacs-devel/2011-01/msg01238.html"
   (file-name-nondirectory (directory-file-name file)))
+
+(defun printable-string (string)
+  "Strip newline character from file names, like 'Icon\n'"
+  (replace-regexp-in-string "\n" "" string))  
+
 
 (defun difftree-get-directory-contens (path)
   "Returns pair of 2 elements: list of subdirectories and
@@ -97,16 +104,72 @@ list of files"
           (remove-if #'(lambda (f) (file-directory-p f)) files))))
 
 (defun difftree-file-is-in-filter-list (file)
+  "Determine if the file is in filter list (and therefore
+apparently shall not be visible"
   (find file difftree-filter-list :test #'(lambda (f rx) (string-match rx f))))
 
+(defun difftree-draw-char (c x y)
+  "Draw char c at the position (1-based) (x y)"
+  (save-excursion
+    (scroll-to-line y)
+    (beginning-of-line)
+    (goto-char (+ x (-(point) 1)))
+    (delete-char 1)
+    (insert-char c 1)))
+
+(defun difftree-draw-vertical-line (y1 y2 x)
+  (if (> y1 y2)
+    (dotimes (y (1+ (- y1 y2)))
+      (difftree-draw-char ?\| x (+ y2 y)))
+    (dotimes (y (1+ (- y2 y1)))
+      (difftree-draw-char ?\| x (+ y1 y)))))
+        
+(defun difftree-draw-horizontal-line (x1 x2 y)
+  (if (> x1 x2)
+    (dotimes (x (1+ (- x1 x2)))
+      (difftree-draw-char ?\- (+ x2 x) y))
+    (dotimes (x (1+ (- x2 x1)))
+      (difftree-draw-char ?\- (+ x1 x) y))))
+  
+
+(defun difftree-draw-tree (tree offset)
+  "Draw the tree of lines with parents"
+  (if (atom tree)
+      nil
+    (let ((root (car tree))
+          (children (cdr tree)))
+      (when children
+        ;; draw the line to the last child
+        ;; since we push'd children to the list, the last line
+        ;; is the first
+        (let ((last-child (car children))
+              (x-offset (+ 2 (* offset 4))))
+          (if (atom last-child)
+              (difftree-draw-vertical-line (1+ root) last-child x-offset)
+            (difftree-draw-vertical-line (1+ root) (car last-child) x-offset)))
+        ;; draw recursively
+        (dolist (child children)
+          (difftree-draw-tree child (1+ offset))
+          (if (listp child)
+              (difftree-draw-horizontal-line (+ 3 (* offset 4))
+                                             (+ 4 (* offset 4))
+                                             (car child))
+            (difftree-draw-horizontal-line (+ 3 (* offset 4))
+                                           (+ 7 (* offset 4))
+                                           child)))))))
+  
                                             
 (defun difftree-insert-directory-contents (path)
   ;; insert path contents with initial offset 0
-  (difftree-insert-directory-contents-1 path 0))
+  (setq difftree-files-drawable-tree (difftree-insert-directory-contents-1 path 0))
+  (difftree-draw-tree difftree-files-drawable-tree 0))
+
+  
 
 (defun difftree-insert-directory-contents-1 (path offset)
-  (let ((expanded (difftree-is-expanded-dir path)))
-    (difftree-insert-entry path offset expanded)
+  (let* ((expanded (difftree-is-expanded-dir path))
+         (root-line (difftree-insert-entry path offset expanded))
+         (children nil))
     (when expanded 
       (let* ((contents (difftree-get-directory-contens path))
              (dirs (car contents))
@@ -116,17 +179,21 @@ list of files"
             (when (not (or (string-equal short-dir-name ".")
                            (string-equal short-dir-name "..")
                            (difftree-file-is-in-filter-list short-dir-name)))
-              (difftree-insert-directory-contents-1 dir (1+ offset)))))
+              (push (difftree-insert-directory-contents-1 dir (1+ offset))
+                    children))))
         (dolist (file files)
           (let ((short-file-name (file-basename file)))
             (when (not (difftree-file-is-in-filter-list short-file-name))
-              (difftree-insert-entry file (1+ offset) nil))))))))
+              (push (difftree-insert-entry file (1+ offset) nil)
+                    children))))))
+    (cons root-line children)))
 
 (defun difftree-insert-entry (path offset expanded)
-  (let ((short-name (file-basename path))
+  (let ((short-name (printable-string (file-basename path)))
         (dir-sign #'(lambda (exp)
                       (insert "[" (if exp "-" "+") "]")))
-        (is-dir (file-directory-p path)))
+        (is-dir (file-directory-p path))
+        (line (line-number-at-pos)))
     (when (> offset 0)
       (dotimes (i offset)
         (insert " ")
@@ -137,7 +204,8 @@ list of files"
           (insert " " short-name))
       (insert "    " short-name))
     (push (cons path (line-number-at-pos)) difftree-files-info)
-    (newline)))
+    (newline)
+    line))
 
 (defun difftree-insert-buffer-header ()
   (insert "Directory tree")
@@ -155,8 +223,8 @@ list of files"
     (erase-buffer)
     (difftree-insert-buffer-header)
     (difftree-insert-directory-contents difftree-start-dir)
-    (toggle-read-only)
-    (scroll-to-line (if line line 3))))
+    (scroll-to-line (if line line 3))
+    (toggle-read-only)))
 
 
 (defun difftree-tree (path)

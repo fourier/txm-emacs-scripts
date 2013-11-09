@@ -28,6 +28,7 @@
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "\r") 'difftree-perform-action)
     (define-key map (kbd "SPC") 'difftree-perform-action)
+    (define-key map [mouse-1] 'difftree-perform-action)
     (define-key map (kbd "g") 'difftree-refresh-buffer)
     map)
   "Keymap for `difftree-mode'.")
@@ -100,8 +101,8 @@ list of files"
 
                                             
 (defun difftree-insert-directory-contents (path)
+  ;; insert path contents with initial offset 0
   (difftree-insert-directory-contents-1 path 0))
-
 
 (defun difftree-insert-directory-contents-1 (path offset)
   (let ((expanded (difftree-is-expanded-dir path)))
@@ -123,19 +124,18 @@ list of files"
 
 (defun difftree-insert-entry (path offset expanded)
   (let ((short-name (file-basename path))
-        (return-line-number (line-number-at-pos))
-        (dir-prefix "+--[")
-        (dir-suffix "] ")
-        (file-prefix "+----- ")
+        (dir-sign #'(lambda (exp)
+                      (insert "[" (if exp "-" "+") "]")))
         (is-dir (file-directory-p path)))
     (when (> offset 0)
       (dotimes (i offset)
-        (insert (if is-dir "|" " "))
-        (dotimes (j (- (length dir-prefix) 1)) (insert " "))))
+        (insert " ")
+        (insert-char ?\s 3)))           ; insert 3 spaces
     (if is-dir
-        (insert dir-prefix;;(if (> offset 0) dir-prefix "[")
-                (if expanded "-" "+") dir-suffix short-name)
-      (insert file-prefix short-name))
+        (progn
+          (funcall dir-sign expanded)
+          (insert " " short-name))
+      (insert "    " short-name))
     (push (cons path (line-number-at-pos)) difftree-files-info)
     (newline)))
 

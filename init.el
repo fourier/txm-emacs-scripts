@@ -561,7 +561,7 @@
  ;; If there is more than one, they won't work right.
  '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
  '(quack-programs (quote ("gui" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "gu" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
- '(safe-local-variable-values (quote ((ac-clang-cflags "-I../inc") (ac-clang-cflags . "-I../inc") (ac-clang-cflags . "-I ../inc") (ac-clang-cflags . "--std=c99 -I ../inc") (unittest-name . anptotalpowerconssv) (unittest-name . currentsv) (unittest-name . anusupervisionserviceprovidertest) (unittest-name . feedersv) (unittest-name . CurrentMeas) (unittest-name . VSWRMeasSupervision) (unittest-name . tmaSupervision) (unittest-name . anusupervisionservicetest)))))
+ '(safe-local-variable-values (quote ((TeX-master . "main") (TeX-master . t) (ac-clang-cflags "-I../inc") (ac-clang-cflags . "-I../inc") (ac-clang-cflags . "-I ../inc") (ac-clang-cflags . "--std=c99 -I ../inc") (unittest-name . anptotalpowerconssv) (unittest-name . currentsv) (unittest-name . anusupervisionserviceprovidertest) (unittest-name . feedersv) (unittest-name . CurrentMeas) (unittest-name . VSWRMeasSupervision) (unittest-name . tmaSupervision) (unittest-name . anusupervisionservicetest)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

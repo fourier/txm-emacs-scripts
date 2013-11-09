@@ -21,8 +21,8 @@
 (let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
   (when (file-exists-p helm-path)
     (push helm-path load-path)))
-(push (substitute-in-file-name "~/.emacs.d/scala-mode") load-path)
-(push (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp") load-path)
+(push (substitute-in-file-name "~/.emacs.d/scala-mode2") load-path)
+(push (substitute-in-file-name "~/.emacs.d/ensime/dist/elisp") load-path)
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
@@ -32,8 +32,10 @@
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
   (push "/opt/local/bin" exec-path)
-  (push "/opt/local/lib/postgresql83/bin" exec-path)
   (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH"))))
+(when (eq system-type 'gnu/linux)
+  (push "/home/fourier/Applications/sbt/bin" exec-path)
+  (push "/home/fourier/Applications/scala-2.10.3/bin" exec-path))
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
@@ -50,15 +52,17 @@
 (require 'recentf)
 ;;(require 'yasnippet)
 (require 'fill-column-indicator)
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/scala-mode/"))
-  (require 'scala-mode-auto))
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/ensime_2.9.2-0.9.8.1/elisp"))
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/scala-mode2/"))
+  (require 'scala-mode2))
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/ensime"))
   (require 'ensime))
-(require 'cl)
+;;(require 'cl)
 ;; for OCAML
 ;;(require 'tuareg)
 ;; hex-view
 (require 'hexview-mode)
+
+;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
   (require 'helm-config)
   (global-set-key [f10] 'helm-mini))
@@ -500,6 +504,7 @@
 ;; scala-mode is started for a buffer. You may have to customize this step
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+;;(setq ensime-default-server-cmd (substitute-in-file-name "~/.emacs.d/ensime/etc/scripts/server"))
 
 ;; Flex/jlex customization
 (autoload 'jflex-mode "jflex-mode" nil t)

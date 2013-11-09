@@ -1,6 +1,9 @@
 ;;; -*- lexical-binding: nil -*-
 ;; Directory tree
 
+(defconst difftree-hidden-files-regexp "^\\."
+  "Hidden files regexp")
+
 (defvar difftree-expanded-dir-list nil
   "A list of Expanded directory entries.")
 (make-variable-buffer-local 'difftree-expanded-dir-list)
@@ -13,6 +16,9 @@
   "List of tuples with full file name and the line.")
 (make-variable-buffer-local 'difftree-files-info)
 
+(defvar difftree-filter-list nil
+  "List of regexp for file/directory names to filter out")
+(make-variable-buffer-local 'difftree-filter-list)
 
 ;;
 ;; Major mode definitions
@@ -89,11 +95,15 @@ list of files"
     (cons (remove-if-not #'(lambda (f) (file-directory-p f)) files)
           (remove-if #'(lambda (f) (file-directory-p f)) files))))
 
-(defun difftree-insert-directory-contents (path &optional full)
-  (difftree-insert-directory-contents-1 path 0 t))
+(defun difftree-file-is-in-filter-list (file)
+  (find file difftree-filter-list :test #'(lambda (f rx) (string-match rx f))))
+
+                                            
+(defun difftree-insert-directory-contents (path)
+  (difftree-insert-directory-contents-1 path 0))
 
 
-(defun difftree-insert-directory-contents-1 (path offset &optional full)
+(defun difftree-insert-directory-contents-1 (path offset)
   (let ((contents (difftree-get-directory-contens path)))
     (let ((dirs (car contents))
           (files (cdr contents)))
@@ -101,14 +111,14 @@ list of files"
         (let ((short-dir-name (file-basename dir)))
           (when (not (or (string-equal short-dir-name ".")
                          (string-equal short-dir-name "..")
-                         (and (not full) (string-match "^\\." short-dir-name))))
+                         (difftree-file-is-in-filter-list short-dir-name)))
             (let ((expanded (difftree-is-expanded-dir dir)))
               (difftree-insert-entry dir (1+ offset) expanded)
               (when expanded
-                (difftree-insert-directory-contents-1 dir (1+ offset) full))))))
+                (difftree-insert-directory-contents-1 dir (1+ offset)))))))
       (dolist (file files)
         (let ((short-file-name (file-basename file)))
-          (when (or full (not (string-match "^\\." short-file-name)))
+          (when (not (difftree-file-is-in-filter-list short-file-name))
             (difftree-insert-entry file (1+ offset) nil)))))))
 
 (defun difftree-insert-entry (path offset expanded)
@@ -144,7 +154,7 @@ list of files"
     (toggle-read-only)
     (erase-buffer)
     (difftree-insert-buffer-header)
-    (difftree-insert-directory-contents difftree-start-dir nil)
+    (difftree-insert-directory-contents difftree-start-dir)
     (toggle-read-only)
     (scroll-to-line (if line line 3))))
 
@@ -157,6 +167,7 @@ list of files"
       (difftree-mode)
       (setq difftree-start-dir (expand-file-name (substitute-in-file-name path)))
       (setq difftree-expanded-dir-list (list difftree-start-dir))
+      (setq difftree-filter-list (list difftree-hidden-files-regexp))
       (difftree-refresh-buffer))))
 
 (defun difftree ()

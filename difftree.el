@@ -34,7 +34,7 @@
   "Keymap for `difftree-mode'.")
 
 (defvar difftree-font-lock-keywords
-  '((".*/" (1 diredp-dir-heading)))
+  '(("[+] .*" (1 diredp-dir-heading)))
   "Directory highlighting specification for `difftree-mode'.")
 
 ;;;###autoload

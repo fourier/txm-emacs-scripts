@@ -6,6 +6,9 @@
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
+(let ((popup-path "~/.emacs.d/popup-el"))
+  (when (file-exists-p popup-path)
+    (push (substitute-in-file-name popup-path) load-path)))
 (let ((autocomplete-path (substitute-in-file-name "~/.emacs.d/auto-complete")))
   (when (file-exists-p autocomplete-path)
     (push autocomplete-path load-path)
@@ -21,8 +24,12 @@
 (let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
   (when (file-exists-p helm-path)
     (push helm-path load-path)))
-(push (substitute-in-file-name "~/.emacs.d/scala-mode2") load-path)
-(push (substitute-in-file-name "~/.emacs.d/ensime/dist/elisp") load-path)
+(let ((scala-mode-path "~/.emacs.d/scala-mode2"))
+  (when (file-exists-p scala-mode-path)
+    (push (substitute-in-file-name scala-mode-path) load-path)))
+(let ((ensime-path "~/.emacs.d/ensime/dist/elisp"))
+  (when (file-exists-p ensime-path)
+    (push (substitute-in-file-name ensime-path) load-path)))
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
@@ -530,9 +537,9 @@
 
 ;; Autocomplete configuration
 (when (boundp 'txm-autocomplete-installed)
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
   (require 'auto-complete-config)
-  (ac-config-default))
+  (ac-config-default)
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict"))
 
 
 (load "txm.el")

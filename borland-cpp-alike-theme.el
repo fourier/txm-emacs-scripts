@@ -62,7 +62,23 @@
  '(diredp-flag-mark ((t (:foreground "gold" :background "MidnightBlue"))))
  '(diredp-inode+size ((t (:foreground "white"))))
  '(diredp-compressed-file-suffix ((t (:foreground "cyan1"))))
- '(diredp-ignored-file-name ((t (:foreground "cyan1")))))
+ '(diredp-ignored-file-name ((t (:foreground "cyan1"))))
+ ;; nXML customizations
+ '(nxml-tag-delimiter ((t (:foreground "#E8BF6A"))))
+ ; tag name
+ '(nxml-element-local-name ((t (:foreground "#CC7832"))))
+ ; attribute name
+ ;'(nxml-attribute-local-name ((t (:foreground "#BABABA"))))
+ '(nxml-attribute-local-name ((t (:foreground "#ABCDEF"))))
+ ; attribute value
+ '(nxml-attribute-value ((t (:foreground "#A5C261"))))
+ '(nxml-text ((t (:foreground "#BABABA"))))
+ '(nxml-attribute-value-delimiter ((t (:foreground "#E8BF6A"))))
+ ; attribute prefix like xlink:href - here it is "xlink"
+ ;'(nxml-attribute-prefix ((t (:foreground "#DADADA"))))
+ '(nxml-attribute-prefix ((t (:foreground "#BBEDFF"))))
+ ; tag prefix : <ui:Checkbox> - here it is "ui"
+ '(nxml-element-prefix ((t (:foreground "#EC9852")))))
 
 
  ;; '(font-lock-regexp-grouping-backslash ((t (:inherit (bold)))))

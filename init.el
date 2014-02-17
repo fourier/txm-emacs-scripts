@@ -1,11 +1,35 @@
 ;;__________________________________________________________________________
 ;;;; Additional directories to search for emacs extensions
 
+
+(defmacro try-to-load(path mode &optional body)
+  "Push the path `path' to `load-path' if it exists.
+
+`mode' is the mode to requiere after this, `body' is the
+configuration commands to perform when the path exists.
+
+Example:
+\(try-add-path \"~/.emacs.d/ztree\" ztree-dir
+                            (message \"ztree loaded\"))
+
+will be expanded to:
+\(when (file-exists-p \"~/.emacs.d/ztree\")
+      (push (substitute-in-file-name \"~/.emacs.d/ztree\") load-path)
+      (require 'ztree-dir)
+      (message \"ztree loaded\"))
+
+"
+  `(when (file-exists-p ,path)
+     (push (substitute-in-file-name ,path) load-path)
+     (require ',mode)
+     ,body))
+  
 (push (substitute-in-file-name "~/.emacs.d/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
+(push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
 (let ((popup-path "~/.emacs.d/popup-el"))
   (when (file-exists-p popup-path)
     (push (substitute-in-file-name popup-path) load-path)))
@@ -33,12 +57,17 @@
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
+(let ((rtags-path (substitute-in-file-name "~/Sources/rtags/src")))
+  (when (file-exists-p rtags-path)
+    (push rtags-path load-path)))
+
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
   (push "/opt/local/bin" exec-path)
+  (push (substitute-in-file-name "$HOME/Applications") exec-path)
   (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH"))))
 (when (eq system-type 'gnu/linux)
   (push "/home/fourier/Applications/sbt/bin" exec-path)
@@ -68,6 +97,11 @@
 ;;(require 'tuareg)
 ;; hex-view
 (require 'hexview-mode)
+;;(require 'ztree-dir)
+(require 'ztree-diff)
+
+(require 'rtags)
+(rtags-enable-standard-keybindings c-mode-base-map)
 
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
@@ -477,7 +511,7 @@
 
 ;; Ediff customizations
 (setq ediff-split-window-function 'split-window-horizontally)
-
+  
 ;; reduced java machine options to run Scala on machine with small RAM
 (setenv "_JAVA_OPTIONS" "-Xms64m -Xmx128m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewSize=10m -XX:MaxNewSize=10m -XX:SurvivorRatio=6 -XX:TargetSurvivorRatio=80 -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled")
 

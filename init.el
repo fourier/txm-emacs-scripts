@@ -423,7 +423,10 @@ will be expanded to:
 ;; Automatically set closed date when closing TODO task
 ;; (setq org-log-done t)
 
+
 (setq auto-mode-alist (cons '("\\.svg\\'" . xml-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.es\\'" . js-mode) auto-mode-alist))
+
 
 
 ;; Custom functions to move line-wise buffers in other window

@@ -10,6 +10,7 @@
 (require 'dired-aux)
 (require 'dired-details)
 ;;(dired-details-install)
+(require 'ztree-diff)
 
 (defconst +kilobyte+ 1024)
 (defconst +megabyte+ (* 1024 1024))
@@ -207,10 +208,16 @@ with the current buffer"
     (let ((current-file (dired-get-file-for-visit))
           (other-file (txm-dired-file-other-window)))
       (when (and current-file
-                 other-file
-                 (not (file-directory-p current-file))
-                 (not (file-directory-p other-file)))
-        (ediff current-file other-file)))))
+                 other-file)
+        ;; if files - run ediff
+        ;; if directories - run ztreediff
+        (cond ((and (not (file-directory-p current-file))
+                    (not (file-directory-p other-file)))
+               (ediff current-file other-file))
+              ((and (file-directory-p current-file)
+                    (file-directory-p other-file))
+               (ztree-diff current-file other-file))
+              (t nil))))))
 
 (defun txm-count-similar-windows()
   "Calculate the number of the windows with the current buffer"

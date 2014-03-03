@@ -30,6 +30,11 @@ will be expanded to:
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
+
+
+(try-to-load "~/.emacs.d/strings-mode" strings-mode
+             (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
+
 (let ((popup-path "~/.emacs.d/popup-el"))
   (when (file-exists-p popup-path)
     (push (substitute-in-file-name popup-path) load-path)))
@@ -60,7 +65,8 @@ will be expanded to:
 (try-to-load (substitute-in-file-name "~/Sources/rtags/src") rtags
     (rtags-enable-standard-keybindings c-mode-base-map))
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
@@ -97,7 +103,6 @@ will be expanded to:
 (require 'hexview-mode)
 ;;(require 'ztree-dir)
 (require 'ztree-diff)
-
 
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
@@ -421,7 +426,7 @@ will be expanded to:
 
 
 (setq auto-mode-alist (cons '("\\.svg\\'" . xml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.es\\'" . js-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.es\\'" . js2-mode) auto-mode-alist))
 
 
 

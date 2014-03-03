@@ -76,6 +76,7 @@
  ; attribute value
  '(nxml-attribute-value ((t (:foreground "#A5C261"))))
  '(nxml-text ((t (:foreground "#BABABA"))))
+ '(nxml-cdata-section-content ((t (:foreground "gold"))))
  ; attribute prefix like xlink:href - here it is "xlink"
  ;'(nxml-attribute-prefix ((t (:foreground "#DADADA"))))
  '(nxml-attribute-prefix ((t (:foreground "#BBEDFF"))))

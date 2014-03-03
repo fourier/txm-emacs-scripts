@@ -57,10 +57,8 @@ will be expanded to:
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
-(let ((rtags-path (substitute-in-file-name "~/Sources/rtags/src")))
-  (when (file-exists-p rtags-path)
-    (push rtags-path load-path)))
-
+(try-to-load (substitute-in-file-name "~/Sources/rtags/src") rtags
+    (rtags-enable-standard-keybindings c-mode-base-map))
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
 
@@ -100,8 +98,6 @@ will be expanded to:
 ;;(require 'ztree-dir)
 (require 'ztree-diff)
 
-(require 'rtags)
-(rtags-enable-standard-keybindings c-mode-base-map)
 
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))

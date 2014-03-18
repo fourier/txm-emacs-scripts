@@ -309,6 +309,10 @@ in both of them."
 ;; Hotkey for search in files
 (define-key dired-mode-map [(meta f7)] 'find-grep-dired)
 
+;; Hotkey for search in files
+(define-key dired-mode-map [(C-f7)] 'find-name-dired)
+
+
 ;; Hotkey for directory creation
 (define-key dired-mode-map [f7] 'dired-create-directory)
 

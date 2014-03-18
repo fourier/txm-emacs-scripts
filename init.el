@@ -162,7 +162,8 @@ will be expanded to:
 (when (fboundp 'ns-toggle-fullscreen)
   (global-set-key "\M-\r" 'ns-toggle-fullscreen))
 ;; Switch btw frames like in Mac OS X
-(global-set-key "\M-`" 'other-frame)
+(when (eq system-type 'darwin)
+  (global-set-key "\M-`" 'other-frame))
 ;; begin/end of defun, alternative to Ctrl+Alt+A/E
 ;;(global-set-key "\M-[" 'beginning-of-defun)
 ;;(global-set-key "\M-]" 'end-of-defun)
@@ -566,7 +567,16 @@ will be expanded to:
 (define-key Info-mode-map [M-up] 'Info-up)
 (define-key Info-mode-map [M-down] 'Info-follow-nearest-node)
 
-(load "full-ack.el")
+;; Ack plugin
+;; No need to require it here, since it will be autoloaded
+;; AFTER the init file
+;;(require 'ack-knd-a-half)
+;; Create shorter aliases
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+(defalias 'ack-find-file 'ack-and-a-half-find-file)
+(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+
 
 ;; determine if the GNU Screen is running
 (when (getenv "STY")

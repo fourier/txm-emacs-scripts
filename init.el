@@ -25,8 +25,6 @@ will be expanded to:
      ,body))
   
 (push (substitute-in-file-name "~/.emacs.d/") load-path)
-(push (substitute-in-file-name "~/.emacs.d/slime/") load-path)
-(push (substitute-in-file-name "~/.emacs.d/slime/contrib") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
@@ -87,8 +85,6 @@ will be expanded to:
 (require 'qt-pro)
 ;;(require 'w3m-load)
 (require 'mic-paren)
-(require 'slime-autoloads)
-(require 'slime)
 (require 'recentf)
 ;;(require 'yasnippet)
 (require 'fill-column-indicator)

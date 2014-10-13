@@ -356,4 +356,8 @@ in both of them."
 ;; dired-jump from dired-x does exactly what I wanted
 (global-set-key  "\C-d" 'dired-jump)
 (global-set-key  "\M-d" 'dired-jump-other-window)
+(global-set-key  (kbd "C-S-d") '(lambda ()
+                                  (interactive)
+                                  (make-frame-command)
+                                  (dired-jump)))
 

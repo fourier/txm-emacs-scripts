@@ -28,7 +28,9 @@ will be expanded to:
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
-
+;; SLIME from QuickLisp distribution. If not found, install through
+;; (ql:quickload "swank")
+(push (substitute-in-file-name"~/.quicklisp/dists/quicklisp/software/slime-2.9") load-path)
 
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
@@ -99,6 +101,8 @@ will be expanded to:
 (require 'hexview-mode)
 ;;(require 'ztree-dir)
 (require 'ztree-diff)
+;; SLIME
+(require 'slime-autoloads)
 
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
@@ -144,6 +148,13 @@ will be expanded to:
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f2] 'eshell)
 (global-set-key "\C-xj" 'join-line)
+;; make Emacs behave like OSX app with hotkeys
+(when (eq system-type 'darwin)
+  ;; Switch btw frames like in Mac OS X
+  (global-set-key "\M-`" 'other-frame)
+  ;; Cmd-n to open a new window and Cmd-w to kill the window
+  (global-set-key "\C-n" 'make-frame-command))
+
 ;; Tags keybindings
 ;;(global-set-key [(control ?.)] 'txm-goto-tag-at-point)
 ;;(global-set-key [(control ?,)] 'pop-tag-mark)
@@ -157,9 +168,6 @@ will be expanded to:
 ;; works only in special build of Emacs
 (when (fboundp 'ns-toggle-fullscreen)
   (global-set-key "\M-\r" 'ns-toggle-fullscreen))
-;; Switch btw frames like in Mac OS X
-(when (eq system-type 'darwin)
-  (global-set-key "\M-`" 'other-frame))
 ;; begin/end of defun, alternative to Ctrl+Alt+A/E
 ;;(global-set-key "\M-[" 'beginning-of-defun)
 ;;(global-set-key "\M-]" 'end-of-defun)
@@ -354,7 +362,9 @@ will be expanded to:
 		(setq slime-complete-symbol*-fancy t)
 		(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 		(setq slime-multiprocessing t)
-		(setq slime-net-coding-system 'utf-8-unix)))
+		(setq slime-net-coding-system 'utf-8-unix)
+    (add-to-list 'slime-contribs 'slime-autodoc)))
+
 
 (when (or (eq system-type 'gnu/linux)
           (eq system-type 'darwin))
@@ -365,31 +375,12 @@ will be expanded to:
   ;; (setq inferior-lisp-program "clisp -K full")
   (setq ns-use-system-highlight-color nil))
 
-;; HOWTO install documentation described here:
-;; http://habib.posterous.com/refer-to-cl-documentation-from
-;; HyperSpec local path
-;; 1) Configure w3m to use documentation in Emacs window
-(when nil
-  (require 'w3m-load)
-  ;; without this loads w3m failed to open pages
-  (load "w3m-util.el")
-  (load "w3m-proc.el")
-  ;; helper function to open web pages in other window
-  (setq browse-url-browser-function 'w3m-browse-url-other-window)
-  (defun w3m-browse-url-other-window (url &optional newwin)
-    (let ((w3m-pop-up-windows t))
-      ;; (if (one-window-p) (split-window))
-      (split-window)
-      (other-window 1)
-      (w3m-browse-url url newwin)))
+(let ((clhs-el-file (substitute-in-file-name "~/.quicklisp/clhs-use-local.el")))
+  (when (file-exists-p clhs-el-file)
+    (load clhs-el-file t)))
 
-  (setq browse-url-browser-function 'w3m-browse-url)
-  (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t))
-
-(setq common-lisp-hyperspec-root (substitute-in-file-name "$HOME/.emacs.d/HyperSpec/"))
-(setq common-lisp-hyperspec-symbol-table (concat common-lisp-hyperspec-root "Data/Map_Sym.txt"))
-(define-key lisp-mode-map [(f1)] 'slime-documentation-lookup)
-
+(define-key lisp-mode-map [C-f1] 'slime-documentation-lookup)
+(define-key lisp-mode-map [M-f1] 'slime-describe-symbol)
 
 ;; CL indentation rules are different from Emacs Lisp indentation
 ;; rules. Make the lisp indentation in CL-style
@@ -424,7 +415,6 @@ will be expanded to:
 
 (setq auto-mode-alist (cons '("\\.svg\\'" . xml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.es\\'" . js2-mode) auto-mode-alist))
-
 
 
 ;; Custom functions to move line-wise buffers in other window
@@ -586,12 +576,20 @@ will be expanded to:
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict"))
 
 
+;; nxml configuration
+;; set path to custom RelaxNG schemas (i.e. XSL2/3)
+(push (substitute-in-file-name "$HOME/.emacs.d/nxml-schemas/schemas.xml") rng-schema-locating-files)
+;; "</" autocompletes the tag
+(setq nxml-slash-auto-complete-flag t)
+;;
+(add-hook 'nxml-mode-hook 'auto-complete-mode)
+
+
 (load "txm.el")
 (load "txm-dired.el")
 (let ((gnus-config-name "~/.emacs.d/txm-gnus.el"))
   (when (file-exists-p gnus-config-name)
     (load gnus-config-name)))
-
 
 
 

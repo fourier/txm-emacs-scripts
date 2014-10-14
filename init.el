@@ -30,7 +30,8 @@ will be expanded to:
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
 ;; SLIME from QuickLisp distribution. If not found, install through
 ;; (ql:quickload "swank")
-(push (substitute-in-file-name"~/.quicklisp/dists/quicklisp/software/slime-2.9") load-path)
+(push (substitute-in-file-name "~/.quicklisp/dists/quicklisp/software/slime-2.9") load-path)
+(push (substitute-in-file-name "~/Sources/lisp-sandbox/quicklisp/dists/quicklisp/software/slime-2.9") load-path)
 
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))

@@ -23,15 +23,20 @@ will be expanded to:
      (push (substitute-in-file-name ,path) load-path)
      (require ',mode)
      ,body))
-  
+
 (push (substitute-in-file-name "~/.emacs.d/") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
-;; SLIME from QuickLisp distribution. If not found, install through
+;; SLIME from QuickLisp distribution. If not found, install it through the quicklisp:
 ;; (ql:quickload "swank")
-(push (substitute-in-file-name "~/.quicklisp/dists/quicklisp/software/slime-2.9") load-path)
-(push (substitute-in-file-name "~/Sources/lisp-sandbox/quicklisp/dists/quicklisp/software/slime-2.9") load-path)
+;; different possible quicklist paths for different systems
+(let ((slime-paths (list (substitute-in-file-name "~/.quicklisp/dists/quicklisp/software/slime-2.9")
+                         (substitute-in-file-name "~/Sources/lisp-sandbox/quicklisp/dists/quicklisp/software/slime-2.9"))))
+  (mapcar #'(lambda (path) (when (file-exists-p path)
+                             (push path load-path)))
+          slime-paths))
+
 
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
@@ -57,14 +62,11 @@ will be expanded to:
 (let ((scala-mode-path "~/.emacs.d/scala-mode2"))
   (when (file-exists-p scala-mode-path)
     (push (substitute-in-file-name scala-mode-path) load-path)))
-(let ((ensime-path "~/.emacs.d/ensime/dist/elisp"))
-  (when (file-exists-p ensime-path)
-    (push (substitute-in-file-name ensime-path) load-path)))
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
 (try-to-load (substitute-in-file-name "~/Sources/rtags/src") rtags
-    (rtags-enable-standard-keybindings c-mode-base-map))
+             (rtags-enable-standard-keybindings c-mode-base-map))
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
@@ -93,8 +95,6 @@ will be expanded to:
 (require 'fill-column-indicator)
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/scala-mode2/"))
   (require 'scala-mode2))
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/ensime"))
-  (require 'ensime))
 ;;(require 'cl)
 ;; for OCAML
 ;;(require 'tuareg)
@@ -104,19 +104,18 @@ will be expanded to:
 (require 'ztree-diff)
 ;; SLIME
 (require 'slime-autoloads)
-
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
   (require 'helm-config)
   (global-set-key [f10] 'helm-mini))
-  
+
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
 
 (autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
+  "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
-   (cons '("\\.md" . markdown-mode) auto-mode-alist))
+      (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 ;; Swap "C-u" and "C-x", so it's easier to type on Dvorak layout
 (keyboard-translate ?\C-u ?\C-x)
@@ -205,20 +204,20 @@ will be expanded to:
   (interactive)
   (call-interactively
    (intern
-	(ido-completing-read
-	 "M-x "
-	 (progn
-	   (unless ido-execute-command-cache
-		 (mapatoms (lambda (s)
-					 (when (commandp s)
-					   (setq ido-execute-command-cache
-							 (cons (format "%S" s) ido-execute-command-cache))))))
-	   ido-execute-command-cache)))))
+    (ido-completing-read
+     "M-x "
+     (progn
+       (unless ido-execute-command-cache
+         (mapatoms (lambda (s)
+                     (when (commandp s)
+                       (setq ido-execute-command-cache
+                             (cons (format "%S" s) ido-execute-command-cache))))))
+       ido-execute-command-cache)))))
 
 (add-hook 'ido-setup-hook
-		  (lambda ()
-			(setq ido-enable-flex-matching t)
-			(global-set-key "\M-x" 'ido-execute-command)))
+          (lambda ()
+            (setq ido-enable-flex-matching t)
+            (global-set-key "\M-x" 'ido-execute-command)))
 
 
 ;; Turn on the mode to show 80-chars indicator line
@@ -239,7 +238,7 @@ will be expanded to:
 
 ;; set autosave timeout to 2 minutes
 (setq auto-save-timeout 120)
-      
+
 ;; Save desktop status
 ;; set default directory for saving desktop files
 (desktop-save-mode t)
@@ -280,13 +279,13 @@ will be expanded to:
 (setq mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
-; turn off cursor blinking 
+                                        ; turn off cursor blinking 
 (blink-cursor-mode 0)
 
 ;; Code display options (highlight parens & colorize)
 (show-paren-mode)
 
-; parenthesis mode. see mic-paren for description
+                                        ; parenthesis mode. see mic-paren for description
 (when window-system
 	(paren-activate)     ; activating
 	;; (setq paren-match-face '(underline paren-face))
@@ -295,9 +294,9 @@ will be expanded to:
 	(setq parse-sexp-ignore-comments t))
 
 
-; set tab size to 2 columns
+                                        ; set tab size to 2 columns
 (setq-default tab-width 2)
-; always insert TAB signs when TAB is pressed
+                                        ; always insert TAB signs when TAB is pressed
 (setq-default indent-tabs-mode nil)
 
 
@@ -308,7 +307,7 @@ will be expanded to:
 ;; Set the name of the host and current path/file in title bar:
 (setq frame-title-format
       (list (format "%s %%S: %%j " (system-name))
-	    '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+            '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
 ;; Do not create backup files (with ~ sign at the end)
 (setq make-backup-files nil)
@@ -322,8 +321,8 @@ will be expanded to:
 			(menu-bar-mode t)
 			;; turn off scrollbar
 			(scroll-bar-mode -1))
-		;; turn off menu in console
-		(menu-bar-mode 0))
+  ;; turn off menu in console
+  (menu-bar-mode 0))
 
 ;; Misc customizations
 (fset 'yes-or-no-p 'y-or-n-p)           ; replace y-e-s by y
@@ -357,14 +356,14 @@ will be expanded to:
 ;; Slime customizations
 (eval-after-load "slime"
   '(progn
-		(add-to-list 'auto-mode-alist '("\\.cl" . lisp-mode))
-		(slime-setup '(slime-fancy slime-asdf slime-banner))
-		(global-set-key "\C-cs" 'slime-selector)
-		(setq slime-complete-symbol*-fancy t)
-		(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-		(setq slime-multiprocessing t)
-		(setq slime-net-coding-system 'utf-8-unix)
-    (add-to-list 'slime-contribs 'slime-autodoc)))
+     (add-to-list 'auto-mode-alist '("\\.cl" . lisp-mode))
+     (slime-setup '(slime-fancy slime-asdf slime-banner))
+     (global-set-key "\C-cs" 'slime-selector)
+     (setq slime-complete-symbol*-fancy t)
+     (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+     (setq slime-multiprocessing t)
+     (setq slime-net-coding-system 'utf-8-unix)
+     (add-to-list 'slime-contribs 'slime-autodoc)))
 
 
 (when (or (eq system-type 'gnu/linux)
@@ -386,7 +385,7 @@ will be expanded to:
 ;; CL indentation rules are different from Emacs Lisp indentation
 ;; rules. Make the lisp indentation in CL-style
 (set (make-local-variable lisp-indent-function)
-	 'common-lisp-indent-function)
+     'common-lisp-indent-function)
 
 ;; Python customization 
 (defun python-mode-customization ()
@@ -395,7 +394,7 @@ will be expanded to:
         py-indent-offset 2
         indent-tabs-mode nil
         py-smart-indentation nil
-	   python-indent 2)
+        python-indent 2)
 	(set (make-variable-buffer-local 'beginning-of-defun-function)
 			 'py-beginning-of-def-or-class)
 	(setq outline-regexp "def\\|class "))
@@ -451,10 +450,10 @@ will be expanded to:
 (add-hook 'message-mode-hook
           '(lambda ()
              (define-key message-mode-map "\C-c\C-c" '(lambda ()
-                                           "save and exit quickly"
-                                           (interactive)
-                                           (save-buffer)
-                                           (server-edit)))))
+                                                        "save and exit quickly"
+                                                        (interactive)
+                                                        (save-buffer)
+                                                        (server-edit)))))
 ;; Spell checking
 ;; Turn on spell checking in comments
 ;;(flyspell-prog-mode)
@@ -503,7 +502,7 @@ will be expanded to:
 
 ;; Ediff customizations
 (setq ediff-split-window-function 'split-window-horizontally)
-  
+
 ;; reduced java machine options to run Scala on machine with small RAM
 (setenv "_JAVA_OPTIONS" "-Xms64m -Xmx128m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewSize=10m -XX:MaxNewSize=10m -XX:SurvivorRatio=6 -XX:TargetSurvivorRatio=80 -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled")
 
@@ -567,8 +566,8 @@ will be expanded to:
 
 ;; determine if the GNU Screen is running
 (when (getenv "STY")
-   (define-key function-key-map (kbd "<select>") (kbd "<end>"))
-   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
+  (define-key function-key-map (kbd "<select>") (kbd "<end>"))
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
 
 ;; Autocomplete configuration
 (when (boundp 'txm-autocomplete-installed)

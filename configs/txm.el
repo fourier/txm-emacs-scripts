@@ -328,6 +328,15 @@
   ;; turn on autocomplete-clang
   (txm-ac-config))
 
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/tmux-cfg.el"))
+(defun txm-open-menu ()
+  "Activates menu bar mode if not active and opens menu"
+  (interactive)
+  (when (not menu-bar-mode)
+    (menu-bar-mode))
+  (menu-bar-open))
+
+
+
+(when (file-exists-p (substitute-in-file-name "~/.emacs.d/elisp/tmux-cfg.el"))
   (load "tmux-cfg.el"))
 

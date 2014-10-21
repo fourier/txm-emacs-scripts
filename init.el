@@ -110,7 +110,7 @@ will be expanded to:
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
   (require 'helm-config)
-  (global-set-key [f10] 'helm-mini))
+  (global-set-key [f2] 'helm-mini))
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
@@ -142,14 +142,13 @@ will be expanded to:
 (global-set-key "\C-xg" 'goto-line)
 (global-set-key "\r" 'newline-and-indent)
 (global-set-key "\C-xf" 'recentf-open-files)
-(global-set-key [f11] 'menu-bar-mode)
 (global-set-key [C-f4] 'kill-buffer)
 (global-set-key [M-up] 'scroll-other-window-down-1) ; Alt-Up moves text in other window up
 (global-set-key [M-down] 'scroll-other-window-up-1) ; Alt-Up moves text in other window down
 (global-set-key [M-f4] 'save-buffers-kill-emacs)
 (global-set-key [S-f7] 'query-replace)
 (global-set-key [f5] 'revert-buffer)
-(global-set-key [f2] 'eshell)
+;;(global-set-key [f2] 'eshell)
 (global-set-key "\C-xj" 'join-line)
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
@@ -181,7 +180,11 @@ will be expanded to:
 ;; Ctrl + keypad insert acts as C-x r s to store to register
 (global-set-key [C-kp-insert] 'copy-to-register)
 (global-set-key "\C-j" 'indent-new-comment-line)
+;; Set text-mode menu
+(global-set-key [S-f10] 'menu-bar-mode)
+(global-set-key [f10] 'txm-open-menu)
 ;;
+
 
 ;;__________________________________________________________________________
 

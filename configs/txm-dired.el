@@ -12,8 +12,8 @@
 ;;(dired-details-install)
 (require 'ztree-diff)
 
-(defconst +kilobyte+ 1024)
-(defconst +megabyte+ (* 1024 1024))
+(defconst +kilobyte+ 1024.0)
+(defconst +megabyte+ (* 1024 1024.0))
 (defconst +gigabyte+ (* 1024 1024 1024.0))
 (defconst +terabyte+ (* 1024 1024 1024.0 1024.0))
 
@@ -24,15 +24,17 @@
 
 (defun txm-format-file-size (size)
   "Return string with formatted file size"
-  (cond ((< size +kilobyte+)
-         (concat (number-to-string size) " bytes"))
-        ((< size +megabyte+)
-         (concat (number-to-string (/ size +kilobyte+)) " Kb"))
-        ((< size +gigabyte+)
-         (concat (number-to-string (/ size +megabyte+)) " Mb"))
-        ((< size +terabyte+)
-         (concat (number-to-string (/ size +gigabyte+)) " Gb"))
-        (t "Unknown size")))
+  (cl-flet ((float-to-string (x)
+                              (format "%.2f" x)))
+    (cond ((< size +kilobyte+)
+           (concat (number-to-string size) " bytes"))
+          ((< size +megabyte+)
+           (concat (float-to-string (/ size +kilobyte+)) " Kb"))
+          ((< size +gigabyte+)
+           (concat (float-to-string (/ size +megabyte+)) " Mb"))
+          ((< size +terabyte+)
+           (concat (float-to-string (/ size +gigabyte+)) " Gb"))
+          (t "Unknown size"))))
 
 
 (defun txm-file-or-dir-size (path)
@@ -63,7 +65,12 @@ Assuming .. and . is a current directory (like in FAR)"
             (setq file (dired-current-directory)))
           (let ((size (txm-file-or-dir-size file)))
             (if (/= size -1 )
-                (message (concat (txm-format-file-size size) " in " filename))
+                (message (concat (txm-format-file-size size)
+                                 " in "
+                                 filename
+                                 " ("
+                                 (number-to-string size)
+                                 " bytes)"))
               (message (concat "Cannot determine size of " filename)))))
       (view-file file))))
 

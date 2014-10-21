@@ -24,7 +24,10 @@ will be expanded to:
      (require ',mode)
      ,body))
 
-(push (substitute-in-file-name "~/.emacs.d/") load-path)
+;; own config files 
+(push (substitute-in-file-name "~/.emacs.d/configs") load-path)
+;; single-file downloaded elisp scripts
+(push (substitute-in-file-name "~/.emacs.d/elisp") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
@@ -492,7 +495,7 @@ will be expanded to:
 (setq TeX-save-query nil)
 
 ;; Mathematica
-(let ((mathematica-mode-file (substitute-in-file-name "$HOME/.emacs.d/mathematica.el")))
+(let ((mathematica-mode-file (substitute-in-file-name "$HOME/.emacs.d/elisp/mathematica.el")))
   (when (file-exists-p mathematica-mode-file)
     (setq mathematica-command-line "/Applications/Mathematica.app/Contents/MacOS/MathKernel")
     (load-file mathematica-mode-file)))
@@ -587,7 +590,7 @@ will be expanded to:
 
 (load "txm.el")
 (load "txm-dired.el")
-(let ((gnus-config-name "~/.emacs.d/txm-gnus.el"))
+(let ((gnus-config-name "~/.emacs.d/elisp/txm-gnus.el"))
   (when (file-exists-p gnus-config-name)
     (load gnus-config-name)))
 

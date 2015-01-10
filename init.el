@@ -51,13 +51,6 @@ will be expanded to:
   (when (file-exists-p autocomplete-path)
     (push autocomplete-path load-path)
     (setq txm-autocomplete-installed t)))
-(let* ((clang-autocomplete-path (substitute-in-file-name "~/.emacs.d/emacs-clang-complete-async/"))
-       (clang-autocomplete-executable (substitute-in-file-name "~/.emacs.d/emacs-clang-complete-async/clang-complete")))
-  (when (and (file-exists-p clang-autocomplete-path)
-             (file-exists-p clang-autocomplete-executable))
-    (push clang-autocomplete-path load-path)
-    (setq txm-clang-autocomplete-installed t
-          txm-clang-autocomplete-executable clang-autocomplete-executable)))
 
 (let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
   (when (file-exists-p helm-path)
@@ -440,10 +433,13 @@ will be expanded to:
 
 
 ;; YASnippet customization
-;;(setq yas/root-directory (substitute-in-file-name "$HOME/.emacs.d/yasnippet-0.6.1c/snippets"))
-;;(yas/load-directory yas/root-directory)
-;;(yas/global-mode t)
-
+;;(define-key yas-minor-mode-map (kbd "<tab>") nil)
+;;(define-key yas-minor-mode-map (kbd "TAB") nil)
+;; Set Yasnippet's key binding to shift+tab
+;;(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+(eval-after-load "yasnippet"
+  '(progn
+     (yas/initialize)))
 
 ;; Turn on showing current function in modeline
 (which-func-mode t)
@@ -464,6 +460,15 @@ will be expanded to:
 ;; Turn on spell checking in comments
 ;;(flyspell-prog-mode)
 ;; set default spell-checking program
+(require 'flyspell)
+(setq flyspell-issue-message-flg nil)
+(add-hook 'enh-ruby-mode-hook
+          (lambda () (flyspell-prog-mode)))
+
+(add-hook 'web-mode-hook
+          (lambda () (flyspell-prog-mode)))
+;; flyspell mode breaks auto-complete mode without this.
+(ac-flyspell-workaround)
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
 
@@ -579,8 +584,13 @@ will be expanded to:
 (when (boundp 'txm-autocomplete-installed)
   (require 'auto-complete-config)
   (ac-config-default)
+  (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
+    (let ((yas-fallback-behavior nil))
+      ad-do-it))
+  (setq ac-auto-start nil)
+  (ac-set-trigger-key "TAB")
+  (add-to-list 'ac-modes 'enh-ruby-mode)
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict"))
-
 
 ;; nxml configuration
 ;; set path to custom RelaxNG schemas (i.e. XSL2/3)

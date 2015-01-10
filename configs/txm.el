@@ -262,7 +262,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (push (substitute-in-file-name "~/.emacs.d/configs/") custom-theme-load-path)
 (load-theme 'borland-cpp-alike t)
-
+;;(load-theme 'idea-darkula t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Frame font

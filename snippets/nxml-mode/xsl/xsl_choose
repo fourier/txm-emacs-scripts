@@ -1,0 +1,14 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: <xsl:choose ...
+# key: choose
+# binding: direct-keybinding
+# --
+<xsl:choose>
+  <xsl:when test="$1">
+    $2
+  </xsl:when>
+  <xsl:otherwise>
+    $3
+  </xsl:otherwise>
+</xsl:choose>
+$0

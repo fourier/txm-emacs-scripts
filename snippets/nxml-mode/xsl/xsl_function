@@ -1,0 +1,10 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: <xsl:function ...
+# key: func
+# binding: direct-keybinding
+# --
+<xsl:function name="$1" as="xs:string">
+  <xsl:param name="$2"/>
+    $3
+</xsl:function>
+$0

@@ -437,6 +437,7 @@ will be expanded to:
 ;;(define-key yas-minor-mode-map (kbd "TAB") nil)
 ;; Set Yasnippet's key binding to shift+tab
 ;;(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
+(setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
 (eval-after-load "yasnippet"
   '(progn
      (yas/initialize)))

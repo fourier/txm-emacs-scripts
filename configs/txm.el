@@ -166,8 +166,8 @@
 
 (eval-after-load "cc-mode"
   '(progn
-     (define-key c-mode-map [f7] 'lrci-compile)
-     (define-key c++-mode-map [f7] 'lrci-compile)
+     (define-key c-mode-map [f7] 'txm-compile)
+     (define-key c++-mode-map [f7] 'txm-compile)
      (define-key c-mode-map "\C-d" 'dired-jump)
      (define-key c++-mode-map "\C-d" 'dired-jump)
      (define-key c-mode-map "\M-d" 'dired-jump-other-window)
@@ -335,6 +335,42 @@
     (menu-bar-mode))
   (menu-bar-open))
 
+(defun txm-swap-buffers-in-windows ()
+  "Put the buffer from the selected window in next window, and vice versa
+Only when 2 windows active"
+  (interactive)
+  (when (= 2 (count-windows))
+    (let* ((this (selected-window))
+           (other (next-window))
+           (this-buffer (window-buffer this))
+           (other-buffer (window-buffer other)))
+      (set-window-buffer other this-buffer)
+      (set-window-buffer this other-buffer))))
+
+(setq compilation-filenames '("Makefile" "makefile"))
+
+(defun get-nearest-compilation-file ()
+  "Search for the compilation file traversing up the directory tree."
+  (let ((dir default-directory)
+	(parent-dir (file-name-directory (directory-file-name default-directory)))
+	(nearest-compilation-file 'nil))
+    (while (and (not (string= dir parent-dir))
+		(not nearest-compilation-file))
+      (dolist (filename compilation-filenames)
+	(setq file-path (concat dir filename))
+	(when (file-readable-p file-path)
+	  (setq nearest-compilation-file file-path)))
+      (setq dir parent-dir
+	    parent-dir (file-name-directory (directory-file-name parent-dir))))
+    nearest-compilation-file))  
+
+(defun txm-compile ()
+  (interactive)
+  (let ((makefile (get-nearest-compilation-file)))
+    (if (> (length makefile) 0)
+        (let ((dir (file-name-directory makefile)))
+          (compile (format "cd %s && make -f %s" dir makefile)))
+      (message "No makefile found in current or above directrories"))))
 
 
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/elisp/tmux-cfg.el"))

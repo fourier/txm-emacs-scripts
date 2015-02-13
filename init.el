@@ -30,6 +30,7 @@ will be expanded to:
 (push (substitute-in-file-name "~/.emacs.d/elisp") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
+(push (substitute-in-file-name "~/.emacs.d/ac-slime") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
 ;; SLIME from QuickLisp distribution. If not found, install it through the quicklisp:
 ;; (ql:quickload "swank")
@@ -100,10 +101,12 @@ will be expanded to:
 (require 'ztree-diff)
 ;; SLIME
 (require 'slime-autoloads)
+(require 'ac-slime)
 ;; helm customizations
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
   (require 'helm-config)
   (global-set-key [f2] 'helm-mini))
+
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
@@ -130,6 +133,7 @@ will be expanded to:
   (setq x-super-keysym 'meta))
 
 (global-set-key [f6] 'other-window)
+(global-set-key [S-f6] 'txm-swap-buffers-in-windows)
 ;; for terminal w/o function keys
 (global-set-key (kbd "\C-x\C-o") 'other-window)
 (global-set-key "\C-xg" 'goto-line)
@@ -355,15 +359,19 @@ will be expanded to:
 ;; Slime customizations
 (eval-after-load "slime"
   '(progn
-     (add-to-list 'auto-mode-alist '("\\.cl" . lisp-mode))
+     (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
+     (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
      (slime-setup '(slime-fancy slime-asdf slime-banner))
      (global-set-key "\C-cs" 'slime-selector)
      (setq slime-complete-symbol*-fancy t)
      (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
      (setq slime-multiprocessing t)
      (setq slime-net-coding-system 'utf-8-unix)
-     (add-to-list 'slime-contribs 'slime-autodoc)))
-
+     (add-to-list 'slime-contribs 'slime-autodoc)
+     (add-hook 'slime-mode-hook 'set-up-slime-ac)
+     (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+     (eval-after-load "auto-complete"
+       '(add-to-list 'ac-modes 'slime-repl-mode))))
 
 (when (or (eq system-type 'gnu/linux)
           (eq system-type 'darwin))
@@ -600,6 +608,11 @@ will be expanded to:
 (setq nxml-slash-auto-complete-flag t)
 ;;
 (add-hook 'nxml-mode-hook 'auto-complete-mode)
+
+;; Groovy customization
+(add-to-list 'auto-mode-alist '("\\.groovy$" . groovy-mode))
+(add-to-list 'auto-mode-alist '("\\.gradle$" . groovy-mode))
+
 
 
 (load "txm.el")

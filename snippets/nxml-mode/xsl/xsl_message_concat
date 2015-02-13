@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: <xsl:message><xsl:value-of select=...
+# key: message
+# binding: direct-keybinding
+# --
+<xsl:message><xsl:value-of select="concat($1)"/></xsl:message>
+$0

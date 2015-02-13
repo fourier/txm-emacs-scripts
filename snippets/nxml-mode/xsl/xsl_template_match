@@ -1,0 +1,10 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: <xsl:template match= ...
+# key: template
+# binding: direct-keybinding
+# --
+<xsl:template match="$1" mode="$2">
+  <xsl:param name="$3"/>
+    $4
+</xsl:template>
+$0

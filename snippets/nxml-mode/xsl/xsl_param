@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: <xsl:param ...
+# key: param
+# binding: direct-keybinding
+# --
+<xsl:param name="$1" select="$2"/>
+$0

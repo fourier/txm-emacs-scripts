@@ -52,13 +52,6 @@ will be expanded to:
   (when (file-exists-p autocomplete-path)
     (push autocomplete-path load-path)
     (setq txm-autocomplete-installed t)))
-
-(let ((helm-path (substitute-in-file-name "~/.emacs.d/helm/")))
-  (when (file-exists-p helm-path)
-    (push helm-path load-path)))
-(let ((scala-mode-path "~/.emacs.d/scala-mode2"))
-  (when (file-exists-p scala-mode-path)
-    (push (substitute-in-file-name scala-mode-path) load-path)))
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
@@ -80,8 +73,8 @@ will be expanded to:
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
 ;;(require 'quack)
+(require 'info)
 (require 'flymake)
-(require 'python-mode)
 (require 'nxml-mode)
 (require 'vc-ediff)
 (require 'qt-pro)
@@ -90,8 +83,6 @@ will be expanded to:
 (require 'recentf)
 ;;(require 'yasnippet)
 (require 'fill-column-indicator)
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/scala-mode2/"))
-  (require 'scala-mode2))
 ;;(require 'cl)
 ;; for OCAML
 ;;(require 'tuareg)
@@ -103,10 +94,7 @@ will be expanded to:
 (require 'slime-autoloads)
 (require 'ac-slime)
 ;; helm customizations
-(when (file-exists-p (substitute-in-file-name "~/.emacs.d/helm/"))
-  (require 'helm-config)
-  (global-set-key [f2] 'helm-mini))
-
+;;   (require 'helm-config)
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
@@ -147,6 +135,7 @@ will be expanded to:
 (global-set-key [f5] 'revert-buffer)
 ;;(global-set-key [f2] 'eshell)
 (global-set-key "\C-xj" 'join-line)
+(global-set-key [f2] 'helm-mini)
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
   ;; Switch btw frames like in Mac OS X
@@ -394,20 +383,31 @@ will be expanded to:
 (set (make-local-variable lisp-indent-function)
      'common-lisp-indent-function)
 
-;; Python customization 
+;; Python customization
+;; need to install from melpa: python-mode, jedi
+;; in order to use jedi, install virtualenv and make
+;; it available in path, i.e. for MacPorts:
+;; sudo port install py27-virtualenv virtualenv_select
+;; sudo port select --activate virtualenv27
+(setq txm-python-jedi-started nil)
 (defun python-mode-customization ()
-  ;; set proper tab width in Python mode
-  (setq tab-width 2
-        py-indent-offset 2
-        indent-tabs-mode nil
-        py-smart-indentation nil
-        python-indent 2)
 	(set (make-variable-buffer-local 'beginning-of-defun-function)
 			 'py-beginning-of-def-or-class)
-	(setq outline-regexp "def\\|class "))
+	(setq outline-regexp "def\\|class ")
+  (when (not txm-python-jedi-started)
+    (jedi:install-server)
+    (setq txm-python-jedi-started t)))
+(eval-after-load "python-mode"
+  '(progn
+     ;; set proper tab width in Python mode  
+     (customize-set-variable 'py-indent-offset 2)
+     ;; fontify class/method documentation
+     (customize-set-variable 'py-use-font-lock-doc-face-p t)))
 
 (add-hook 'python-mode-hook 'python-mode-customization)
+(add-hook 'python-mode-hook 'jedi:setup)
 (autoload 'python-mode "python-mode" "Python Mode." t)
+
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
@@ -422,6 +422,17 @@ will be expanded to:
 
 (setq auto-mode-alist (cons '("\\.svg\\'" . xml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.es\\'" . js2-mode) auto-mode-alist))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Shackle - windows layout configuration
+;; see https://github.com/wasamasa/shackle
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(eval-after-load "shackle"
+  '(progn
+     (setq shackle-rules
+           '((compilation-mode :noselect t :align 'below)
+             (t :select t)))
+     (shackle-mode)))
 
 
 ;; Custom functions to move line-wise buffers in other window
@@ -638,12 +649,20 @@ will be expanded to:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
- '(quack-programs (quote ("gui" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "gu" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
- '(safe-local-variable-values (quote ((TeX-master . "main") (TeX-master . t) (ac-clang-cflags "-I../inc") (ac-clang-cflags . "-I../inc") (ac-clang-cflags . "-I ../inc") (ac-clang-cflags . "--std=c99 -I ../inc") (unittest-name . anptotalpowerconssv) (unittest-name . currentsv) (unittest-name . anusupervisionserviceprovidertest) (unittest-name . feedersv) (unittest-name . CurrentMeas) (unittest-name . VSWRMeasSupervision) (unittest-name . tmaSupervision) (unittest-name . anusupervisionservicetest)))))
+ '(preview-gs-options
+   (quote
+    ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
+ '(quack-programs
+   (quote
+    ("gui" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "gu" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
+ '(safe-local-variable-values
+   (quote
+    ((ac-clang-cflags "-I../inc")
+     (TeX-master . "main")
+     (TeX-master . t)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(preview-reference-face ((t (:foreground "white")))))
+ )

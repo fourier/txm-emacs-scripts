@@ -63,21 +63,20 @@
     (jump-to-register 0)))
 
 (defun txm-close-temporary-window ()
+  "Close all temporary windows in current frame"
   (interactive)
   (let ((current-window (selected-window)))
     (dolist (window (window-list))
       (select-window window)
-      (message  (symbol-name major-mode))
-      (cond ((eq major-mode 'help-mode)
-             (or (View-quit) (quit-window)))
-            ((or (eq major-mode 'compilation-mode)
-                 (eq major-mode 'completion-list-mode)
-                 (eq major-mode 'Man-mode)
-                 (eq major-mode 'apropos-mode)
-                 (eq major-mode 'grep-mode)
-                 (string= (buffer-name) "*slime-description*"))
+      (when (or (eq major-mode 'help-mode)
+                (eq major-mode 'compilation-mode)
+                (eq major-mode 'completion-list-mode)
+                (eq major-mode 'Man-mode)
+                (eq major-mode 'apropos-mode)
+                (eq major-mode 'grep-mode)
+                (string= (buffer-name) "*slime-description*"))
              (quit-window)))
-    (select-window current-window))))
+     (select-window current-window)))
 
 
 (require 'vc-hooks)
@@ -87,7 +86,13 @@
 ;;;###autoload
 (define-key vc-prefix-map [?=] 'vc-ediff)
 
-(global-set-key "\M-q" 'txm-close-temporary-window)
+;; use Esc to close temporary windows
+(let ((hotkey
+       (if window-system (kbd "<escape>") "\M-q")))
+  (global-set-key hotkey 'txm-close-temporary-window)
+  ;; in cc-modes M-q redefined
+  (define-key c-mode-map hotkey 'txm-close-temporary-window)
+  (define-key c++-mode-map hotkey 'txm-close-temporary-window))
 
 (define-key isearch-mode-map (kbd "C-o")
   (lambda ()
@@ -292,6 +297,7 @@
 
 (add-hook 'after-make-frame-functions 'txm-set-frame-font t)
 (txm-set-frame-font)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Project dependent configuration

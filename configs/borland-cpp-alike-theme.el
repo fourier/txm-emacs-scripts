@@ -81,7 +81,17 @@
  ;'(nxml-attribute-prefix ((t (:foreground "#DADADA"))))
  '(nxml-attribute-prefix ((t (:foreground "#BBEDFF"))))
  ; tag prefix : <ui:Checkbox> - here it is "ui"
- '(nxml-element-prefix ((t (:foreground "#EC9852")))))
+ '(nxml-element-prefix ((t (:foreground "#EC9852"))))
+ ;; python customization
+ ;; self, None, True, False, ... keywords
+ '(py-pseudo-keyword-face ((t (:foreground "#ABCDEF" :italic t))))
+ ;; object, open, exec etc
+ '(py-builtins-face ((t (:foreground "white" :bold t))))
+ ;; numbers
+ '(py-number-face ((t (:foreground "cyan1"))))
+ ;; method decorators, starting with @
+ '(py-decorators-face ((t (:foreground "#BBB5B9" :italic t)))))
+ 
 
 
  ;; '(font-lock-regexp-grouping-backslash ((t (:inherit (bold)))))

@@ -335,11 +335,13 @@
   (txm-ac-config))
 
 (defun txm-open-menu ()
-  "Activates menu bar mode if not active and opens menu"
+  "Activates menu bar mode if not active and opens menu.
+Only for text mode"
   (interactive)
-  (when (not menu-bar-mode)
-    (menu-bar-mode))
-  (menu-bar-open))
+  (when (not window-system)
+    (when (not menu-bar-mode)
+      (menu-bar-mode))
+    (menu-bar-open)))
 
 (defun txm-swap-buffers-in-windows ()
   "Put the buffer from the selected window in next window, and vice versa

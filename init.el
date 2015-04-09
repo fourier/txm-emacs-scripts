@@ -1,6 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Emacs packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+;; initialize packages. Now all we need is require necessary packages
+;; to have their variables etc availables
+(package-initialize)
+
 ;;__________________________________________________________________________
 ;;;; Additional directories to search for emacs extensions
-
 
 (defmacro try-to-load(path mode &optional body)
   "Push the path `path' to `load-path' if it exists.
@@ -58,8 +66,6 @@ will be expanded to:
 (try-to-load (substitute-in-file-name "~/Sources/rtags/src") rtags
              (rtags-enable-standard-keybindings c-mode-base-map))
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
@@ -81,7 +87,6 @@ will be expanded to:
 ;;(require 'w3m-load)
 (require 'mic-paren)
 (require 'recentf)
-;;(require 'yasnippet)
 (require 'fill-column-indicator)
 ;;(require 'cl)
 ;; for OCAML
@@ -93,8 +98,10 @@ will be expanded to:
 ;; SLIME
 (require 'slime-autoloads)
 (require 'ac-slime)
+(require 'shackle)
 ;; helm customizations
-;;   (require 'helm-config)
+(require 'helm-config)
+(require 'helm-ls-git)
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
@@ -136,6 +143,7 @@ will be expanded to:
 ;;(global-set-key [f2] 'eshell)
 (global-set-key "\C-xj" 'join-line)
 (global-set-key [f2] 'helm-mini)
+(global-set-key [S-f2] 'helm-browse-project)
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
   ;; Switch btw frames like in Mac OS X
@@ -231,7 +239,7 @@ will be expanded to:
 ;; set autosave timeout to 2 minutes
 (setq auto-save-timeout 120)
 
-;; Save desktop status
+;; Save destkop status
 ;; set default directory for saving desktop files
 (desktop-save-mode t)
 (push (substitute-in-file-name "$HOME/.emacs.d/") desktop-path)
@@ -395,17 +403,15 @@ will be expanded to:
 			 'py-beginning-of-def-or-class)
 	(setq outline-regexp "def\\|class ")
   (when (not txm-python-jedi-started)
-    (jedi:install-server)
+    ;; (jedi:install-server)
     (setq txm-python-jedi-started t)))
-(eval-after-load "python-mode"
-  '(progn
-     ;; set proper tab width in Python mode  
-     (customize-set-variable 'py-indent-offset 2)
-     ;; fontify class/method documentation
-     (customize-set-variable 'py-use-font-lock-doc-face-p t)))
+;; set proper tab width in Python mode  
+(customize-set-variable 'py-indent-offset 2)
+;; fontify class/method documentation
+(customize-set-variable 'py-use-font-lock-doc-face-p t)
 
 (add-hook 'python-mode-hook 'python-mode-customization)
-(add-hook 'python-mode-hook 'jedi:setup)
+;; (add-hook 'python-mode-hook 'jedi:setup)
 (autoload 'python-mode "python-mode" "Python Mode." t)
 
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
@@ -427,12 +433,10 @@ will be expanded to:
 ;; Shackle - windows layout configuration
 ;; see https://github.com/wasamasa/shackle
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(eval-after-load "shackle"
-  '(progn
-     (setq shackle-rules
-           '((compilation-mode :noselect t :align 'below)
-             (t :select t)))
-     (shackle-mode)))
+(setq shackle-rules
+      '((compilation-mode :noselect t :align 'below)
+        (t :select t)))
+(shackle-mode)
 
 
 ;; Custom functions to move line-wise buffers in other window
@@ -457,9 +461,7 @@ will be expanded to:
 ;; Set Yasnippet's key binding to shift+tab
 ;;(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
 (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
-(eval-after-load "yasnippet"
-  '(progn
-     (yas/initialize)))
+(yas-global-mode)
 
 ;; Turn on showing current function in modeline
 (which-func-mode t)
@@ -543,6 +545,11 @@ will be expanded to:
 
 ;; OCAML mode
 (add-to-list 'auto-mode-alist '("\\.ml" . tuareg-mode))
+
+;; MATLAB customizations
+(setq matlab-indent-function t)
+(setq matlab-shell-command "/Applications/MATLAB_R2014a.app/bin/matlab")
+(setq matlab-shell-command-switches '("-nojvm" "-nodisplay" "-nosplash"))
 
 ;; Qt Project files mode
 (add-to-list 'auto-mode-alist '("\\.pr[io]$" . qt-pro-mode))
@@ -660,9 +667,4 @@ will be expanded to:
     ((ac-clang-cflags "-I../inc")
      (TeX-master . "main")
      (TeX-master . t)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+

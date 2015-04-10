@@ -435,8 +435,9 @@ will be expanded to:
 (setq shackle-rules
       '((compilation-mode :noselect t :align 'below)
         (t :select t)))
+;; to avoid slowness on OSX GUI mode Emacs
+(setq shackle-lighter "s")
 (shackle-mode)
-
 
 ;; Custom functions to move line-wise buffers in other window
 ;; shall be used with keystrokes like Alt-up and Alt-down

@@ -63,8 +63,6 @@ will be expanded to:
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
-(try-to-load (substitute-in-file-name "~/Sources/rtags/src") rtags
-             (rtags-enable-standard-keybindings c-mode-base-map))
 
 
 ;; Configuration for MacPorts
@@ -85,6 +83,7 @@ will be expanded to:
 (require 'vc-ediff)
 (require 'qt-pro)
 ;;(require 'w3m-load)
+(require 'cc-mode)
 (require 'mic-paren)
 (require 'recentf)
 (require 'fill-column-indicator)

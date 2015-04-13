@@ -143,6 +143,8 @@ will be expanded to:
 (global-set-key "\C-xj" 'join-line)
 (global-set-key [f2] 'helm-mini)
 (global-set-key [S-f2] 'helm-browse-project)
+(global-set-key [M-f7] 'helm-git-grep)
+
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
   ;; Switch btw frames like in Mac OS X
@@ -401,6 +403,8 @@ will be expanded to:
 	(set (make-variable-buffer-local 'beginning-of-defun-function)
 			 'py-beginning-of-def-or-class)
 	(setq outline-regexp "def\\|class ")
+  (subword-mode)
+  (define-key python-mode-map (kbd "<C-backspace>") 'subword-backward-kill)
   (when (not txm-python-jedi-started)
     ;; (jedi:install-server)
     (setq txm-python-jedi-started t)))
@@ -408,7 +412,8 @@ will be expanded to:
 (customize-set-variable 'py-indent-offset 2)
 ;; fontify class/method documentation
 (customize-set-variable 'py-use-font-lock-doc-face-p t)
-
+;; turn off electric comment
+(customize-set-variable 'py-electric-comment-p nil)
 (add-hook 'python-mode-hook 'python-mode-customization)
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 (autoload 'python-mode "python-mode" "Python Mode." t)
@@ -462,9 +467,6 @@ will be expanded to:
 ;;(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
 (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
 (yas-global-mode)
-
-;; Turn on showing current function in modeline
-(which-func-mode t)
 
 ;; Start emacs as a server for emacsclient application
 (server-start)

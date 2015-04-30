@@ -4,7 +4,7 @@
 
 ;; list of packages installed. Taken from the package-activated-list variable
 ;; on original machine
-(setq package-list '(ac-haskell-process haskell-mode auto-complete popup ac-slime slime auto-complete popup ack-and-a-half adjust-parens auto-complete-nxml auto-complete popup bison-mode cmake-font-lock cmake-mode cmake-mode dash-at-point debbugs diff-git enh-ruby-mode ensime yasnippet company sbt-mode scala-mode2 scala-mode2 auto-complete popup popup dash s flyspell-lazy gist gh logito pcache groovy-mode haskell-mode helm-c-yasnippet yasnippet helm async helm-dash helm async helm-git-grep helm async helm-ls-git helm async helm-make projectile pkg-info epl dash helm async helm-package helm async helm-spotify multi helm async jedi auto-complete popup jedi-core python-environment deferred epc ctable concurrent deferred jedi-core python-environment deferred epc ctable concurrent deferred js2-mode json-mode json-snatcher json-reformat json-reformat json-snatcher log4j-mode logito magit git-rebase-mode git-commit-mode matlab-mode multi paredit pcache popup pretty-lambdada projectile pkg-info epl dash python-environment deferred python-mode s sbt-mode scala-mode2 scala-mode2 shackle slime tup-mode yasnippet))      
+(setq package-list '(ac-haskell-process haskell-mode auto-complete popup ac-slime slime auto-complete popup adjust-parens auto-complete-nxml auto-complete popup bison-mode cmake-font-lock cmake-mode cmake-mode dash-at-point debbugs diff-git enh-ruby-mode ensime scala-mode2 popup yasnippet company sbt-mode scala-mode2 auto-complete popup dash s flyspell-lazy gist gh logito pcache groovy-mode haskell-mode helm-c-yasnippet yasnippet helm async helm-dash helm async helm-git-grep helm async helm-ls-git helm async helm-make projectile pkg-info epl dash helm async helm-package helm async helm-spotify multi helm async jedi-core python-environment deferred epc ctable concurrent deferred js2-mode json-mode json-snatcher json-reformat json-reformat json-snatcher log4j-mode logito magit git-rebase-mode git-commit-mode matlab-mode multi paredit pcache popup pretty-lambdada projectile pkg-info epl dash python-environment deferred python-mode s sbt-mode scala-mode2 scala-mode2 shackle slime tup-mode yasnippet))      
 
 ;; where to get
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -409,21 +409,12 @@ will be expanded to:
      'common-lisp-indent-function)
 
 ;; Python customization
-;; need to install from melpa: python-mode, jedi
-;; in order to use jedi, install virtualenv and make
-;; it available in path, i.e. for MacPorts:
-;; sudo port install py27-virtualenv virtualenv_select
-;; sudo port select --activate virtualenv27
-(setq txm-python-jedi-started nil)
 (defun python-mode-customization ()
 	(set (make-variable-buffer-local 'beginning-of-defun-function)
 			 'py-beginning-of-def-or-class)
 	(setq outline-regexp "def\\|class ")
   (subword-mode)
-  (define-key python-mode-map (kbd "<C-backspace>") 'subword-backward-kill)
-  (when (not txm-python-jedi-started)
-    ;; (jedi:install-server)
-    (setq txm-python-jedi-started t)))
+  (define-key python-mode-map (kbd "<C-backspace>") 'subword-backward-kill))
 ;; set proper tab width in Python mode  
 (customize-set-variable 'py-indent-offset 2)
 ;; fontify class/method documentation
@@ -431,7 +422,6 @@ will be expanded to:
 ;; turn off electric comment
 (customize-set-variable 'py-electric-comment-p nil)
 (add-hook 'python-mode-hook 'python-mode-customization)
-;; (add-hook 'python-mode-hook 'jedi:setup)
 (autoload 'python-mode "python-mode" "Python Mode." t)
 
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
@@ -606,17 +596,6 @@ will be expanded to:
 (define-key Info-mode-map [M-right] 'Info-history-forward)
 (define-key Info-mode-map [M-up] 'Info-up)
 (define-key Info-mode-map [M-down] 'Info-follow-nearest-node)
-
-;; Ack plugin
-;; No need to require it here, since it will be autoloaded
-;; AFTER the init file
-;;(require 'ack-knd-a-half)
-;; Create shorter aliases
-(defalias 'ack 'ack-and-a-half)
-(defalias 'ack-same 'ack-and-a-half-same)
-(defalias 'ack-find-file 'ack-and-a-half-find-file)
-(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
-
 
 ;; determine if the GNU Screen is running
 (when (getenv "STY")

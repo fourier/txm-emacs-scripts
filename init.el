@@ -101,6 +101,7 @@ will be expanded to:
 ;; helm customizations
 (require 'helm-config)
 (require 'helm-ls-git)
+(require 'ensime)
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
@@ -538,10 +539,6 @@ will be expanded to:
 ;; Ediff customizations
 (setq ediff-split-window-function 'split-window-horizontally)
 
-;; reduced java machine options to run Scala on machine with small RAM
-(setenv "_JAVA_OPTIONS" "-Xms64m -Xmx128m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:NewSize=10m -XX:MaxNewSize=10m -XX:SurvivorRatio=6 -XX:TargetSurvivorRatio=80 -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled")
-
-
 ;; replace buffers menu with ibuffer
 (defalias 'list-buffers 'ibuffer)
 
@@ -576,6 +573,8 @@ will be expanded to:
 ;; scala-mode is started for a buffer. You may have to customize this step
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(define-key ensime-mode-map [f7] 'ensime-sbt-do-compile)
+
 ;;(setq ensime-default-server-cmd (substitute-in-file-name "~/.emacs.d/ensime/etc/scripts/server"))
 
 ;; Flex/jlex customization

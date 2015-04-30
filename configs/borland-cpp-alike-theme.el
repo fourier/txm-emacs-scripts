@@ -90,7 +90,10 @@
  ;; numbers
  '(py-number-face ((t (:foreground "cyan1"))))
  ;; method decorators, starting with @
- '(py-decorators-face ((t (:foreground "#BBB5B9" :italic t)))))
+ '(py-decorators-face ((t (:foreground "#BBB5B9" :italic t))))
+ ;; Scala mode colors
+ '(scala-font-lock:var-face ((t (:foreground "Magenta"))))
+ )
  
 
 

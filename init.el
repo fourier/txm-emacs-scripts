@@ -4,7 +4,32 @@
 
 ;; list of packages installed. Taken from the package-activated-list variable
 ;; on original machine
-(setq package-list '(ac-haskell-process haskell-mode auto-complete popup ac-slime slime auto-complete popup adjust-parens auto-complete-nxml auto-complete popup bison-mode cmake-font-lock cmake-mode cmake-mode dash-at-point debbugs diff-git enh-ruby-mode ensime scala-mode2 popup yasnippet company sbt-mode scala-mode2 auto-complete popup dash s flyspell-lazy gist gh logito pcache groovy-mode haskell-mode helm-c-yasnippet yasnippet helm async helm-dash helm async helm-git-grep helm async helm-ls-git helm async helm-make projectile pkg-info epl dash helm async helm-package helm async helm-spotify multi helm async jedi-core python-environment deferred epc ctable concurrent deferred js2-mode json-mode json-snatcher json-reformat json-reformat json-snatcher log4j-mode logito magit git-rebase-mode git-commit-mode matlab-mode multi paredit pcache popup pretty-lambdada projectile pkg-info epl dash python-environment deferred python-mode s sbt-mode scala-mode2 scala-mode2 shackle slime tup-mode yasnippet))      
+(setq package-list '(haskell-mode
+                     auto-complete
+                     popup
+                     slime
+                     ac-slime
+                     auto-complete-nxml
+                     bison-mode
+                     cmake-mode
+                     dash-at-point
+                     debbugs
+                     enh-ruby-mode
+                     ensime
+                     yasnippet
+                     groovy-mode
+                     python-mode
+                     helm
+                     helm-dash
+                     helm-git-grep
+                     helm-ls-git
+                     helm-c-yasnippet
+                     js2-mode
+                     json-mode
+                     log4j-mode
+                     matlab-mode
+                     shackle
+                     tup-mode))      
 
 ;; where to get
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")

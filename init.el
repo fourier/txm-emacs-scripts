@@ -14,7 +14,7 @@
 (package-initialize)
 
 ;; fetch the list of packages available 
-(unless package-archive-contents
+(unless (file-exists-p package-user-dir)
   (package-refresh-contents))
 
 ;; install the missing packages

@@ -78,7 +78,6 @@ will be expanded to:
 (push (substitute-in-file-name "~/.emacs.d/elisp") load-path)
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
-(push (substitute-in-file-name "~/.emacs.d/ac-slime") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
 ;; SLIME from QuickLisp distribution. If not found, install it through the quicklisp:
 ;; (ql:quickload "swank")

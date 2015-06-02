@@ -266,6 +266,10 @@
 ;; Color theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (push (substitute-in-file-name "~/.emacs.d/configs/") custom-theme-load-path)
+;; disables all custom themes before loading (enabling) another one.
+;; link: http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
+(defadvice load-theme (before theme-dont-propagate activate)
+ (mapcar #'disable-theme custom-enabled-themes))
 (load-theme 'borland-cpp-alike t)
 ;;(load-theme 'idea-darkula t)
 

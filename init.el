@@ -415,7 +415,8 @@ will be expanded to:
           (eq system-type 'darwin))
   ;; (setq inferior-lisp-program "alisp")
   ;; (setq inferior-lisp-program (substitute-in-file-name "~/AllegroCL/mlisp"))
-  (setq inferior-lisp-program "sbcl")
+  ;; (setq inferior-lisp-program "sbcl")
+  (setq inferior-lisp-program "~/Development/lw-console")
   ;; (setq inferior-lisp-program "~/Sources/sbcl-1.0.29-x86-darwin/run-sbcl.sh")
   ;; (setq inferior-lisp-program "clisp -K full")
   (setq ns-use-system-highlight-color nil))
@@ -659,7 +660,7 @@ will be expanded to:
     (load gnus-config-name)))
 
 
-
+(setq custom-file "~/.emacs.d/emacs-custom.el")
 
 ;; In the end on initialization:
 ;; (when (and window-system (eq system-type 'darwin))
@@ -669,21 +670,4 @@ will be expanded to:
 ;;     (ns-toggle-fullscreen)
 ;;     ;; 2) split window
 ;;     (split-window-horizontally)))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(preview-gs-options
-   (quote
-    ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
- '(quack-programs
-   (quote
-    ("gui" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "gu" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
- '(safe-local-variable-values
-   (quote
-    ((ac-clang-cflags "-I../inc")
-     (TeX-master . "main")
-     (TeX-master . t)))))
 

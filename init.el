@@ -79,6 +79,7 @@ will be expanded to:
 (push (substitute-in-file-name "~/.emacs.d/emacs-w3m") load-path)
 (push (substitute-in-file-name "~/.emacs.d/markdown-mode") load-path)
 (push (substitute-in-file-name "~/.emacs.d/ztree") load-path)
+
 ;; SLIME from QuickLisp distribution. If not found, install it through the quicklisp:
 ;; (ql:quickload "swank")
 ;; different possible quicklist paths for different systems
@@ -87,7 +88,6 @@ will be expanded to:
   (mapcar #'(lambda (path) (when (file-exists-p path)
                              (push path load-path)))
           slime-paths))
-
 
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
@@ -106,6 +106,8 @@ will be expanded to:
   (when (file-exists-p cff-path)
     (push cff-path load-path)))
 
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)

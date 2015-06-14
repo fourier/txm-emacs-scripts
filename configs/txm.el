@@ -117,10 +117,10 @@
 ;;
 (add-hook 'c++-mode-hook
           '(lambda ()
-             (define-key c-mode-base-map (kbd "M-o") 'ff-find-other-file)))
+             (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
 (add-hook 'c-mode-hook
           '(lambda ()
-             (define-key c-mode-base-map (kbd "M-o") 'ff-find-other-file)))
+             (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
 
 ;; 
 ;; C++ operators font lock

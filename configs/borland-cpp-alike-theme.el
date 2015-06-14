@@ -93,6 +93,11 @@
  '(py-decorators-face ((t (:foreground "#BBB5B9" :italic t))))
  ;; Scala mode colors
  '(scala-font-lock:var-face ((t (:foreground "Magenta"))))
+ ;; erc colors
+ '(erc-nick-default-face ((t (:foreground "#3b99fc" :bold t))))
+ '(erc-default-face ((t (:foreground "#b2d7ff"))))
+ '(erc-action-face ((t (:foreground "LightGrey"))))
+ '(erc-button ((t (:foreground "cyan" :underline t))))
  )
  
 

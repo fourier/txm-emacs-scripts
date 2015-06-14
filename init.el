@@ -102,6 +102,9 @@ will be expanded to:
 (let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
+(let ((cff-path (substitute-in-file-name "~/.emacs.d/cff")))
+  (when (file-exists-p cff-path)
+    (push cff-path load-path)))
 
 
 ;; Configuration for MacPorts
@@ -131,8 +134,7 @@ will be expanded to:
 ;;(require 'tuareg)
 ;; hex-view
 (require 'hexview-mode)
-;;(require 'ztree-dir)
-(require 'ztree-diff)
+(require 'ztree)
 ;; SLIME
 (require 'slime-autoloads)
 (require 'ac-slime)
@@ -141,6 +143,7 @@ will be expanded to:
 (require 'helm-config)
 (require 'helm-ls-git)
 (require 'ensime)
+(require 'cff)
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
 ;; (require 'eassist)
@@ -182,6 +185,7 @@ will be expanded to:
 ;;(global-set-key [f2] 'eshell)
 (global-set-key "\C-xj" 'join-line)
 (global-set-key [f2] 'helm-mini)
+(global-set-key [C-f2] 'helm-git-grep)
 (global-set-key [S-f2] 'helm-browse-project)
 (global-set-key [M-f7] 'helm-git-grep)
 
@@ -415,8 +419,8 @@ will be expanded to:
           (eq system-type 'darwin))
   ;; (setq inferior-lisp-program "alisp")
   ;; (setq inferior-lisp-program (substitute-in-file-name "~/AllegroCL/mlisp"))
-  ;; (setq inferior-lisp-program "sbcl")
-  (setq inferior-lisp-program "~/Development/lw-console")
+  (setq inferior-lisp-program "sbcl")
+  ;; (setq inferior-lisp-program "~/Development/lw-console")
   ;; (setq inferior-lisp-program "~/Sources/sbcl-1.0.29-x86-darwin/run-sbcl.sh")
   ;; (setq inferior-lisp-program "clisp -K full")
   (setq ns-use-system-highlight-color nil))

@@ -384,6 +384,54 @@ Only when 2 windows active"
           (compile (format "cd %s && make -f %s" dir makefile)))
       (message "No makefile found in current or above directrories"))))
 
+;;
+;; Emacs builtin goodies
+;;
+
+;; show/hide whitespaces
+(global-set-key (kbd "C-c xw") 'whitespace-mode)
+;; toggle glasses, convert CamelCase to Camel_Case
+(global-set-key (kbd "C-c xg") 'glasses-mode)
+;; show/hide line numbers 
+(global-set-key (kbd "C-c xl") 'linum-mode)
+;; show/hide highlighting of the line under cursor
+(global-set-key (kbd "C-c xh") 'hl-line-mode)
+;; toggle subword mode
+(global-set-key (kbd "C-c xs") 'subword-mode)
+
+(defun revert-all-buffers ()
+  "Refreshes all open buffers from their respective files"
+  (interactive)
+  (let* ((list (buffer-list))
+         (buffer (car list)))
+    (while buffer
+      (when (and (buffer-file-name buffer) 
+                 (not (buffer-modified-p buffer))
+                 (file-exists-p (buffer-file-name buffer)))
+        (set-buffer buffer)
+        (revert-buffer t t t))
+      (setq list (cdr list))
+      (setq buffer (car list))))
+  (message "Refreshed open files"))
+
+(global-set-key [C-down-mouse-1]	'txm-highlight-symbol)
+
+(defface txm-highlight-symbol-face
+  '((t                   (:underline t :slant italic :foreground "red")))
+  "*Face used for mouse-clickable highlight."
+  :group 'font-lock-highlighting-faces)
+
+(defun txm-highlight-symbol (click)
+  "Mouse event - toggle highlight of the symbol at point"
+  (interactive "e")
+  (mouse-set-point click)
+  (let ((regex (find-tag-default-as-symbol-regexp)))
+    (if (assoc regex hi-lock-interactive-patterns)
+        (unhighlight-regexp regex)
+      (highlight-regexp regex 'txm-highlight-symbol-face))))
+
+
+
 
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/elisp/tmux-cfg.el"))
   (load "tmux-cfg.el"))

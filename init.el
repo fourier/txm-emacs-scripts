@@ -162,10 +162,12 @@ will be expanded to:
 
 ;; Mac keybindings
 (when (eq system-type 'darwin)
-  ;; bind Command to Control on Mac OS X
+  ;; bind Command to Control 
   (setq mac-command-modifier 'control)
-  ;; bind Alt to Meta on Mac OS X
-  (setq mac-option-modifier 'meta))
+  ;; bind Alt to Meta 
+  (setq mac-option-modifier 'meta)
+  ;; bind right command as Super
+  (setq mac-right-command-modifier 'super))
 
 (when (and (eq system-type 'gnu/linux) window-system)
   (global-set-key "\M-\\" 'dabbrev-expand) 
@@ -186,10 +188,14 @@ will be expanded to:
 (global-set-key [f5] 'revert-buffer)
 ;;(global-set-key [f2] 'eshell)
 (global-set-key "\C-xj" 'join-line)
+(global-set-key [M-f7] 'vc-git-grep)
 (global-set-key [f2] 'helm-mini)
 (global-set-key [C-f2] 'helm-git-grep)
 (global-set-key [S-f2] 'helm-browse-project)
-(global-set-key [M-f7] 'helm-git-grep)
+(global-set-key "\C-p" 'helm-git-grep-at-point)
+(global-set-key "\M-y" 'browse-kill-ring)
+;; replace M-x with helm
+(global-set-key (kbd "M-x") 'helm-M-x)
 
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
@@ -241,31 +247,8 @@ will be expanded to:
 ;; turn on autocompletion in 'find file' and in 'switch-to-buffer' mode
 (ido-mode t)
 
-;; turn on autocompletion in M-x mode
-(icomplete-mode t)
-
-
-;; Make ido always work in M-x mode
-(setq ido-execute-command-cache nil)
-(defun ido-execute-command ()
-  (interactive)
-  (call-interactively
-   (intern
-    (ido-completing-read
-     "M-x "
-     (progn
-       (unless ido-execute-command-cache
-         (mapatoms (lambda (s)
-                     (when (commandp s)
-                       (setq ido-execute-command-cache
-                             (cons (format "%S" s) ido-execute-command-cache))))))
-       ido-execute-command-cache)))))
-
-(add-hook 'ido-setup-hook
-          (lambda ()
-            (setq ido-enable-flex-matching t)
-            (global-set-key "\M-x" 'ido-execute-command)))
-
+;; Buttonize URL and email addresses
+(goto-address-mode 1)
 
 ;; Turn on the mode to show 80-chars indicator line
 ;; (fci-mode)
@@ -658,6 +641,21 @@ will be expanded to:
 (add-to-list 'auto-mode-alist '("\\.gradle$" . groovy-mode))
 
 
+;; Markdown mode customization
+;; set default preview command C-c C-c o
+(setq markdown-open-command "~/Applications/marked")
+
+;; GNU APL customizations
+;; turn off keymap display
+(setf gnu-apl-show-keymap-on-startup nil)
+;; disable tips on startup
+(setf gnu-apl-show-tips-on-start nil)
+;; function to run GNU APL with proper path
+(defun run-apl ()
+  (interactive)
+  (require 'gnu-apl-mode)
+  (gnu-apl "~/Development/gapl/apl"))
+
 
 (load "txm.el")
 (load "txm-dired.el")
@@ -665,7 +663,7 @@ will be expanded to:
   (when (file-exists-p gnus-config-name)
     (load gnus-config-name)))
 
-
+  
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 
 ;; In the end on initialization:

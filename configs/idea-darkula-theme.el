@@ -14,8 +14,8 @@
                         :strike-through nil
                         :box nil
                         :inverse-video nil
-                        :foreground "#a9b7c6"
-                        :background "#393939"
+                        :foreground "#A9B7C6"
+                        :background "#2B2B2B"
                         :stipple nil
                         :inherit nil))))
  '(cursor ((t (:background "#bbbbbb"))))
@@ -63,17 +63,17 @@
  ;; dired customizations
  '(diredp-file-name ((t (:foreground "cyan1"))))
  '(diredp-file-suffix ((t (:foreground "cyan1"))))
- '(diredp-dir-heading ((t (:foreground "white" :background "MidnightBlue" :underline t ))))
- '(diredp-dir-priv ((t (:foreground "#ffffff" :background "MidnightBlue"))))
+ '(diredp-dir-heading ((t (:foreground "white" :background "#2B2B2B" :underline t ))))
+ '(diredp-dir-priv ((t (:foreground "#ffffff" :background "#2B2B2B"))))
  ;; file attributes in the dired
- '(diredp-read-priv ((t (:foreground "grey" :background "MidnightBlue"))))
- '(diredp-write-priv ((t (:foreground "grey" :background "MidnightBlue"))))
- '(diredp-exec-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+ '(diredp-read-priv ((t (:foreground "grey" :background "#2B2B2B"))))
+ '(diredp-write-priv ((t (:foreground "grey" :background "#2B2B2B"))))
+ '(diredp-exec-priv ((t (:foreground "grey" :background "#2B2B2B"))))
  ;; no attribute set
- '(diredp-no-priv ((t (:foreground "grey" :background "MidnightBlue"))))
+ '(diredp-no-priv ((t (:foreground "grey" :background "#2B2B2B"))))
  ;; marked file color and mark sign
- '(diredp-flag-mark-line ((t (:background "MidnightBlue"))))
- '(diredp-flag-mark ((t (:foreground "gold" :background "MidnightBlue"))))
+ '(diredp-flag-mark-line ((t (:background "#2B2B2B"))))
+ '(diredp-flag-mark ((t (:foreground "gold" :background "#2B2B2B"))))
  '(diredp-inode+size ((t (:foreground "white"))))
  '(diredp-compressed-file-suffix ((t (:foreground "cyan1"))))
  '(diredp-ignored-file-name ((t (:foreground "cyan1"))))

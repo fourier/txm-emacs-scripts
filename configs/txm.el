@@ -265,13 +265,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(push (substitute-in-file-name "~/.emacs.d/configs/") custom-theme-load-path)
+(push (substitute-in-file-name "~/.emacs.d/borland-blue-theme/") custom-theme-load-path)
+(push (substitute-in-file-name "~/.emacs.d/idea-darkula-theme/") custom-theme-load-path)
 ;; disables all custom themes before loading (enabling) another one.
 ;; link: http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
 (defadvice load-theme (before theme-dont-propagate activate)
  (mapcar #'disable-theme custom-enabled-themes))
-(load-theme 'borland-cpp-alike t)
-;;(load-theme 'idea-darkula t)
+;; (load-theme 'borland-cpp-alike t)
+(load-theme 'idea-darkula t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Frame font
@@ -291,11 +292,7 @@
          (progn
            (setq mac-allow-anti-aliasing nil)
            (setq mac-allow-anti-aliasing t)
-           (cond ((string= (txm-hostname) "veroveli-mbp.local")
-                  (set-frame-font "Monaco-14" nil frame-to-use))
-                 ((string-match "zoomon\\.local" (txm-hostname))
-                  (set-frame-font "Monaco-14" nil frame-to-use))
-                 (t (set-frame-font "Monaco-14" nil frame-to-use)))))
+           (set-frame-font "Menlo-12" nil (list (selected-frame)))))
         ((eq system-type 'windows-nt)
          (message "windows-nt")))))
 

@@ -166,8 +166,8 @@ will be expanded to:
   (setq mac-command-modifier 'control)
   ;; bind Alt to Meta 
   (setq mac-option-modifier 'meta)
-  ;; bind right command as Super
-  (setq mac-right-command-modifier 'super))
+  ;; leave the right option modifier untouched
+  (setq mac-right-option-modifier nil))
 
 (when (and (eq system-type 'gnu/linux) window-system)
   (global-set-key "\M-\\" 'dabbrev-expand) 
@@ -231,7 +231,8 @@ will be expanded to:
 (global-set-key [S-f10] 'menu-bar-mode)
 (global-set-key [f10] 'txm-open-menu)
 ;;
-
+;; Use C-j in elisp mode to eval last expression
+(define-key emacs-lisp-mode-map "\C-j" 'eval-print-last-sexp)
 
 ;;__________________________________________________________________________
 
@@ -546,12 +547,6 @@ will be expanded to:
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
 
-;; Mathematica
-(let ((mathematica-mode-file (substitute-in-file-name "$HOME/.emacs.d/elisp/mathematica.el")))
-  (when (file-exists-p mathematica-mode-file)
-    (setq mathematica-command-line "/Applications/Mathematica.app/Contents/MacOS/MathKernel")
-    (load-file mathematica-mode-file)))
-
 ;; Automatically reread changed files from disk
 (global-auto-revert-mode t)
 
@@ -600,10 +595,6 @@ will be expanded to:
 (autoload 'jflex-mode "jflex-mode" nil t)
 (setq auto-mode-alist (cons '("\\(\\.flex\\|\\.jflex\\|\\.jlex\\|\\.lex\\)\\'" . jflex-mode) auto-mode-alist))
 
-
-
-;; ERC customization:
-(setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
 ;; info hotkeys customization
 (define-key Info-mode-map [M-left] 'Info-history-back)
@@ -658,10 +649,9 @@ will be expanded to:
 
 
 (load "txm.el")
+(load "txm-erc.el")
+(load "txm-gnus.el")
 (load "txm-dired.el")
-(let ((gnus-config-name "~/.emacs.d/elisp/txm-gnus.el"))
-  (when (file-exists-p gnus-config-name)
-    (load gnus-config-name)))
 
   
 (setq custom-file "~/.emacs.d/emacs-custom.el")

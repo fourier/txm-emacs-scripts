@@ -230,6 +230,7 @@ will be expanded to:
 ;; Set text-mode menu
 (global-set-key [S-f10] 'menu-bar-mode)
 (global-set-key [f10] 'txm-open-menu)
+(global-set-key (kbd "\C-b") 'ido-switch-buffer)
 ;;
 ;; Use C-j in elisp mode to eval last expression
 (define-key emacs-lisp-mode-map "\C-j" 'eval-print-last-sexp)

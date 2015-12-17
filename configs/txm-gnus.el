@@ -4,45 +4,22 @@
 
 (require 'gnus)
 (require 'nnir)
-(setq gnus-select-method `(nntp ,(rot13-string "arjf.vaqvivqhny.arg")))
-(setq user-full-name (rot13-string "Nyrkrl Irergraavxbi"))
-(setq user-mail-address (rot13-string "nyrkrl.irergraavxbi@tznvy.pbz"))
-
-;; mail servers configuration
-(add-to-list 'gnus-secondary-select-methods
-             '(nnimap "freedommail"
-                      (nnimap-address "imap.kolabnow.com")
-                      (nnimap-server-port 993)
-                      (nnimap-stream ssl)
-                      (nnir-search-engine imap)))
-
-(add-to-list 'gnus-secondary-select-methods
-             `(nnimap ,(rot13-string "gkz.sbhevre")
-                      (nnimap-address "imap.gmail.com")
-                      (nnimap-server-port "imaps")
-                      (nnimap-stream ssl)
-                      (nnir-search-engine imap)))
-
+(require 'smtpmail)
+(require 'smtpmail-multi)
+(load "txm-gnus-auto.el")
+(setq user-full-name "Alexey Veretennikov")
 
 ;; default sending method - using internal smtp client
-(setq message-send-mail-function 'smtpmail-send-it)
+;; with the smtpmail-multi package to handle multiple email
+;; accounts
+(setq message-send-mail-function 'smtpmail-multi-send-it)
 
-;; make default port for smtp 
-(setq smtpmail-smtp-service 587)
-
-;;and workaround for Gmail folders
+;; and workaround for Gmail folders
 (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
-;; set the reply from the mail address addressed in the incoming mail
-(setq gnus-posting-styles
-      `(((header "to" ,(rot13-string "sbhevre@serrqbzznvy.pu"))
-         (address ,(rot13-string "sbhevre@serrqbzznvy.pu")))
-        ((header "to" ,(rot13-string "gkz.sbhevre@tznvy.pbz"))
-         (address ,(rot13-string "gkz.sbhevre@tznvy.pbz")))
-        ((header "cc" ,(rot13-string "sbhevre@serrqbzznvy.pu"))
-         (address ,(rot13-string "sbhevre@serrqbzznvy.pu")))
-        ((header "cc" ,(rot13-string "gkz.sbhevre@tznvy.pbz"))
-         (address ,(rot13-string "gkz.sbhevre@tznvy.pbz")))))
+;; verbose printing of SMTP issues
+(setq smtpmail-debug-info t)
+(setq smtpmail-debug-verbose t)
 
 ;; set gnus-parameter
 (setq gnus-parameters

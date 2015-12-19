@@ -5,13 +5,14 @@
 (require 'cl)
 (require 'nnir)
 (require 'smtpmail-multi)
+(require 'auth-source)
 
 ;;(auth-source-forget-all-cached)
 
 (defun txm-gnus-auth-sources ()
   "Return the list of all auth sources from the .authinfo[.gpg]
 Temporary wrapper around auth-source-search to avoid bug #22188"
-  (auth-source-search :port '(25 587))
+  (auth-source-search :port '(25 587) :max 999)
   ;; '((:host "machine1" :port "25")
   ;;   (:host "machine2" :port "587")
   ;;   (:host "machine3")
@@ -26,7 +27,7 @@ it to be interned as a symbol"
 
 
 (defun txm-gnus-is-smtp (source)
-  "Naive way to determine if the source from .authinfo is a smtp
+  "Naive way to determine if the SOURCE from .authinfo is a smtp
 account"
   (let ((host (plist-get source :host))
         (port (plist-get source :port)))
@@ -37,7 +38,7 @@ account"
               (string= port "587")))))) 
 
 (defun txm-gnus-is-nntp (source)
-  "Naive way to determine if the source from .authinfo is a nntp
+  "Naive way to determine if the SOURCE from .authinfo is a nntp
 account"
   (let ((host (plist-get source :host))
         (port (plist-get source :port)))
@@ -50,7 +51,7 @@ account"
 
 
 (defun txm-gnus-is-imap (source)
-  "Naive way to determine if the source from .authinfo is a nntp
+  "Naive way to determine if the SOURCE from .authinfo is a nntp
 account"
   (let ((host (plist-get source :host))
         (port (plist-get source :port)))
@@ -60,6 +61,15 @@ account"
              (or
               (string= port "993")
               (string= port "143"))))))
+
+(defun txm-gnus-is-gmail-vserver (source)
+  "Naive way to determine if the SOURCE from .authinfo is a gmail
+virtual server account.
+See https://lists.gnu.org/archive/html/info-gnus-english/2010-07/msg00013.html
+for examples.
+Every virtual server for all gmail accounts assumed to start with
+'gmail-', like 'gmail-mymail1', for simplisity"
+  (string-match "^gmail-" (plist-get source :host)))
 
 
 (defun txm-gnus-create-smtpmail-multi-accounts (smtps)
@@ -267,8 +277,7 @@ This code could be later `eval'uated. "
 ;; set the IMAP accounts
 (let ((imaps (remove-if-not 'txm-gnus-is-imap (txm-gnus-auth-sources))))
   ;; (setf gnus-secondary-select-methods nil)
-  (eval (txm-gnus-imap-add-to-gnus-secondary-select-methods imaps (lambda (h) (string-match "^gmail-" (plist-get h :host))))))
-
+    (cl-prettyprint (txm-gnus-imap-add-to-gnus-secondary-select-methods imaps 'txm-gnus-is-gmail-vserver)))
 
 
 

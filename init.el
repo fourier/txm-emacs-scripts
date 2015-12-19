@@ -231,9 +231,11 @@ will be expanded to:
 (global-set-key [S-f10] 'menu-bar-mode)
 (global-set-key [f10] 'txm-open-menu)
 (global-set-key (kbd "\C-b") 'ido-switch-buffer)
-;;
 ;; Use C-j in elisp mode to eval last expression
 (define-key emacs-lisp-mode-map "\C-j" 'eval-print-last-sexp)
+;; magit
+(global-set-key [S-f1] 'magit-status)
+(global-set-key [f1] 'magit-dispatch-popup)
 
 ;;__________________________________________________________________________
 
@@ -666,3 +668,4 @@ will be expanded to:
 ;;     ;; 2) split window
 ;;     (split-window-horizontally)))
 
+(put 'upcase-region 'disabled nil)

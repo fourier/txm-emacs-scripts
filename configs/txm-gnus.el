@@ -7,7 +7,7 @@
 (require 'smtpmail)
 (require 'smtpmail-multi)
 (load "txm-gnus-auto.el")
-(setq user-full-name "Alexey Veretennikov")
+;;(setq user-full-name (user-full-name))
 
 ;; default sending method - using internal smtp client
 ;; with the smtpmail-multi package to handle multiple email

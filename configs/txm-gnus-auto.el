@@ -277,7 +277,7 @@ This code could be later `eval'uated. "
 ;; set the IMAP accounts
 (let ((imaps (remove-if-not 'txm-gnus-is-imap (txm-gnus-auth-sources))))
   ;; (setf gnus-secondary-select-methods nil)
-    (cl-prettyprint (txm-gnus-imap-add-to-gnus-secondary-select-methods imaps 'txm-gnus-is-gmail-vserver)))
+    (eval (txm-gnus-imap-add-to-gnus-secondary-select-methods imaps 'txm-gnus-is-gmail-vserver)))
 
 
 

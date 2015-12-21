@@ -82,15 +82,37 @@
 ;; Groups view
 ;; 
 
+;; show all subscribed groups by default. The default behavior is to show
+;; only those with unread messages
+;; By some reason doesn't work on first start, one have to manually press L
+(add-hook 'gnus-group-mode-hook 'gnus-group-list-all-groups)
+
 ;; Format of the group name presented.
 ;; see https://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Group-Line-Specification
 ;; for details
-(setf gnus-group-line-format "%S%p%P%5y:%B%(%g%)\n")
-;; the header/topic line format
+;; (setf gnus-group-line-format "%p%P%5y:%g\n")
+;; (setf gnus-group-line-format "%p%P%*%g (%y)\n")
+(setf gnus-group-line-format "%p%P%*%u&group-line;\n")
 
-;; show all subscribed groups by default. The default behavior is to show
-;; only those with unread messages
-(add-hook 'gnus-group-mode-hook 'gnus-group-list-all-groups)
+(defun txm-gnus-news-group-is-imap-inbox (group)
+  (string-match "^nnimap\\+.*INBOX$" group))
+
+(defun txm-gnus-account-name-from-group (group)
+ (string-match "\\(^.*\\)\\+\\(.*\\):\\(.*\\)" group)
+ (let ((addr (match-string 2 group)))
+   (if (null addr) "(unknown)" addr)))
+
+(defun gnus-user-format-function-group-line (dummy)
+  (let ((number-of-msgs-suffix
+         (if (> (string-to-number gnus-tmp-number-of-unread) 0)
+             (concat " (" gnus-tmp-number-of-unread ")")
+           ""))
+        (group-name (if (txm-gnus-news-group-is-imap-inbox gnus-tmp-group)
+                        (txm-gnus-account-name-from-group gnus-tmp-group)
+                      gnus-tmp-qualified-group)))
+    (concat group-name
+            number-of-msgs-suffix)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Topics in Groups view

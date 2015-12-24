@@ -260,11 +260,37 @@ This code could be later `eval'uated. "
     `(progn ,@(reverse accounts))))
   
 
+(defun txm-gnus-create-message-dont-reply-to-names (smtps)
+  "Given the SMTPS - list of smtp accounts from authinfo, create a variable
+`message-dont-reply-to-names' from message.el, assuming
+login is the email address.
+
+Example:
+Suppose .authinfo[.gpg] contains entries like this:
+machine smtp.googlemail.com login mylogin@gmail.com password mypass1 port 587
+machine mymailserv1.com login mylogin1@mymailserv password mypass2 port 25
+machine mymailserv2.com login mylogin2@mymailserv password mypass3
+
+Then the message-dont-reply-to-names variable with regexps will be generated:
+
+(setq message-dont-reply-to-names
+      \"\\\\(mylogin@gmail.com\\\\|mylogin1@mymailserv\\\\|mylogin2@mymailserv\\\\)\")
+
+This code could be later `eval'uated. "
+  (let ((accounts (mapcar (lambda (source) (plist-get source :user)) smtps)))
+    `(setq message-dont-reply-to-names ,(concat "\\("
+                                                (mapconcat 'identity accounts "\\|")
+                                                "\\)"))))
+
+
+
 
 (let ((smtps (remove-if-not 'txm-gnus-is-smtp (txm-gnus-auth-sources))))
   (eval (txm-gnus-create-smtpmail-multi-accounts smtps))
   (eval (txm-gnus-create-smtpmail-multi-associations smtps))
   (eval (txm-gnus-create-gnu-posting-styles smtps))
+  ;; this variable used to exclude own email address when doing reply to all
+  (eval (txm-gnus-create-message-dont-reply-to-names smtps))
   ;; the first smtp account in the list is the default one
   (setq smtpmail-multi-default-account (caar smtpmail-multi-accounts))
   (setq user-mail-address (second (car smtpmail-multi-accounts))))
@@ -278,7 +304,6 @@ This code could be later `eval'uated. "
 (let ((imaps (remove-if-not 'txm-gnus-is-imap (txm-gnus-auth-sources))))
   ;; (setf gnus-secondary-select-methods nil)
     (eval (txm-gnus-imap-add-to-gnus-secondary-select-methods imaps 'txm-gnus-is-gmail-vserver)))
-
 
 
 ;;;

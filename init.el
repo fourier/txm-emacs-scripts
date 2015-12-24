@@ -7,8 +7,7 @@
 (setq package-list '(haskell-mode
                      auto-complete
                      popup
-                     slime
-                     ac-slime
+                     sly
                      auto-complete-nxml
                      bison-mode
                      cmake-mode
@@ -83,11 +82,11 @@ will be expanded to:
 ;; SLIME from QuickLisp distribution. If not found, install it through the quicklisp:
 ;; (ql:quickload "swank")
 ;; different possible quicklist paths for different systems
-(let ((slime-paths (list (substitute-in-file-name "~/.quicklisp/dists/quicklisp/software/slime-2.9")
-                         (substitute-in-file-name "~/Sources/lisp-sandbox/quicklisp/dists/quicklisp/software/slime-2.9"))))
-  (mapcar #'(lambda (path) (when (file-exists-p path)
-                             (push path load-path)))
-          slime-paths))
+;; (let ((slime-paths (list (substitute-in-file-name "~/.quicklisp/dists/quicklisp/software/slime-2.9")
+;;                          (substitute-in-file-name "~/Sources/lisp-sandbox/quicklisp/dists/quicklisp/software/slime-2.9"))))
+;;   (mapcar #'(lambda (path) (when (file-exists-p path)
+;;                              (push path load-path)))
+;;           slime-paths))
 
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
@@ -137,9 +136,6 @@ will be expanded to:
 ;; hex-view
 (require 'hexview-mode)
 (require 'ztree)
-;; SLIME
-(require 'slime-autoloads)
-(require 'ac-slime)
 (require 'shackle)
 ;; helm customizations
 (require 'helm-config)
@@ -387,22 +383,24 @@ will be expanded to:
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
+
+
 ;; Slime customizations
-(eval-after-load "slime"
-  '(progn
-     (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
-     (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
-     (slime-setup '(slime-fancy slime-asdf slime-banner))
-     (global-set-key "\C-cs" 'slime-selector)
-     (setq slime-complete-symbol*-fancy t)
-     (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-     (setq slime-multiprocessing t)
-     (setq slime-net-coding-system 'utf-8-unix)
-     (add-to-list 'slime-contribs 'slime-autodoc)
-     (add-hook 'slime-mode-hook 'set-up-slime-ac)
-     (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-     (eval-after-load "auto-complete"
-       '(add-to-list 'ac-modes 'slime-repl-mode))))
+;; (eval-after-load "slime"
+;;   '(progn
+;;      (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
+;;      (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
+;;      (slime-setup '(slime-fancy slime-asdf slime-banner))
+;;      (global-set-key "\C-cs" 'slime-selector)
+;;      (setq slime-complete-symbol*-fancy t)
+;;      (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+;;      (setq slime-multiprocessing t)
+;;      (setq slime-net-coding-system 'utf-8-unix)
+;;      (add-to-list 'slime-contribs 'slime-autodoc)
+;;      (add-hook 'slime-mode-hook 'set-up-slime-ac)
+;;      (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+;;      (eval-after-load "auto-complete"
+;;        '(add-to-list 'ac-modes 'slime-repl-mode))))
 
 (when (or (eq system-type 'gnu/linux)
           (eq system-type 'darwin))
@@ -418,8 +416,8 @@ will be expanded to:
   (when (file-exists-p clhs-el-file)
     (load clhs-el-file t)))
 
-(define-key lisp-mode-map [C-f1] 'slime-documentation-lookup)
-(define-key lisp-mode-map [M-f1] 'slime-describe-symbol)
+;; (define-key lisp-mode-map [C-f1] 'slime-documentation-lookup)
+;; (define-key lisp-mode-map [M-f1] 'slime-describe-symbol)
 
 ;; CL indentation rules are different from Emacs Lisp indentation
 ;; rules. Make the lisp indentation in CL-style
@@ -483,7 +481,6 @@ will be expanded to:
 ;; Encoding
 (set-language-environment "UTF-8")
 
-
 ;; YASnippet customization
 ;;(define-key yas-minor-mode-map (kbd "<tab>") nil)
 ;;(define-key yas-minor-mode-map (kbd "TAB") nil)
@@ -516,7 +513,7 @@ will be expanded to:
 (add-hook 'web-mode-hook
           (lambda () (flyspell-prog-mode)))
 ;; flyspell mode breaks auto-complete mode without this.
-(ac-flyspell-workaround)
+;; (ac-flyspell-workaround)
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
 

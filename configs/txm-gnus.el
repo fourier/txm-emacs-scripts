@@ -26,24 +26,19 @@
   '(("^nnimap.*"
      (gnus-use-scoring nil)
      (expiry-wait . 2)
-     (display . all))))
+     (display . all))
+    (".*/emacs-devel$"
+      (to-address . "emacs-devel@gnu.org")
+      (to-list . "emacs-devel@gnu.org"))
+    (".*/bug-gnu-emacs$"
+      (to-list . "bug-gnu-emacs@gnu.org"))))
 
 ;; No group considered big, download everything
 ;; see http://stackoverflow.com/questions/4982831/i-dont-want-to-expire-mail-in-gnus
 ;; for examples
-(setq gnus-large-newsgroup 'nil)
+;;(setq gnus-large-newsgroup 'nil)
+(setq gnus-large-newsgroup 100)
 
-
-;; organize groups by topics
-(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-
-;; sort threads
-(setq gnus-thread-sort-functions
-      '((not gnus-thread-sort-by-date)
-        (not gnus-thread-sort-by-number)))
-
-;; organize in threads
-(setq gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
 
 ;; cache for offline reading
 (setq gnus-use-cache t)
@@ -81,38 +76,49 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Groups view
 ;; 
-
-;; show all subscribed groups by default. The default behavior is to show
-;; only those with unread messages
-;; By some reason doesn't work on first start, one have to manually press L
-(add-hook 'gnus-group-mode-hook 'gnus-group-list-all-groups)
+;; organize groups by topics
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 
 ;; Format of the group name presented.
 ;; see https://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Group-Line-Specification
 ;; for details
-;; (setf gnus-group-line-format "%p%P%5y:%g\n")
-;; (setf gnus-group-line-format "%p%P%*%g (%y)\n")
-(setf gnus-group-line-format "%p%P%*%u&group-line;\n")
+;; The format is "group-name (number of unread messages)"
+;; if number of unread messages is 0, do not show them
+;; if the group-name is an inbox, take the account instead
+;; i.e. if the group name is "nnimap+gmail-my.account:INBOX"
+;; the printed name will be "gmail-my.account"
+;; In order to achive this one have to implement custom formatting
+;; function `gnus-user-format-function-group-line'
+;; 
+(setf gnus-group-line-format "%p%3P%*%u&group-line;\n")
 
 (defun txm-gnus-news-group-is-imap-inbox (group)
+  "Determine if GROUP is the IMAP inbox"
   (string-match "^nnimap\\+.*INBOX$" group))
 
 (defun txm-gnus-account-name-from-group (group)
+  "extract account name from the GROUP"
  (string-match "\\(^.*\\)\\+\\(.*\\):\\(.*\\)" group)
  (let ((addr (match-string 2 group)))
    (if (null addr) "(unknown)" addr)))
 
 (defun gnus-user-format-function-group-line (dummy)
   (let ((number-of-msgs-suffix
+         ;; check if number of unread messages > 0
          (if (> (string-to-number gnus-tmp-number-of-unread) 0)
              (concat " (" gnus-tmp-number-of-unread ")")
+           ;; otherwise do no show anything
            ""))
+        ;; if it is an inbox, extract the account, since we want all
+        ;; inboxes to be in one separate topic [Inbox]
         (group-name (if (txm-gnus-news-group-is-imap-inbox gnus-tmp-group)
                         (txm-gnus-account-name-from-group gnus-tmp-group)
                       gnus-tmp-qualified-group)))
     (concat group-name
             number-of-msgs-suffix)))
 
+;; make all subscribed groups visible even if they don't have unread messages
+(setq gnus-permanently-visible-groups ".*")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Topics in Groups view
@@ -146,3 +152,94 @@
     (propertize
      (format "%s (%d)" name num-unread)
      'face topic-face)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Window management
+;;
+
+;; Prevent changing the Emacs window layout
+(setq gnus-use-full-window nil)
+
+;; Bind to F5 force refresh all mail
+;;(gnus-activate-all-groups)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Summary buffer (list of messages)
+;;
+
+;; use exact address components extraction
+(setq gnus-extract-address-components 'mail-extract-address-components)
+
+;; Set the line format
+;; the default one:
+;;(setf gnus-summary-line-format "%U%R%z%I%(%[%4L: %-23,23f%]%) %s\n")
+;; Explanation:
+;; Unread, Secondary mark, Zcore(%z), indentation
+;; (start highlighted text
+;; [opening bracket
+;; 4 chars for number of lines
+;; ':' and 23 characters of the name, To field or Newgroups header
+;; ]closing)end highlighted text
+;; space and subject
+;; 
+(when nil
+  (setq gnus-summary-line-format "%U%R%B %*%-40,40S %(%[%a%]%)  %o\n")
+  (setq gnus-show-threads nil)
+  (setq gnus-article-sort-functions '((not gnus-article-sort-by-date))))
+
+;; turn on threading
+(setq gnus-show-threads t)
+
+;; organize in threads
+;; the format and commands below are based on
+;; http://www.emacswiki.org/emacs/GnusFormatting#toc4
+;; with some modifications
+;; 1) Fixed date/time size format
+;; 2) date/time as in Thunderbird, today's messages with hh:mm and all others
+;;    with dd/mm/yy
+;; 3) Removed "Unread" flag, we use faces for it
+(setq gnus-summary-line-format "%R %(%-15,15&user-date;%-20,20a %B%s%)\n")
+(setq gnus-user-date-format-alist '(((gnus-seconds-today)
+                                     . "%H:%M")
+                                    (t . "%d/%m/%y %H:%M")))
+;; organize threads by Reference header (subject not always works as it
+;; groups sometimes all messages with the same subject as thread, which is
+;; not correct for regular mails
+(setq gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references)
+;; sort by date descending (latest first)
+(setq gnus-thread-sort-functions '((not gnus-thread-sort-by-date)))
+;; set of variables specifying how to show thread characters
+(setq gnus-sum-thread-tree-false-root "")
+(setq gnus-sum-thread-tree-indent " ")
+(setq gnus-sum-thread-tree-leaf-with-other "├► ")
+(setq gnus-sum-thread-tree-root "")
+(setq gnus-sum-thread-tree-single-leaf "╰► ")
+(setq gnus-sum-thread-tree-vertical "│")
+
+;; (setq gnus-mark-article-hook '(gnus-summary-mark-unread-as-read gnus-summary-prepare))
+
+;; when in windowed system use unicode characters to indicate
+;; replied/forwarded mails
+(when (window-system)
+  (setq gnus-replied-mark 8592
+        gnus-forwarded-mark 8594))
+
+;; set GNUS to prefectch article asynchronously
+(setq gnus-asynchronous t)
+
+;; '=' is used to hide open article. TODO: make it togglable with space
+;; = means (gnus-summary-expand-window).
+;; If given a prefix, force an article window configuration.
+;;
+;; use Y g (gnus-summary-prepare) to refresh state of the summary buffer
+;; to set read/unread etc
+;;3.27.4
+
+;; unread article M c M-u or (gnus-summary-clear-mark-forward)
+
+
+;; add article to cache- *, remove - M-*
+
+;; 'h' switches focus between article and summary buffer

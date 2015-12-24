@@ -73,10 +73,12 @@
                 (eq major-mode 'completion-list-mode)
                 (eq major-mode 'Man-mode)
                 (eq major-mode 'apropos-mode)
-                (eq major-mode 'grep-mode)
+                (eq major-mode 'grep-mode)                
                 (string= (buffer-name) "*slime-description*"))
-             (quit-window)))
-     (select-window current-window)))
+        (quit-window))
+      ;;      gnus-summary-expand-window
+      )
+    (select-window current-window)))
 
 
 (require 'vc-hooks)

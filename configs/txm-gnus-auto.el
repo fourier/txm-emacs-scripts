@@ -283,8 +283,6 @@ This code could be later `eval'uated. "
                                                 "\\)"))))
 
 
-
-
 (let ((smtps (remove-if-not 'txm-gnus-is-smtp (txm-gnus-auth-sources))))
   (eval (txm-gnus-create-smtpmail-multi-accounts smtps))
   (eval (txm-gnus-create-smtpmail-multi-associations smtps))

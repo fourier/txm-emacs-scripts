@@ -137,6 +137,7 @@ will be expanded to:
 (require 'hexview-mode)
 (require 'ztree)
 (require 'shackle)
+(require 'hi-lock)
 ;; helm customizations
 (require 'helm-config)
 (require 'helm-ls-git)
@@ -492,15 +493,6 @@ will be expanded to:
 ;; Start emacs as a server for emacsclient application
 (server-start)
 
-;; mutt configuration
-(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
-(add-hook 'message-mode-hook
-          '(lambda ()
-             (define-key message-mode-map "\C-c\C-c" '(lambda ()
-                                                        "save and exit quickly"
-                                                        (interactive)
-                                                        (save-buffer)
-                                                        (server-edit)))))
 ;; Spell checking
 ;; Turn on spell checking in comments
 ;;(flyspell-prog-mode)

@@ -218,7 +218,8 @@
 (setq gnus-sum-thread-tree-single-leaf "╰► ")
 (setq gnus-sum-thread-tree-vertical "│")
 
-;; (setq gnus-mark-article-hook '(gnus-summary-mark-unread-as-read gnus-summary-prepare))
+;; hook on after reading arcticle
+(setq gnus-mark-article-hook '(gnus-summary-mark-unread-as-read))
 
 ;; when in windowed system use unicode characters to indicate
 ;; replied/forwarded mails
@@ -229,17 +230,88 @@
 ;; set GNUS to prefectch article asynchronously
 (setq gnus-asynchronous t)
 
-;; '=' is used to hide open article. TODO: make it togglable with space
-;; = means (gnus-summary-expand-window).
-;; If given a prefix, force an article window configuration.
-;;
-;; use Y g (gnus-summary-prepare) to refresh state of the summary buffer
-;; to set read/unread etc
-;;3.27.4
-
-;; unread article M c M-u or (gnus-summary-clear-mark-forward)
-
-
 ;; add article to cache- *, remove - M-*
 
-;; 'h' switches focus between article and summary buffer
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Composing message customizations
+;;
+
+;; create a signature with the first name from full name
+(when (and (user-full-name)
+           (stringp (user-full-name)))
+  (let ((name (car (split-string (user-full-name) " "))))
+    (add-to-list 'gnus-posting-styles `(".*" (signature ,(concat "Br,\n/" name))))))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Some hotkeys redefinition
+;;
+
+;; use 'r' to reply to message with citing in both summary and article modes
+(define-key gnus-summary-mode-map "r" 'gnus-summary-reply-with-original)
+(define-key gnus-article-mode-map "r" 'gnus-article-reply-with-original)
+
+;; use 'R' to reply to all with citing in both summary and article modes
+(define-key gnus-summary-mode-map "R" 'gnus-summary-wide-reply-with-original)
+(define-key gnus-article-mode-map "R" 'gnus-article-wide-reply-with-original)
+
+;; forward mail with 'f'
+(define-key gnus-summary-mode-map "f" 'gnus-summary-mail-forward)
+;; use 'F' for followups with original message
+(define-key gnus-summary-mode-map "F" 'gnus-summary-followup-with-original)
+
+
+;; use g instead of Y g (gnus-summary-prepare) to refresh state of the summary buffer
+;; to set read/unread etc
+(define-key gnus-summary-mode-map "g" 'gnus-summary-prepare)
+
+;; 'u' will mark the current mail as unread and move to the next line
+(define-key gnus-summary-mode-map "u" '(lambda () (interactive) 
+                                         (gnus-summary-clear-mark-forward 1)
+                                         (let ((line (line-number-at-pos)))
+                                               (gnus-summary-prepare)
+                                               (goto-line line))))
+                                         
+;; Bind M-up/down to scroll the article
+(define-key gnus-summary-mode-map [M-up] (lambda () (interactive) (gnus-summary-scroll-up -1)))
+(define-key gnus-summary-mode-map [M-down] (lambda () (interactive) (gnus-summary-scroll-up 1)))
+
+;; Esc should close the article window in both arcticle and summary mode
+(define-key gnus-summary-mode-map (if window-system (kbd "<escape>") "\M-q") 'gnus-summary-expand-window)
+(define-key gnus-article-mode-map (if window-system (kbd "<escape>") "\M-q") 'gnus-summary-expand-window)
+;; additional to it 'q' in article mode should close the article window
+(define-key gnus-article-mode-map "q" 'gnus-summary-expand-window)
+
+;; TAB should switch focus between article and summary
+(define-key gnus-article-mode-map (kbd "TAB") 'gnus-article-show-summary)
+(define-key gnus-summary-mode-map (kbd "TAB") 'gnus-summary-select-article-buffer)
+
+;; Enter in summary mode should open article full window
+(define-key gnus-summary-mode-map (kbd "\r") '(lambda () (interactive)
+                                                (let ((gnus-widen-article-window t))
+                                                  (gnus-summary-select-article-buffer))))
+
+;; bind d to Delete message
+(define-key gnus-summary-mode-map "d" 'gnus-summary-delete-article)
+
+
+;; Attachement commands
+;; bind Enter to save
+(require 'gnus-art)
+(define-key gnus-mime-button-map "\r" 'gnus-mime-save-part)
+(define-key gnus-mime-button-map " " 'gnus-mime-view-part-externally)
+
+
+;; handle attachements with default OSX previewers
+(require 'mailcap)
+(mailcap-add-mailcap-entry "application" "pdf" '((viewer "/usr/bin/qlmanage -p %s") (type . "application/pdf")))
+(mailcap-add-mailcap-entry "image" "jpeg" '((viewer "/usr/bin/qlmanage -p %s") (type . "image/*")))
+
+;; test with the following examples:
+;; (cl-prettyprint
+;;  (mailcap-possible-viewers (cdr (assoc "application" mailcap-mime-data)) "pdf"))
+;; (mailcap-mime-info "image/jpeg")
+
+

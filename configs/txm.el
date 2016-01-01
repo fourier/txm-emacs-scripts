@@ -1,3 +1,8 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Various customizations
+;; TODO: split to different files (or even packages)
+
+
 (defun txm-goto-tag-at-point ()
   (interactive)
   (let ((identifier (txm-c-identifier-at-point-string)))
@@ -63,9 +68,11 @@
     (jump-to-register 0)))
 
 (defun txm-close-temporary-window ()
-  "Close all temporary windows in current frame"
+  "Close all temporary windows in current frame.
+Return t if any of windows were closed."
   (interactive)
-  (let ((current-window (selected-window)))
+  (let ((current-window (selected-window))
+        (result nil))
     (dolist (window (window-list))
       (select-window window)
       (when (or (eq major-mode 'help-mode)
@@ -75,10 +82,12 @@
                 (eq major-mode 'apropos-mode)
                 (eq major-mode 'grep-mode)                
                 (string= (buffer-name) "*slime-description*"))
-        (quit-window))
+        (quit-window)
+        (setf result t))
       ;;      gnus-summary-expand-window
       )
-    (select-window current-window)))
+    (select-window current-window)
+    result))
 
 
 (require 'vc-hooks)
@@ -428,7 +437,6 @@ Only when 2 windows active"
     (if (assoc regex hi-lock-interactive-patterns)
         (unhighlight-regexp regex)
       (highlight-regexp regex 'txm-highlight-symbol-face))))
-
 
 
 

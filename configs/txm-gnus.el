@@ -6,6 +6,10 @@
 (require 'nnir)
 (require 'smtpmail)
 (require 'smtpmail-multi)
+(require 'gnus-art)
+(require 'mailcap)
+
+
 (load "txm-gnus-auto.el")
 ;;(setq user-full-name (user-full-name))
 
@@ -219,7 +223,7 @@
 (setq gnus-sum-thread-tree-vertical "│")
 
 ;; hook on after reading arcticle
-(setq gnus-mark-article-hook '(gnus-summary-mark-unread-as-read))
+(setq gnus-mark-article-hook '(gnus-summary-mark-read-and-unread-as-read))
 
 ;; when in windowed system use unicode characters to indicate
 ;; replied/forwarded mails
@@ -242,7 +246,6 @@
            (stringp (user-full-name)))
   (let ((name (car (split-string (user-full-name) " "))))
     (add-to-list 'gnus-posting-styles `(".*" (signature ,(concat "Br,\n/" name))))))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -278,9 +281,17 @@
 (define-key gnus-summary-mode-map [M-up] (lambda () (interactive) (gnus-summary-scroll-up -1)))
 (define-key gnus-summary-mode-map [M-down] (lambda () (interactive) (gnus-summary-scroll-up 1)))
 
+(defun txm-gnus-esc-dwim ()
+  "Handle the ESC key in GNUS.
+If any temporary windows opened, close them; otherwise close the article window."
+  (interactive)
+  (unless
+      (txm-close-temporary-window)
+    (gnus-summary-expand-window)))
+
 ;; Esc should close the article window in both arcticle and summary mode
-(define-key gnus-summary-mode-map (if window-system (kbd "<escape>") "\M-q") 'gnus-summary-expand-window)
-(define-key gnus-article-mode-map (if window-system (kbd "<escape>") "\M-q") 'gnus-summary-expand-window)
+(define-key gnus-summary-mode-map (if window-system (kbd "<escape>") "\M-q") 'txm-gnus-esc-dwim)
+(define-key gnus-article-mode-map (if window-system (kbd "<escape>") "\M-q") 'txm-gnus-esc-dwim)
 ;; additional to it 'q' in article mode should close the article window
 (define-key gnus-article-mode-map "q" 'gnus-summary-expand-window)
 
@@ -296,16 +307,19 @@
 ;; bind d to Delete message
 (define-key gnus-summary-mode-map "d" 'gnus-summary-delete-article)
 
-
 ;; Attachement commands
 ;; bind Enter to save
-(require 'gnus-art)
 (define-key gnus-mime-button-map "\r" 'gnus-mime-save-part)
 (define-key gnus-mime-button-map " " 'gnus-mime-view-part-externally)
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Some attachement types handling
+;; (to avoid using mailcap)
+
 ;; handle attachements with default OSX previewers
-(require 'mailcap)
 (mailcap-add-mailcap-entry "application" "pdf" '((viewer "/usr/bin/qlmanage -p %s") (type . "application/pdf")))
 (mailcap-add-mailcap-entry "image" "jpeg" '((viewer "/usr/bin/qlmanage -p %s") (type . "image/*")))
 

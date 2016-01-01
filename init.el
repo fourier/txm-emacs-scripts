@@ -32,7 +32,8 @@
 
 ;; where to get
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+                         ("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 ;; initialize packages. Now all we need is require necessary packages
 ;; to have their variables etc availables
 (package-initialize)
@@ -98,7 +99,7 @@ will be expanded to:
   (when (file-exists-p autocomplete-path)
     (push autocomplete-path load-path)
     (setq txm-autocomplete-installed t)))
-(let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
+(let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
 (let ((cff-path (substitute-in-file-name "~/.emacs.d/cff")))
@@ -369,14 +370,6 @@ will be expanded to:
 ;; recently edited files in menu
 (recentf-mode 1)                        
 
-;; Lisp customization
-;; (font-lock-add-keywords
-;;  'emacs-lisp-mode
-;;  `(("\\<lambda\\>"
-;;     (0 (progn (compose-region (match-beginning 0) (match-end 0)
-;;                               ,(make-char 'greek-iso8859-7 107))
-;;               nil)))))
-
 
 ;; Haskell customization
 (setq haskell-program-name (executable-find "ghci"))
@@ -644,7 +637,7 @@ will be expanded to:
 (load "txm-erc.el")
 (load "txm-gnus.el")
 (load "txm-dired.el")
-
+(load "txm-elisp.el")
   
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 

@@ -11,6 +11,12 @@
 
 
 (load "txm-gnus-auto.el")
+(load "txm-gnus-contacts.el")
+
+
+;; initialize contacts support from txm-gnus-contacts.el
+(txm-org-contacts-initialize)
+
 ;;(setq user-full-name (user-full-name))
 
 ;; default sending method - using internal smtp client

@@ -19,34 +19,63 @@
   "Variable holding the values for current name and email for template.
 To be used in template when creating a new contact.")
 
-(setq org-contacts-files '("~/ownCloud/Documents/Мои документы/Personal Notes/mail_contacts.org"))
+(defvar txm-org-contacts-base-path
+  "~/ownCloud/Documents/Мои документы/Personal Notes"
+  "Path to the directory where org contacts files should be located")
 
-(add-to-list 'org-capture-templates
-             `("c" "Contacts" entry (file ,(car org-contacts-files))
-               "* %(org-contacts-template-name)
+(defvar txm-org-contacts-main-contacts-file
+  (concat (file-name-as-directory txm-org-contacts-base-path)
+          "gnus_contacts.org")
+  "Full path to the file with a list of contacts.")
+
+(defvar txm-org-contacts-collected-contacts-file
+  (concat (file-name-as-directory txm-org-contacts-base-path)
+          "gnus_contacts_collected.org")
+  "Full path to the file with a list of collected from send mails contacts.")
+
+(defun txm-org-contacts-initialize ()
+  "Initialize support of the org-contacts and collecting send mails contacts."
+  ;; Set the list of .org files to search for contacts in Gnus
+  (setq org-contacts-files `(,txm-org-contacts-main-contacts-file
+                             ,txm-org-contacts-collected-contacts-file))
+
+  ;; (setq org-capture-templates nil)
+  ;; Set the list templates for org-capture.
+  ;; First template "c" used when reading mails in summary buffer to
+  ;; manually collect senders. Need to bind it to some key, hence not
+  ;; used yet. The contacts should be added to the
+  ;; txm-org-contacts-main-contacts-file
+  (add-to-list 'org-capture-templates
+               `("c" "Contacts" entry (file ,txm-org-contacts-main-contacts-file)
+                 "** %(org-contacts-template-name)
 :PROPERTIES:
 :EMAIL: %(org-contacts-template-email)
 :END:"
-               :immediate-finish t))
-
-(add-to-list 'org-capture-templates
-             `("cs" "Contacts send mail" entry (file ,(car org-contacts-files))
-               "* %(txm-org-contacts-template-current-name)
+                 :immediate-finish t))
+  ;; This template is used for automatic addition of contacts after
+  ;; the mail being send. The contacts will be added to the
+  ;; txm-org-contacts-collected-contacts-file
+  (add-to-list 'org-capture-templates
+               `("cs" "Collected contacts from sent mail" entry (file ,txm-org-contacts-collected-contacts-file)
+                 "** %(txm-org-contacts-template-current-name)
 :PROPERTIES:
 :EMAIL: %(txm-org-contacts-template-current-email)
 :END:"
-               :immediate-finish t))
+                 :immediate-finish t))
 
-(org-contacts-gnus-insinuate)
+  ;; ensure contacts files exists with basic contents
+  (when (not (file-exists-p txm-org-contacts-main-contacts-file))
+    (write-region "#+STARTUP: showeverything\n* Main contacts\n" nil txm-org-contacts-main-contacts-file))
 
+  (when (not (file-exists-p txm-org-contacts-collected-contacts-file))
+    (write-region "#+STARTUP: showeverything\n* Collected contacts\n" nil txm-org-contacts-collected-contacts-file))
 
-;; gnus-newsgroup-processable
-;; gnus-summary-iterate
+  ;; initialize support for org-contacts in Gnus
+  (org-contacts-gnus-insinuate)
 
+  ;; hook after message has been sent to collect contacts
+  (add-hook 'message-sent-hook 'txm-org-contacts-message-update-contacts))
 
-;; hook after message has been sent
-(add-hook 'message-sent-hook 'org-contacts-gnus-check-add-mail-address)
-(add-hook 'gnus-article-prepare-hook 'txm-test-art-prepare)
 
 (defun txm-org-contacts-template-current-name ()
   "Function used in a cs capture template.
@@ -117,9 +146,10 @@ Returns the To field email value"
                (org-contacts-filter
                 (concat "^" name "$"))))))
 
-
-
-    
+;; TODO:
+;; to iterate through the summary buffer, one can use 
+;; gnus-newsgroup-processable
+;; gnus-summary-iterate
 
 
 (provide 'txm-gnus-contacts)

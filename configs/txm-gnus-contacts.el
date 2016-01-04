@@ -33,6 +33,10 @@ To be used in template when creating a new contact.")
           "gnus_contacts_collected.org")
   "Full path to the file with a list of collected from send mails contacts.")
 
+
+(defvar txm-org-contacts-collected-headline "Collected contacts"
+  "Heading under which all collected contacts will be placed.")
+
 (defun txm-org-contacts-initialize ()
   "Initialize support of the org-contacts and collecting send mails contacts."
   ;; Set the list of .org files to search for contacts in Gnus
@@ -47,7 +51,7 @@ To be used in template when creating a new contact.")
   ;; txm-org-contacts-main-contacts-file
   (add-to-list 'org-capture-templates
                `("c" "Contacts" entry (file ,txm-org-contacts-main-contacts-file)
-                 "** %(org-contacts-template-name)
+                 "* %(org-contacts-template-name)
 :PROPERTIES:
 :EMAIL: %(org-contacts-template-email)
 :END:"
@@ -56,8 +60,10 @@ To be used in template when creating a new contact.")
   ;; the mail being send. The contacts will be added to the
   ;; txm-org-contacts-collected-contacts-file
   (add-to-list 'org-capture-templates
-               `("cs" "Collected contacts from sent mail" entry (file ,txm-org-contacts-collected-contacts-file)
-                 "** %(txm-org-contacts-template-current-name)
+               `("cs" "Collected contacts from sent mail" entry
+                 (file+headline ,txm-org-contacts-collected-contacts-file
+                                ,txm-org-contacts-collected-headline)
+                 "* %(txm-org-contacts-template-current-name)
 :PROPERTIES:
 :EMAIL: %(txm-org-contacts-template-current-email)
 :END:"

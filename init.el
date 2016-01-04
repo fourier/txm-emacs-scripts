@@ -253,7 +253,8 @@ will be expanded to:
 
 
 ;; Highlight current line
-;; (global-hl-line-mode)
+;; works good for idea-darkula theme
+(global-hl-line-mode)
 
 ;; turn the bell totally off
 (setq ring-bell-function 'ignore)

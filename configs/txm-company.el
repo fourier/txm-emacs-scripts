@@ -1,16 +1,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Company-mode configuration
 ;; company-mode provides all popup options used
-(add-hook 'after-init-hook 'global-company-mode)
+
+;;(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'prog-mode-hook 'company-mode)
 ;; install the company-quickhelp to get the documentation
 (company-quickhelp-mode 1)
 
-(global-set-key "\t" 'company-complete-common)
-;; ;; cycle through the completion list with( TAB
+;; cycle through the completion list with TAB
 (eval-after-load 'company
   '(progn
      (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
-     (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)))
+     (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+     (define-key prog-mode-map [tab] 'txm-tab-indent-or-complete)))
 
 
 ;; weight by frequency
@@ -33,7 +35,6 @@
          (company-complete-common))
         (t (indent-for-tab-command))))
 
-(global-set-key [tab] 'txm-tab-indent-or-complete)
 
 ;; Add yasnippet support for all company backends
 ;; https://github.com/syl20bnr/spacemacs/pull/179

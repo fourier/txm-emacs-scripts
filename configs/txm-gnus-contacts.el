@@ -117,9 +117,13 @@ Returns the To field email value"
   "Get To contacts from the message buffer and update org contacts."
   (interactive)
   (let* ((to-field (or (mail-fetch-field "To" nil t) ""))
+         (cc-field (mail-fetch-field "Cc" nil t))
          ;; to-field is a comma-separated string with all addresses
          ;; from all 'To' fields
-         (parsed (txm-org-contacts-parse-to-field to-field)))
+         (parsed (txm-org-contacts-parse-to-field
+                  (if cc-field
+                      (concat to-field ", " cc-field)
+                    to-field))))
     (dolist (contact parsed)            ; contact is a pair (name email)
       (let* ((name (car contact))
              (email (cadr contact))

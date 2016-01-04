@@ -2,8 +2,10 @@
 ;; Company-mode configuration
 ;; company-mode provides all popup options used
 
-;;(add-hook 'after-init-hook 'global-company-mode)
+;; manually define modes where we would need company mode
+;; to avoid conflicts
 (add-hook 'prog-mode-hook 'company-mode)
+(add-hook 'message-mode-hook 'company-mode)
 ;; install the company-quickhelp to get the documentation
 (company-quickhelp-mode 1)
 

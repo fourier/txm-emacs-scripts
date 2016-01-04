@@ -303,7 +303,7 @@ Return t if any of windows were closed."
          (progn
            (setq mac-allow-anti-aliasing nil)
            (setq mac-allow-anti-aliasing t)
-           (set-frame-font "Menlo-12" nil (list (selected-frame)))))
+           (set-frame-font "Menlo-14" nil (list (selected-frame)))))
         ((eq system-type 'windows-nt)
          (message "windows-nt")))))
 

@@ -48,6 +48,23 @@ For variables will show `describe-variable', for functions
           ((eql (car thing) 'not-found) 
            (message (concat "Symbol '" (symbol-name (cdr thing)) "' not found")))
           ((null thing) nil))))
+
+
+(defun txm-edebug-instrumented-functions ()
+  ;; implemented by wasamasa from #emacs
+  (interactive)
+  (let (result)
+    (mapatoms
+     (lambda (atom)
+       (when (functionp atom)
+         (let ((edebug-data (get atom 'edebug)))
+           ;; see `edebug-find-stop-point' for the logic
+           (when (and edebug-data (not (markerp edebug-data)))
+             (push atom result))))))
+    result))
+;; (txm-my-instrumented-functions)
+;; (cancel-edebug-on-entry)
+
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybindings
@@ -56,6 +73,19 @@ For variables will show `describe-variable', for functions
 (define-key emacs-lisp-mode-map [f1] 'txm-elisp-help-at-point)
 (define-key emacs-lisp-mode-map "\M-." 'txm-elisp-definition-at-point)
 
+;; toggle edebug
+;; edebug hot-keys:
+;; space - next sexp
+;; E - watches window
+;; in watches window:
+;;   - type variable name
+;;   - press C-c C-u to evaluate it and update
+;;   - type another variable name below
+;;   - press C-c C-u to evaluate it and update
+;;   return to your code and continue execution
+(define-key emacs-lisp-mode-map [f7] '(lambda () (interactive) (eval-defun t)))
+(define-key emacs-lisp-mode-map [S-f7] 'eval-defun)
+;; cancel-edebug-on-entry
 
 ;; (font-lock-add-keywords
 ;;  'emacs-lisp-mode

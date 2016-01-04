@@ -466,12 +466,11 @@ will be expanded to:
 (set-language-environment "UTF-8")
 
 ;; YASnippet customization
-;;(define-key yas-minor-mode-map (kbd "<tab>") nil)
-;;(define-key yas-minor-mode-map (kbd "TAB") nil)
-;; Set Yasnippet's key binding to shift+tab
-;;(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-;; (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
 (yas-global-mode)
+;; cancel 'tab' for yasnippe
+(define-key yas-minor-mode-map [tab] nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+
 
 ;; Start emacs as a server for emacsclient application
 (server-start)
@@ -609,22 +608,21 @@ will be expanded to:
   (require 'gnu-apl-mode)
   (gnu-apl "~/Development/gapl/apl"))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load all other configs
+;; 
 
 (load "txm.el")
 (load "txm-erc.el")
 (load "txm-gnus.el")
 (load "txm-dired.el")
 (load "txm-elisp.el")
-  
-(setq custom-file "~/.emacs.d/emacs-custom.el")
+(load "txm-company.el")
 
-;; In the end on initialization:
-;; (when (and window-system (eq system-type 'darwin))
-;;   ;; full-screen options
-;;   (when (fboundp 'ns-toggle-fullscreen)
-;;     ;; 1) set fullscreen
-;;     (ns-toggle-fullscreen)
-;;     ;; 2) split window
-;;     (split-window-horizontally)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Drop occasional customizations into this file
+;; 
+
+(setq custom-file "~/.emacs.d/emacs-custom.el")
 
 (put 'upcase-region 'disabled nil)

@@ -5,10 +5,7 @@
 ;; list of packages installed. Taken from the package-activated-list variable
 ;; on original machine
 (setq package-list '(haskell-mode
-                     auto-complete
-                     popup
                      sly
-                     auto-complete-nxml
                      bison-mode
                      cmake-mode
                      dash-at-point
@@ -92,13 +89,6 @@ will be expanded to:
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
 
-(let ((popup-path "~/.emacs.d/popup-el"))
-  (when (file-exists-p popup-path)
-    (push (substitute-in-file-name popup-path) load-path)))
-(let ((autocomplete-path (substitute-in-file-name "~/.emacs.d/auto-complete")))
-  (when (file-exists-p autocomplete-path)
-    (push autocomplete-path load-path)
-    (setq txm-autocomplete-installed t)))
 (let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
@@ -480,7 +470,7 @@ will be expanded to:
 ;;(define-key yas-minor-mode-map (kbd "TAB") nil)
 ;; Set Yasnippet's key binding to shift+tab
 ;;(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
-(setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
+;; (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
 (yas-global-mode)
 
 ;; Start emacs as a server for emacsclient application
@@ -592,25 +582,12 @@ will be expanded to:
   (define-key function-key-map (kbd "<select>") (kbd "<end>"))
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
 
-;; Autocomplete configuration
-(when (boundp 'txm-autocomplete-installed)
-  (require 'auto-complete-config)
-  (ac-config-default)
-  (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
-    (let ((yas-fallback-behavior nil))
-      ad-do-it))
-  (setq ac-auto-start nil)
-  (ac-set-trigger-key "TAB")
-  (add-to-list 'ac-modes 'enh-ruby-mode)
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict"))
-
 ;; nxml configuration
 ;; set path to custom RelaxNG schemas (i.e. XSL2/3)
 (push (substitute-in-file-name "$HOME/.emacs.d/nxml-schemas/schemas.xml") rng-schema-locating-files)
 ;; "</" autocompletes the tag
 (setq nxml-slash-auto-complete-flag t)
 ;;
-(add-hook 'nxml-mode-hook 'auto-complete-mode)
 
 ;; Groovy customization
 (add-to-list 'auto-mode-alist '("\\.groovy$" . groovy-mode))

@@ -328,24 +328,6 @@ Return t if any of windows were closed."
           (concat (expand-file-name containing-path) filename))))))
 
 
-;; Autocomplete with clang configuration
-(when (and (boundp 'txm-autocomplete-installed)
-           (boundp 'txm-clang-autocomplete-installed)
-           txm-clang-autocomplete-executable)
-  (require 'auto-complete-clang-async)
-
-  (defun ac-cc-mode-setup ()
-    (setq ac-clang-complete-executable txm-clang-autocomplete-executable)
-    (setq ac-sources '(ac-source-clang-async))
-    (ac-clang-launch-completion-process))
-
-  (defun txm-ac-config ()
-    (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
-    (add-hook 'auto-complete-mode-hook 'ac-common-setup)
-    (global-auto-complete-mode t))
-  ;; turn on autocomplete-clang
-  (txm-ac-config))
-
 (defun txm-open-menu ()
   "Activates menu bar mode if not active and opens menu.
 Only for text mode"

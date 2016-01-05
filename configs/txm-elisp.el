@@ -62,9 +62,27 @@ For variables will show `describe-variable', for functions
            (when (and edebug-data (not (markerp edebug-data)))
              (push atom result))))))
     result))
-;; (txm-my-instrumented-functions)
+;; (txm-edebug-instrumented-functions)
 ;; (cancel-edebug-on-entry)
 
+(defun txm-elisp-add-to-watch (&optional region-start region-end)
+  "Add the current variable to the *EDebug* window"
+  (interactive "r")
+  (let ((statement
+         (if (and region-start region-end (use-region-p))
+             (buffer-substring region-start region-end)
+           (symbol-name (eldoc-current-symbol)))))
+    ;; open eval buffer
+    (edebug-visit-eval-list)
+    ;; jump to the end of it and add a newline
+    (goto-char (point-max))
+    (newline)
+    ;; insert the variable
+    (insert statement)
+    ;; update the list
+    (edebug-update-eval-list)
+    ;; jump back to where we were
+    (edebug-where)))
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybindings
@@ -86,6 +104,8 @@ For variables will show `describe-variable', for functions
 (define-key emacs-lisp-mode-map [f7] '(lambda () (interactive) (eval-defun t)))
 (define-key emacs-lisp-mode-map [S-f7] 'eval-defun)
 ;; cancel-edebug-on-entry
+(define-key edebug-mode-map "A" 'txm-elisp-add-to-watch)
+
 
 ;; (font-lock-add-keywords
 ;;  'emacs-lisp-mode

@@ -21,7 +21,7 @@ To be used in template when creating a new contact.")
 
 (defvar txm-org-contacts-base-path
   "~/ownCloud/Documents/Мои документы/Personal Notes"
-  "Path to the directory where org contacts files should be located")
+  "Path to the directory where org contacts files should be located.")
 
 (defvar txm-org-contacts-main-contacts-file
   (concat (file-name-as-directory txm-org-contacts-base-path)
@@ -38,7 +38,7 @@ To be used in template when creating a new contact.")
   "Heading under which all collected contacts will be placed.")
 
 (defun txm-org-contacts-initialize ()
-  "Initialize support of the org-contacts and collecting send mails contacts."
+  "Initialize support of the `org-contacts' and collecting send mails contacts."
   ;; Set the list of .org files to search for contacts in Gnus
   (setq org-contacts-files `(,txm-org-contacts-main-contacts-file
                              ,txm-org-contacts-collected-contacts-file))
@@ -157,7 +157,7 @@ Returns the To field email value"
                 (concat "^" name "$"))))))
 
 ;; TODO:
-;; to iterate through the summary buffer, one can use 
+;; to iterate through the summary buffer, one can use
 ;; gnus-newsgroup-processable
 ;; gnus-summary-iterate
 

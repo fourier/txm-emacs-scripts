@@ -13,7 +13,7 @@
 (require 'erc-services nil t)
 (erc-services-mode 1)
 (setq erc-prompt-for-nickserv-password nil)
-(setq erc-autojoin-channels-alist '((".*freenode.net" "#emacs" "#diaspora" "#lisp")))
+(setq erc-autojoin-channels-alist '((".*freenode.net" "#emacs" "#diaspora" "#lisp" "#org-mode")))
 
 
 ;; use the .authinfo file

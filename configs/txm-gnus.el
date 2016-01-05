@@ -41,7 +41,10 @@
       (to-address . "emacs-devel@gnu.org")
       (to-list . "emacs-devel@gnu.org"))
     (".*/bug-gnu-emacs$"
-      (to-list . "bug-gnu-emacs@gnu.org"))))
+     (to-list . "bug-gnu-emacs@gnu.org"))
+    (".*/emacs-orgmode$"
+     (to-address . "emacs-orgmode@gnu.org")
+     (to-list . "emacs-orgmode@gnu.org"))))
 
 ;; No group considered big, download everything
 ;; see http://stackoverflow.com/questions/4982831/i-dont-want-to-expire-mail-in-gnus
@@ -107,7 +110,7 @@
   (string-match "^nnimap\\+.*INBOX$" group))
 
 (defun txm-gnus-account-name-from-group (group)
-  "extract account name from the GROUP"
+  "Extract account name from the GROUP"
  (string-match "\\(^.*\\)\\+\\(.*\\):\\(.*\\)" group)
  (let ((addr (match-string 2 group)))
    (if (null addr) "(unknown)" addr)))
@@ -318,6 +321,9 @@ If any temporary windows opened, close them; otherwise close the article window.
 (define-key gnus-mime-button-map "\r" 'gnus-mime-save-part)
 (define-key gnus-mime-button-map " " 'gnus-mime-view-part-externally)
 
+;; Use ctrl up/down to move between topics in group view
+(define-key gnus-group-mode-map [C-up] 'gnus-topic-goto-previous-topic)
+(define-key gnus-group-mode-map [C-down] 'gnus-topic-goto-next-topic)
 
 
 

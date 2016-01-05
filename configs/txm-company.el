@@ -14,7 +14,8 @@
   '(progn
      (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
      (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
-     (define-key prog-mode-map [tab] 'txm-tab-indent-or-complete)))
+     (define-key prog-mode-map [tab] 'txm-tab-indent-or-complete)
+     (define-key message-mode-map [tab] 'txm-tab-indent-or-complete-message)))
 
 
 ;; weight by frequency
@@ -36,6 +37,14 @@
         ((txm-check-expansion)
          (company-complete-common))
         (t (indent-for-tab-command))))
+
+(defun txm-tab-indent-or-complete-message ()
+  (interactive)
+  (let ((mail-abbrev-mode-regexp
+         "^\\(Resent-To\\|To\\|B?Cc\\|Reply-To\\|From\\|Mail-Followup-To\\|Mail-Copies-To\\|Disposition-Notification-To\\|Return-Receipt-To\\):"))
+    (if (mail-abbrev-in-expansion-header-p)
+        (company-complete-common)
+      (indent-for-tab-command))))
 
 
 ;; Add yasnippet support for all company backends

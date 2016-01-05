@@ -132,7 +132,7 @@ Returns the To field email value"
         (if marker
             ;; verify the email and update if necessary
             (org-with-point-at marker
-              (org-contacts-check-mail-address (cadr (org-contacts-gnus-get-name-email))))
+              (org-contacts-check-mail-address email))
           ;; else just add contact
           ;; if name is not set - use an email instead
           (when (not name) (setf name email))

@@ -107,10 +107,12 @@ For variables will show `describe-variable', for functions
 (define-key edebug-mode-map "A" 'txm-elisp-add-to-watch)
 
 
+
 ;; (font-lock-add-keywords
 ;;  'emacs-lisp-mode
 ;;  `(("\\<lambda\\>"
 ;;     (0 (progn (compose-region (match-beginning 0) (match-end 0)
 ;;                               ,(make-char 'greek-iso8859-7 107))
 ;;               nil)))))
+
 

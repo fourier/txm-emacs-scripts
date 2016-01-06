@@ -205,6 +205,7 @@
 ;; turn on threading
 (setq gnus-show-threads t)
 
+
 ;; organize in threads
 ;; the format and commands below are based on
 ;; http://www.emacswiki.org/emacs/GnusFormatting#toc4
@@ -213,7 +214,7 @@
 ;; 2) date/time as in Thunderbird, today's messages with hh:mm and all others
 ;;    with dd/mm/yy
 ;; 3) Removed "Unread" flag, we use faces for it
-(setq gnus-summary-line-format "%R %(%-15,15&user-date;%-20,20a %B%s%)\n")
+(setq gnus-summary-line-format "%U%R %(%-15,15&user-date;%-20,20a %B%s%)\n")
 (setq gnus-user-date-format-alist '(((gnus-seconds-today)
                                      . "%H:%M")
                                     (t . "%d/%m/%y %H:%M")))

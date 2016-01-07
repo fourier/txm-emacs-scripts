@@ -6,6 +6,7 @@
 
 (require 'find-func)
 (require 'eldoc)
+(require 'edebug)
 
 ;; turn on eldoc for elisp buffers
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
@@ -13,7 +14,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set of functions to help with jump to definition
 ;;
-
 
 (defun txm-elisp-thing-at-point ()
   "Finds the current elisp symbol usyng `eldoc-current-symbol'
@@ -104,6 +104,8 @@ For variables will show `describe-variable', for functions
 (define-key emacs-lisp-mode-map [f7] '(lambda () (interactive) (eval-defun t)))
 (define-key emacs-lisp-mode-map [S-f7] 'eval-defun)
 ;; cancel-edebug-on-entry
+;; point cursor to the variable and press A
+;; to get it to the evaluate list buffer
 (define-key edebug-mode-map "A" 'txm-elisp-add-to-watch)
 
 

@@ -10,7 +10,8 @@
 
 ;; turn on eldoc for elisp buffers
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-
+;; turn on eldoc in *scratch* etc buffers
+(add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set of functions to help with jump to definition
 ;;

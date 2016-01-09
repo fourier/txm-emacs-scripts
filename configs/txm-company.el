@@ -6,6 +6,8 @@
 ;; to avoid conflicts
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'message-mode-hook 'company-mode)
+(add-hook 'lisp-interaction-mode-hook 'company-mode)
+
 ;; install the company-quickhelp to get the documentation
 (company-quickhelp-mode 1)
 

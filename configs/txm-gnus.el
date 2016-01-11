@@ -332,6 +332,10 @@ If any temporary windows opened, close them; otherwise close the article window.
 (define-key gnus-group-mode-map [C-up] 'gnus-topic-goto-previous-topic)
 (define-key gnus-group-mode-map [C-down] 'gnus-topic-goto-next-topic)
 
+;; Use ctrl up/down to move between threads in summary view
+(define-key gnus-summary-mode-map [C-up] 'gnus-summary-prev-thread)
+(define-key gnus-summary-mode-map [C-down] 'gnus-summary-next-thread)
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

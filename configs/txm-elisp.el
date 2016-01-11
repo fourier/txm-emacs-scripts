@@ -84,6 +84,16 @@ For variables will show `describe-variable', for functions
     (edebug-update-eval-list)
     ;; jump back to where we were
     (edebug-where)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Font lock updates
+;;
+(font-lock-add-keywords 'emacs-lisp-mode
+                        '(
+                          ("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+                          ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
+                          ("\\<\\(NOTE\\):" 1 font-lock-warning-face prepend)
+                          ))
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybindings

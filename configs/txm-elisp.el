@@ -102,6 +102,9 @@ For variables will show `describe-variable', for functions
 (define-key emacs-lisp-mode-map [f1] 'txm-elisp-help-at-point)
 (define-key emacs-lisp-mode-map "\M-." 'txm-elisp-definition-at-point)
 
+(define-key lisp-interaction-mode-map [f1] 'txm-elisp-help-at-point)
+(define-key lisp-interaction-mode-map "\M-." 'txm-elisp-definition-at-point)
+
 ;; toggle edebug
 ;; edebug hot-keys:
 ;; space - next sexp
@@ -114,6 +117,9 @@ For variables will show `describe-variable', for functions
 ;;   return to your code and continue execution
 (define-key emacs-lisp-mode-map [f7] '(lambda () (interactive) (eval-defun t)))
 (define-key emacs-lisp-mode-map [S-f7] 'eval-defun)
+(define-key lisp-interaction-mode-map [f7] '(lambda () (interactive) (eval-defun t)))
+(define-key lisp-interaction-mode-map [S-f7] 'eval-defun)
+
 ;; cancel-edebug-on-entry
 ;; point cursor to the variable and press A
 ;; to get it to the evaluate list buffer

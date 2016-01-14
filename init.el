@@ -108,6 +108,11 @@ will be expanded to:
   (push "/home/fourier/Applications/sbt/bin" exec-path)
   (push "/home/fourier/Applications/scala-2.10.3/bin" exec-path))
 
+;; reddit api
+(let ((reddit-api-path (substitute-in-file-name "~/Sources/emacs-reddit-api")))
+  (when (file-exists-p reddit-api-path)
+    (push reddit-api-path load-path)))
+
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load
 ;;(require 'quack)
@@ -627,3 +632,4 @@ will be expanded to:
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)

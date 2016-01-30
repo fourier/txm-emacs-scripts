@@ -281,9 +281,10 @@ Return t if any of windows were closed."
 ;; disables all custom themes before loading (enabling) another one.
 ;; link: http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
 (defadvice load-theme (before theme-dont-propagate activate)
- (mapcar #'disable-theme custom-enabled-themes))
-;; (load-theme 'borland-cpp-alike t)
-(load-theme 'idea-darkula t)
+  (mapc #'disable-theme custom-enabled-themes))
+(if (window-system)
+    (load-theme 'idea-darkula t)
+  (load-theme 'borland-blue t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Frame font

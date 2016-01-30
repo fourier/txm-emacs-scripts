@@ -37,6 +37,9 @@
      (gnus-use-scoring nil)
      (expiry-wait . 2)
      (display . all))
+    (".*/bug-apl$"
+     (to-address . "bug-apl@gnu.org")
+     (to-list . "bug-apl@gnu.org"))
     (".*/emacs-devel$"
       (to-address . "emacs-devel@gnu.org")
       (to-list . "emacs-devel@gnu.org"))

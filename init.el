@@ -112,6 +112,10 @@ will be expanded to:
 (let ((reddit-api-path (substitute-in-file-name "~/Sources/emacs-reddit-api")))
   (when (file-exists-p reddit-api-path)
     (push reddit-api-path load-path)))
+(let ((gnus-reddit-path (substitute-in-file-name "~/Sources/gnus-reddit")))
+  (when (file-exists-p gnus-reddit-path)
+    (push gnus-reddit-path load-path)))
+
 
 ;;__________________________________________________________________________
 ;;;;    Initial Code Load

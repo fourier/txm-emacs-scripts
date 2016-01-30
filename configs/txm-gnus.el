@@ -33,7 +33,7 @@
 
 ;; set gnus-parameter
 (setq gnus-parameters
-  '(("^nnimap.*"
+  '(("nnimap.*"
      (gnus-use-scoring nil)
      (expiry-wait . 2)
      (display . all))
@@ -339,6 +339,8 @@ If any temporary windows opened, close them; otherwise close the article window.
 (define-key gnus-summary-mode-map [C-up] 'gnus-summary-prev-thread)
 (define-key gnus-summary-mode-map [C-down] 'gnus-summary-next-thread)
 
+;; Use F5 to redownload all group contents
+(define-key gnus-summary-mode-map [f5] 'gnus-summary-rescan-group)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -354,4 +356,7 @@ If any temporary windows opened, close them; otherwise close the article window.
 ;;  (mailcap-possible-viewers (cdr (assoc "application" mailcap-mime-data)) "pdf"))
 ;; (mailcap-mime-info "image/jpeg")
 
-
+;; when not enough messages downloaded in IMAP account,
+;; run the 'G p' on a group and remove contents of the buffer
+;; then restart Gnus
+;; see here: http://stackoverflow.com/questions/15703346/show-all-messages-in-gnus-with-display-all

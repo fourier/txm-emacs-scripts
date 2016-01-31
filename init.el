@@ -89,7 +89,7 @@ will be expanded to:
 (try-to-load "~/.emacs.d/strings-mode" strings-mode
              (setq auto-mode-alist (cons '("\\.strings\\'" . strings-mode) auto-mode-alist)))
 
-(let ((loccur-path (substitute-in-file-name "~/Sources/loccur")))
+(let ((loccur-path (substitute-in-file-name "~/.emacs.d/loccur")))
   (when (file-exists-p loccur-path)
     (push loccur-path load-path)))
 (let ((cff-path (substitute-in-file-name "~/.emacs.d/cff")))

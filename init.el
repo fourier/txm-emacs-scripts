@@ -232,7 +232,7 @@ will be expanded to:
 (define-key emacs-lisp-mode-map "\C-j" 'eval-print-last-sexp)
 ;; magit
 (global-set-key [S-f1] 'magit-status)
-(global-set-key [f1] 'magit-dispatch-popup)
+;;(global-set-key [f1] 'magit-dispatch-popup)
 
 ;;__________________________________________________________________________
 

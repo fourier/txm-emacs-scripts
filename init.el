@@ -261,10 +261,6 @@ will be expanded to:
 ;;   (global-fci-mode t)
 
 
-;; Highlight current line
-;; works good for idea-darkula theme
-(global-hl-line-mode)
-
 ;; turn the bell totally off
 (setq ring-bell-function 'ignore)
 

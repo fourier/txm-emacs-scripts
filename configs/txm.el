@@ -286,7 +286,11 @@ Return t if any of windows were closed."
 (defadvice load-theme (before theme-dont-propagate activate)
   (mapc #'disable-theme custom-enabled-themes))
 (if (window-system)
-    (load-theme 'idea-darkula t)
+    (progn 
+      (load-theme 'idea-darkula t)
+      ;; Highlight current line
+      ;; works good for idea-darkula theme
+      (global-hl-line-mode))
   (load-theme 'borland-blue t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

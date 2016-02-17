@@ -22,7 +22,12 @@ and constucts a pair (type . symbol) from the symbol under the cursor.
 Here type could be 'function, 'variable or 'not-found if the symbol
 is not defined.
 Returns nil if no symbol at point"
-  (let ((symb (eldoc-current-symbol)))
+  
+  (let* ((c (char-after (point)))
+         (symb 
+          (and c
+               (memq (char-syntax c) '(?w ?_))
+               (intern-soft (current-word)))))
     (cond ((and symb (boundp symb)) (cons 'variable symb))
           ((and symb (fboundp symb)) (cons 'function symb))
           ((null symb) nil)

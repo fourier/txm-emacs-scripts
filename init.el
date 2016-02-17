@@ -13,7 +13,6 @@
                      enh-ruby-mode
                      ensime
                      yasnippet
-                     groovy-mode
                      python-mode
                      helm
                      helm-dash
@@ -233,6 +232,7 @@ will be expanded to:
 ;; magit
 (global-set-key [S-f1] 'magit-status)
 ;;(global-set-key [f1] 'magit-dispatch-popup)
+(global-set-key [C-backspace] 'txm-backward-kill-word)
 
 ;;__________________________________________________________________________
 

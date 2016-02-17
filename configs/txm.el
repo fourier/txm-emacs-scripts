@@ -429,6 +429,20 @@ Only when 2 windows active"
       (highlight-regexp regex 'txm-highlight-symbol-face))))
 
 
+(defun txm-backward-kill-word (arg)
+  "Kill characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (let ((kill-to (point))
+        (line-start nil)
+        (word-start nil))
+    (save-excursion
+      (beginning-of-line-text)
+      (setq line-start (point)))
+    (save-excursion
+      (forward-word (- arg))
+      (setq word-start (point)))
+    (kill-region (point) (progn (goto-char (max line-start word-start)) (point)))))
 
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/elisp/tmux-cfg.el"))
   (load "tmux-cfg.el"))

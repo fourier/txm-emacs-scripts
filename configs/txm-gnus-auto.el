@@ -8,6 +8,7 @@
 (require 'auth-source)
 
 ;;(auth-source-forget-all-cached)
+(setq epg-gpg-program "gpg2")
 
 (defun txm-gnus-auth-sources ()
   "Return the list of all auth sources from the .authinfo[.gpg]

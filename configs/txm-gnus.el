@@ -8,10 +8,14 @@
 (require 'smtpmail-multi)
 (require 'gnus-art)
 (require 'mailcap)
-
+;;(require 'gnus-reddit)
 
 (load "txm-gnus-auto.el")
 (load "txm-gnus-contacts.el")
+
+
+;; (add-to-list 'gnus-secondary-select-methods
+;;              '(nnreddit "someserver"))
 
 
 ;; initialize contacts support from txm-gnus-contacts.el

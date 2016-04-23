@@ -5,7 +5,6 @@
 ;; list of packages installed. Taken from the package-activated-list variable
 ;; on original machine
 (setq package-list '(haskell-mode
-                     sly
                      bison-mode
                      cmake-mode
                      dash-at-point
@@ -95,6 +94,7 @@ will be expanded to:
   (when (file-exists-p cff-path)
     (push cff-path load-path)))
 
+
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
@@ -165,6 +165,7 @@ will be expanded to:
   ;; leave the right option modifier untouched
   (setq mac-right-option-modifier nil))
 
+
 (when (and (eq system-type 'gnu/linux) window-system)
   (global-set-key "\M-\\" 'dabbrev-expand) 
   (setq x-super-keysym 'meta))
@@ -192,6 +193,14 @@ will be expanded to:
 (global-set-key "\M-y" 'browse-kill-ring)
 ;; replace M-x with helm
 (global-set-key (kbd "M-x") 'helm-M-x)
+;; horizontal scroll with touchpad
+(global-set-key (kbd "<wheel-left>") '(lambda () (interactive) (scroll-right 1)))
+(global-set-key (kbd "<double-wheel-left>") '(lambda () (interactive) (scroll-right 2)))
+(global-set-key (kbd "<triple-wheel-left>") '(lambda () (interactive) (scroll-right 5)))
+(global-set-key (kbd "<wheel-right>") '(lambda () (interactive) (scroll-left 1)))
+(global-set-key (kbd "<double-wheel-right>") '(lambda () (interactive) (scroll-left 2)))
+(global-set-key (kbd "<triple-wheel-right>") '(lambda () (interactive) (scroll-left 5)))
+
 
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
@@ -225,7 +234,7 @@ will be expanded to:
 (global-set-key "\C-j" 'indent-new-comment-line)
 ;; Set text-mode menu
 (global-set-key [S-f10] 'menu-bar-mode)
-(global-set-key [f10] 'txm-open-menu)
+(global-set-key [f10] 'helm-M-x)
 (global-set-key (kbd "\C-b") 'ido-switch-buffer)
 ;; Use C-j in elisp mode to eval last expression
 (define-key emacs-lisp-mode-map "\C-j" 'eval-print-last-sexp)
@@ -376,21 +385,17 @@ will be expanded to:
 
 
 ;; Slime customizations
-;; (eval-after-load "slime"
-;;   '(progn
-;;      (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
-;;      (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
-;;      (slime-setup '(slime-fancy slime-asdf slime-banner))
-;;      (global-set-key "\C-cs" 'slime-selector)
-;;      (setq slime-complete-symbol*-fancy t)
-;;      (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-;;      (setq slime-multiprocessing t)
-;;      (setq slime-net-coding-system 'utf-8-unix)
-;;      (add-to-list 'slime-contribs 'slime-autodoc)
-;;      (add-hook 'slime-mode-hook 'set-up-slime-ac)
-;;      (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-;;      (eval-after-load "auto-complete"
-;;        '(add-to-list 'ac-modes 'slime-repl-mode))))
+(eval-after-load "slime"
+  '(progn
+     (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
+     (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
+     (slime-setup '(slime-fancy slime-asdf slime-banner slime-company))
+     ;; (global-set-key "\C-cs" 'slime-selector)
+     (setq slime-complete-symbol*-fancy t)
+     (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+     (setq slime-multiprocessing t)
+     (setq slime-net-coding-system 'utf-8-unix)
+     (add-to-list 'slime-contribs 'slime-autodoc)))
 
 (when (or (eq system-type 'gnu/linux)
           (eq system-type 'darwin))
@@ -552,7 +557,10 @@ will be expanded to:
 ;; (add-to-list 'Info-directory-list "/opt/local/share/info")
 (when (eq system-type 'darwin)
   (eval-after-load 'info
-    '(add-to-list 'Info-default-directory-list "/opt/local/share/info")))
+    '(progn
+       (add-to-list 'Info-default-directory-list "/opt/local/share/info")
+       (add-to-list 'Info-default-directory-list (substitute-in-file-name "~/Development/gapl/share/info/")))))
+
 
 ;; set the 'locate' command to use Spotlight via cmd-line utility mdfind
 (when (eq system-type 'darwin)
@@ -604,6 +612,8 @@ will be expanded to:
 (setq markdown-open-command "~/Applications/marked")
 
 ;; GNU APL customizations
+(add-to-list 'load-path "~/Sources/gnu-apl-mode")
+(require 'gnu-apl-mode)
 ;; turn off keymap display
 (setf gnu-apl-show-keymap-on-startup nil)
 ;; disable tips on startup
@@ -612,7 +622,9 @@ will be expanded to:
 (defun run-apl ()
   (interactive)
   (require 'gnu-apl-mode)
-  (gnu-apl "~/Development/gapl/apl"))
+  ;; (gnu-apl "~/Development/gapl/apl"))
+  (gnu-apl nil))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load all other configs
@@ -633,3 +645,5 @@ will be expanded to:
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(put 'scroll-left 'disabled nil)
+(put 'scroll-right 'disabled nil)

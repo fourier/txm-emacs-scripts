@@ -51,7 +51,11 @@
      (to-list . "bug-gnu-emacs@gnu.org"))
     (".*/emacs-orgmode$"
      (to-address . "emacs-orgmode@gnu.org")
-     (to-list . "emacs-orgmode@gnu.org"))))
+     (to-list . "emacs-orgmode@gnu.org"))
+    (".*/Lispworks Hug$"
+     (to-address . "lisp-hug@lispworks.com")
+     (to-list . "lisp-hug@lispworks.com"))))
+
 
 ;; No group considered big, download everything
 ;; see http://stackoverflow.com/questions/4982831/i-dont-want-to-expire-mail-in-gnus
@@ -338,6 +342,8 @@ If any temporary windows opened, close them; otherwise close the article window.
 ;; Use ctrl up/down to move between topics in group view
 (define-key gnus-group-mode-map [C-up] 'gnus-topic-goto-previous-topic)
 (define-key gnus-group-mode-map [C-down] 'gnus-topic-goto-next-topic)
+;; Use shift-tab to unindent topic
+(define-key gnus-group-mode-map (kbd "<backtab>") 'gnus-topic-unindent)
 
 ;; Use ctrl up/down to move between threads in summary view
 (define-key gnus-summary-mode-map [C-up] 'gnus-summary-prev-thread)
@@ -352,8 +358,8 @@ If any temporary windows opened, close them; otherwise close the article window.
 ;; (to avoid using mailcap)
 
 ;; handle attachements with default OSX previewers
-(mailcap-add-mailcap-entry "application" "pdf" '((viewer "/usr/bin/qlmanage -p %s") (type . "application/pdf")))
-(mailcap-add-mailcap-entry "image" "jpeg" '((viewer "/usr/bin/qlmanage -p %s") (type . "image/*")))
+(mailcap-add-mailcap-entry "application" "pdf" '((viewer . "/usr/bin/qlmanage -p %s") (type . "application/pdf")))
+(mailcap-add-mailcap-entry "image" "jpeg" '((viewer . "/usr/bin/qlmanage -p %s") (type . "image/*")))
 
 ;; test with the following examples:
 ;; (cl-prettyprint

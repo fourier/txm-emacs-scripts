@@ -114,6 +114,19 @@ Return t if any of windows were closed."
     (let ((case-fold-search isearch-case-fold-search))
       (occur (if isearch-regexp isearch-string
                (regexp-quote isearch-string))))))
+;; go to the start of match after the end of isearch
+;; taken from http://endlessparentheses.com/leave-the-cursor-at-start-of-match-after-isearch.html
+(add-hook 'isearch-mode-end-hook
+          #'endless/goto-match-beginning)
+(defun endless/goto-match-beginning ()
+  "Go to the start of current isearch match.
+Use in `isearch-mode-end-hook'."
+  (when (and isearch-forward
+             (number-or-marker-p isearch-other-end)
+             (not mark-active)
+             (not isearch-mode-end-hook-quit))
+    (goto-char isearch-other-end)))
+
 
 (defun switch-to-buffer-quick ()
   "Switch buffers with no questions asked"

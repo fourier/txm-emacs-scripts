@@ -4,7 +4,7 @@
 
 
 ;; automatically join freenode
-(setq erc-hide-list '("JOIN" "PART" "QUIT"))
+(setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "353" "366"))
 ;; 60 seconds pause between reconnect attempts
 (setq erc-server-reconnect-timeout 30)
 

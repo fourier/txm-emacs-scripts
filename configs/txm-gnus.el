@@ -255,11 +255,11 @@
 ;; set Gnus to prefectch article asynchronously
 (setq gnus-asynchronous t)
 ;; set Gnus to update mail every 10 minutes
-(require 'gnus-demon)
-(setq gnus-use-demon t)
-(gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
-(gnus-demon-init)
-(gnus-demon-add-rescan)
+;; (require 'gnus-demon)
+;; (setq gnus-use-demon t)
+;; (gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
+;; (gnus-demon-init)
+;; (gnus-demon-add-rescan)
 
 ;; add article to cache- *, remove - M-*
 

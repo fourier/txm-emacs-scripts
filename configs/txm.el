@@ -200,6 +200,8 @@ Use in `isearch-mode-end-hook'."
   '(progn
      (define-key c-mode-map [f7] 'txm-compile)
      (define-key c++-mode-map [f7] 'txm-compile)
+     (define-key c-mode-map "\C-c\C-k" 'txm-compile)
+     (define-key c++-mode-map "\C-c\C-k" 'txm-compile)
      (define-key c-mode-map "\C-d" 'dired-jump)
      (define-key c++-mode-map "\C-d" 'dired-jump)
      (define-key c-mode-map "\M-d" 'dired-jump-other-window)
@@ -460,3 +462,14 @@ With argument ARG, do this that many times."
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/elisp/tmux-cfg.el"))
   (load "tmux-cfg.el"))
 
+
+
+(defun gnu-apl-find-function-at-point-or-open-editor ()
+  "In APL source files jump to the function definition under the cursor.
+In APL interactive mode open the function editor"
+  (interactive)
+  (let* ((name (gnu-apl--name-at-point))
+         (buffer (current-buffer)))
+    (gnu-apl-find-function-at-point)
+    (when (eq buffer (current-buffer))
+      (gnu-apl-edit-function name))))

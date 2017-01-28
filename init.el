@@ -101,8 +101,10 @@ will be expanded to:
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
   (push "/opt/local/bin" exec-path)
+  (push "/Library/TeX/texbin" exec-path)
   (push (substitute-in-file-name "$HOME/Applications") exec-path)
-  (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH"))))
+  (setenv "PATH" (concat "/opt/local/bin:" (getenv "PATH")))
+  (setenv "PATH" (concat "/Library/TeX/texbin:" (getenv "PATH"))))
 (when (eq system-type 'gnu/linux)
   (push "/home/fourier/Applications/sbt/bin" exec-path)
   (push "/home/fourier/Applications/scala-2.10.3/bin" exec-path))
@@ -401,7 +403,8 @@ will be expanded to:
           (eq system-type 'darwin))
   ;; (setq inferior-lisp-program "alisp")
   ;; (setq inferior-lisp-program (substitute-in-file-name "~/AllegroCL/mlisp"))
-  (setq inferior-lisp-program "sbcl")
+  ;;(setq inferior-lisp-program "sbcl")
+  (setq inferior-lisp-program (substitute-in-file-name "~/Development/abcl-bin-1.4.0/abcl"))
   ;; (setq inferior-lisp-program "~/Development/lw-console")
   ;; (setq inferior-lisp-program "~/Sources/sbcl-1.0.29-x86-darwin/run-sbcl.sh")
   ;; (setq inferior-lisp-program "clisp -K full")
@@ -553,13 +556,22 @@ will be expanded to:
 (add-to-list 'auto-mode-alist '("\\.pr[io]$" . qt-pro-mode))
 
 ;; TODO: doesn't work. why?
-;; (add-to-list 'Info-default-directory-list "/opt/local/share/info")
-;; (add-to-list 'Info-directory-list "/opt/local/share/info")
 (when (eq system-type 'darwin)
+  (require 'info)
   (eval-after-load 'info
     '(progn
-       (add-to-list 'Info-default-directory-list "/opt/local/share/info")
-       (add-to-list 'Info-default-directory-list (substitute-in-file-name "~/Development/gapl/share/info/")))))
+       (let ((info-dirs
+              (list "/Users/alexeyv/Development/gapl/share/info/"
+                    "/opt/local/share/info"
+                    "/usr/info"
+                    "/usr/local/share/info"
+                    "/usr/local/info"
+                    "/opt/info")))
+         (mapc (lambda (info)
+                 (add-to-list 'Info-default-directory-list info)
+                 (add-to-list 'Info-directory-list info))
+               info-dirs)))))
+               
 
 
 ;; set the 'locate' command to use Spotlight via cmd-line utility mdfind
@@ -611,7 +623,9 @@ will be expanded to:
 ;; set default preview command C-c C-c o
 (setq markdown-open-command "~/Applications/marked")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GNU APL customizations
+;;
 (add-to-list 'load-path "~/Sources/gnu-apl-mode")
 (require 'gnu-apl-mode)
 ;; turn off keymap display
@@ -622,9 +636,10 @@ will be expanded to:
 (defun run-apl ()
   (interactive)
   (require 'gnu-apl-mode)
-  ;; (gnu-apl "~/Development/gapl/apl"))
-  (gnu-apl nil))
-
+  (gnu-apl "~/Development/gapl/apl"))
+;;  (gnu-apl nil))
+(define-key gnu-apl-interactive-mode-map "\M-." 'gnu-apl-find-function-at-point-or-open-editor)
+(add-to-list 'auto-mode-alist '("/.gnu-apl/preferences$" . conf-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load all other configs
@@ -636,6 +651,7 @@ will be expanded to:
 (load "txm-dired.el")
 (load "txm-elisp.el")
 (load "txm-company.el")
+(load "txm-ztree.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

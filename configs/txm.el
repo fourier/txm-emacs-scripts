@@ -411,6 +411,8 @@ Only when 2 windows active"
 (global-set-key (kbd "C-c xh") 'hl-line-mode)
 ;; toggle subword mode
 (global-set-key (kbd "C-c xs") 'subword-mode)
+;; not buildin, requires hide-comnt
+(global-set-key (kbd "C-c xc") 'hide/show-comments-toggle)
 
 (defun revert-all-buffers ()
   "Refreshes all open buffers from their respective files"

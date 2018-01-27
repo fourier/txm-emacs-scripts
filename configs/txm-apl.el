@@ -122,3 +122,4 @@ gnu-apl--symbols-old"
 ;; it is now t by default, keep just in case
 (setf gnu-apl-keyboard-simplified-mouse-action-mode t)
 
+(provide 'txm-apl)

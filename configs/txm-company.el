@@ -62,3 +62,5 @@
             '(:with company-yasnippet))))
 
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
+(provide 'txm-company)

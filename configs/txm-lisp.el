@@ -59,3 +59,6 @@
                                      ("\\(@export\\)" 1 lisp-font-lock-annotation-face prepend)
                                      ("\\(@export-class\\)" 1 lisp-font-lock-annotation-face prepend)
                                      ("\\(@export-structure\\)" 1 lisp-font-lock-annotation-face prepend)))
+
+
+(provide 'txm-lisp)

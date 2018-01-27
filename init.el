@@ -586,15 +586,25 @@ will be expanded to:
 ;; Load all other configs
 ;; 
 
-(load "txm.el")
-(load "txm-erc.el")
-(load "txm-gnus.el")
-(load "txm-dired.el")
-(load "txm-elisp.el")
-(load "txm-company.el")
-(load "txm-ztree.el")
-(load "txm-lisp.el")
-(load "txm-apl.el")
+;; (load "txm.el")
+;; (load "txm-erc.el")
+;; (load "txm-gnus.el")
+;; (load "txm-dired.el")
+;; (load "txm-elisp.el")
+;; (load "txm-company.el")
+;; (load "txm-ztree.el")
+;; (load "txm-lisp.el")
+;; (load "txm-apl.el")
+
+(require 'txm)
+(require 'txm-erc)
+(require 'txm-gnus)
+(require 'txm-dired)
+(require 'txm-elisp)
+(require 'txm-company)
+(require 'txm-ztree)
+(require 'txm-lisp)
+(require 'txm-apl)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

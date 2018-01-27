@@ -474,3 +474,5 @@ In APL interactive mode open the function editor"
     (gnu-apl-find-function-at-point)
     (when (eq buffer (current-buffer))
       (gnu-apl-edit-function name))))
+
+(provide 'txm)

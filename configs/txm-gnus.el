@@ -10,9 +10,8 @@
 (require 'mailcap)
 ;;(require 'gnus-reddit)
 
-(load "txm-gnus-auto.el")
-(load "txm-gnus-contacts.el")
-
+(require 'txm-gnus-auto)
+(require 'txm-gnus-contacts)
 
 ;; (add-to-list 'gnus-secondary-select-methods
 ;;              '(nnreddit "someserver"))
@@ -370,3 +369,5 @@ If any temporary windows opened, close them; otherwise close the article window.
 ;; run the 'G p' on a group and remove contents of the buffer
 ;; then restart Gnus
 ;; see here: http://stackoverflow.com/questions/15703346/show-all-messages-in-gnus-with-display-all
+
+(provide 'txm-gnus)

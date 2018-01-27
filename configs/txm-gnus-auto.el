@@ -313,3 +313,5 @@ This code could be later `eval'uated. "
 ;;(cl-prettyprint smtpmail-multi-accounts)
 ;;(cl-prettyprint smtpmail-multi-associations)
 ;;(cl-prettyprint gnus-posting-styles)
+
+(provide 'txm-gnus-auto)

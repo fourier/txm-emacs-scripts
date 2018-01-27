@@ -368,3 +368,4 @@ in both of them."
                                   (make-frame-command)
                                   (dired-jump)))
 
+(provide 'txm-dired)

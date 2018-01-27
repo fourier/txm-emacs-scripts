@@ -149,7 +149,6 @@ will be expanded to:
 (keyboard-translate ?\C-u ?\C-x)
 (keyboard-translate ?\C-x ?\C-u)
 
-
 ;; Mac keybindings
 (when (eq system-type 'darwin)
   ;; bind Command to Control 
@@ -187,6 +186,7 @@ will be expanded to:
 (global-set-key "\M-y" 'browse-kill-ring)
 ;; replace M-x with helm
 (global-set-key (kbd "M-x") 'helm-M-x)
+
 ;; horizontal scroll with touchpad
 (global-set-key (kbd "<wheel-left>") '(lambda () (interactive) (scroll-right 1)))
 (global-set-key (kbd "<double-wheel-left>") '(lambda () (interactive) (scroll-right 2)))
@@ -198,6 +198,8 @@ will be expanded to:
 
 ;; make Emacs behave like OSX app with hotkeys
 (when (eq system-type 'darwin)
+  (setq ns-function-modifier 'super)
+  (setq ns-command-modifier 'super)
   ;; Switch btw frames like in Mac OS X
   (global-set-key "\M-`" 'other-frame)
   ;; Cmd-n to open a new window and Cmd-w to kill the window
@@ -211,7 +213,8 @@ will be expanded to:
 (global-set-key [S-f8] 'txm-restore-bookmark)
 (global-set-key "\C-c\C-]" 'slime-close-all-parens-in-sexp)
 (global-set-key "\M-u" 'execute-extended-command)
-
+;; add binding for M-x to Ctrl-x Ctrl-u
+(global-set-key "\C-x\C-x" 'helm-M-x)
 ;; Fullscreen in Mac OS X 
 ;; works only in special build of Emacs
 (when (fboundp 'ns-toggle-fullscreen)
@@ -516,7 +519,7 @@ will be expanded to:
   (eval-after-load 'info
     '(progn
        (let ((info-dirs
-              (list "/Users/alexeyv/Development/gapl/share/info/"
+              (list "/Users/alexey/Applications/gnu-apl/share/info/"
                     "/opt/local/share/info"
                     "/usr/info"
                     "/usr/local/share/info"
@@ -578,23 +581,6 @@ will be expanded to:
 ;; set default preview command C-c C-c o
 (setq markdown-open-command "~/Applications/marked")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GNU APL customizations
-;;
-(add-to-list 'load-path "~/Sources/gnu-apl-mode")
-(require 'gnu-apl-mode)
-;; turn off keymap display
-(setf gnu-apl-show-keymap-on-startup nil)
-;; disable tips on startup
-(setf gnu-apl-show-tips-on-start nil)
-;; function to run GNU APL with proper path
-(defun run-apl ()
-  (interactive)
-  (require 'gnu-apl-mode)
-  (gnu-apl "~/Development/gapl/apl"))
-;;  (gnu-apl nil))
-(define-key gnu-apl-interactive-mode-map "\M-." 'gnu-apl-find-function-at-point-or-open-editor)
-(add-to-list 'auto-mode-alist '("/.gnu-apl/preferences$" . conf-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load all other configs
@@ -608,6 +594,7 @@ will be expanded to:
 (load "txm-company.el")
 (load "txm-ztree.el")
 (load "txm-lisp.el")
+(load "txm-apl.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

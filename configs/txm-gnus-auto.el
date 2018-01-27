@@ -13,7 +13,8 @@
 (defun txm-gnus-auth-sources ()
   "Return the list of all auth sources from the .authinfo[.gpg]
 Temporary wrapper around auth-source-search to avoid bug #22188"
-  (auth-source-search :port '(25 587) :max 999)
+  ;;(auth-source-search :port '(25 587) :max 999)
+  (auth-source-search :max 999)
   ;; '((:host "machine1" :port "25")
   ;;   (:host "machine2" :port "587")
   ;;   (:host "machine3")

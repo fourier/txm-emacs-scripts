@@ -61,7 +61,9 @@
 ;; for examples
 ;;(setq gnus-large-newsgroup 'nil)
 (setq gnus-large-newsgroup 100)
-
+;; allow GNUS to download read messages up in the thread then
+;; new message in a thread appeared
+(setq gnus-fetch-old-headers t)
 
 ;; cache for offline reading
 (setq gnus-use-cache t)
@@ -224,7 +226,8 @@
 ;; 2) date/time as in Thunderbird, today's messages with hh:mm and all others
 ;;    with dd/mm/yy
 ;; 3) Removed "Unread" flag, we use faces for it
-(setq gnus-summary-line-format "%U%R %(%-15,15&user-date;%-20,20a %B%s%)\n")
+(setq gnus-summary-line-format "%U%R %-15,15&user-date;%1{%-20,20a%} %(%2{%B%}%s%)\n")
+
 (setq gnus-user-date-format-alist '(((gnus-seconds-today)
                                      . "%H:%M")
                                     (t . "%d/%m/%y %H:%M")))

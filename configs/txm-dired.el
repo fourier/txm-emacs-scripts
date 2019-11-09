@@ -21,6 +21,13 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 
+;; hide details initially (from dired+)
+(setq diredp-hide-details-initially-flag t)
+;; if previous dired buffer had details turned off,
+;; turn them off on next buffer
+(setq diredp-hide-details-propagate-flag t)
+;; (setq diredp-hide-details-propagate-flag nil)
+;; (setq diredp-hide-details-initially-flag nil)
 
 (defun txm-format-file-size (size)
   "Return string with formatted file size"
@@ -264,6 +271,7 @@ in both of them."
   (after dired-after-updating-hook first () activate)
   "Sort dired listings with directories first before adding marks."
   (txm-dired-sort))
+;;  (let ((dired-details-internal-overlay-list  ())) (dired-details-hide)))
 
 
 ;; show human-readable sizes

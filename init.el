@@ -160,14 +160,18 @@ will be expanded to:
 
 
 (when (and (eq system-type 'gnu/linux) window-system)
+  ;; on Linux Ctrl-i is interpreted as TAB
+  ;; this command allows to bind it to something else
+  (define-key input-decode-map "\C-i" [C-i])
   (global-set-key "\M-\\" 'dabbrev-expand) 
-  (setq x-super-keysym 'meta))
+  (setq x-super-keysym 'super))
 
 (global-set-key [f6] 'other-window)
 (global-set-key [S-f6] 'txm-swap-buffers-in-windows)
 ;; for terminal w/o function keys
 (global-set-key (kbd "\C-x\C-o") 'other-window)
 (global-set-key "\C-xg" 'goto-line)
+(global-set-key "\C-x\C-g" 'goto-line)
 (global-set-key "\r" 'newline-and-indent)
 (global-set-key "\C-xf" 'recentf-open-files)
 (global-set-key [C-f4] 'kill-buffer)
@@ -186,6 +190,8 @@ will be expanded to:
 (global-set-key "\M-y" 'browse-kill-ring)
 ;; replace M-x with helm
 (global-set-key (kbd "M-x") 'helm-M-x)
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
 
 ;; horizontal scroll with touchpad
 (global-set-key (kbd "<wheel-left>") '(lambda () (interactive) (scroll-right 1)))
@@ -371,13 +377,6 @@ will be expanded to:
 
 ;; recently edited files in menu
 (recentf-mode 1)                        
-
-
-;; Haskell customization
-(setq haskell-program-name (executable-find "ghci"))
-(load (substitute-in-file-name "~/.emacs.d/haskell-mode-2.4/haskell-site-file"))
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
 
 ;; Python customization
@@ -581,20 +580,14 @@ will be expanded to:
 ;; set default preview command C-c C-c o
 (setq markdown-open-command "~/Applications/marked")
 
+;; password for twittering mode
+(setq twittering-use-master-password t)
 
+;; nov epub reader customizations
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load all other configs
 ;; 
-
-;; (load "txm.el")
-;; (load "txm-erc.el")
-;; (load "txm-gnus.el")
-;; (load "txm-dired.el")
-;; (load "txm-elisp.el")
-;; (load "txm-company.el")
-;; (load "txm-ztree.el")
-;; (load "txm-lisp.el")
-;; (load "txm-apl.el")
 
 (require 'txm)
 (require 'txm-erc)
@@ -605,6 +598,7 @@ will be expanded to:
 (require 'txm-ztree)
 (require 'txm-lisp)
 (require 'txm-apl)
+(require 'txm-haskell)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

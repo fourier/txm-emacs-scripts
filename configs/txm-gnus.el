@@ -27,6 +27,10 @@
 ;; accounts
 (setq message-send-mail-function 'smtpmail-multi-send-it)
 
+;; workaround for connecting to Protonmail Bridge
+;;(setq starttls-extra-arguments '("--strict-tofu"))
+
+;;(setq starttls-extra-arguments '("--tofu"))
 ;; and workaround for Gmail folders
 (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
@@ -360,8 +364,14 @@ If any temporary windows opened, close them; otherwise close the article window.
 ;; (to avoid using mailcap)
 
 ;; handle attachements with default OSX previewers
-(mailcap-add-mailcap-entry "application" "pdf" '((viewer . "/usr/bin/qlmanage -p %s") (type . "application/pdf")))
-(mailcap-add-mailcap-entry "image" "jpeg" '((viewer . "/usr/bin/qlmanage -p %s") (type . "image/*")))
+(cond ((eq system-type 'gnu/linux)
+       (mailcap-add-mailcap-entry "application" "pdf" '((viewer . "/usr/bin/evince-previewer %s") (type . "application/pdf")))
+       ;;       (mailcap-add-mailcap-entry "image" "jpeg" '((viewer . "/usr/bin/qlmanage -p %s") (type . "image/*")))))
+       )
+       ((eq system-type 'darwin)
+        (mailcap-add-mailcap-entry "application" "pdf" '((viewer . "/usr/bin/qlmanage -p %s") (type . "application/pdf")))
+        (mailcap-add-mailcap-entry "image" "jpeg" '((viewer . "/usr/bin/qlmanage -p %s") (type . "image/*")))))
+
 
 ;; test with the following examples:
 ;; (cl-prettyprint

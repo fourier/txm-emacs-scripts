@@ -14,7 +14,7 @@
   "Return the list of all auth sources from the .authinfo[.gpg]
 Temporary wrapper around auth-source-search to avoid bug #22188"
   ;;(auth-source-search :port '(25 587) :max 999)
-  (auth-source-search :max 999)
+  (auth-source-search :max 9999)
   ;; '((:host "machine1" :port "25")
   ;;   (:host "machine2" :port "587")
   ;;   (:host "machine3")
@@ -37,7 +37,8 @@ account"
         (and port
              (or
               (string= port "25")
-              (string= port "587")))))) 
+              (string= port "587")
+              (string= port "1025"))))))
 
 (defun txm-gnus-is-nntp (source)
   "Naive way to determine if the SOURCE from .authinfo is a nntp
@@ -62,7 +63,8 @@ account"
         (and port
              (or
               (string= port "993")
-              (string= port "143"))))))
+              (string= port "143")
+              (string= port "1143"))))))
 
 (defun txm-gnus-is-gmail-vserver (source)
   "Naive way to determine if the SOURCE from .authinfo is a gmail
@@ -122,7 +124,7 @@ This code could be later `eval'uated. "
                ,host
                ,(string-to-number port)
                ,user
-               ,(if (string= port "587") 'starttls 'nil)
+               ,(if (or (string= port "1025") (string= port "587")) 'starttls 'nil)
                nil nil nil))
            accounts)))
     `(setq smtpmail-multi-accounts (quote ,(reverse accounts)))))
@@ -241,7 +243,8 @@ This code could be later `eval'uated. "
   (let ((accounts nil))
     (dolist (source imaps)
       (let ((user (plist-get source :user))
-            (host (plist-get source :host)))
+            (host (plist-get source :host))
+            (port (plist-get source :port)))
         (if (funcall is-gmail source)   ; gmail account
           (push
            `(add-to-list 'gnus-secondary-select-methods
@@ -255,8 +258,8 @@ This code could be later `eval'uated. "
            `(add-to-list 'gnus-secondary-select-methods
                          '(nnimap ,user
                                   (nnimap-address ,host)
-                                  (nnimap-server-port "imaps")
-                                  (nnimap-stream ssl)
+                                  (nnimap-server-port ,port)
+                                  (nnimap-stream starttls)
                                   (nnir-search-engine imap)))
            accounts))))
     `(progn ,@(reverse accounts))))

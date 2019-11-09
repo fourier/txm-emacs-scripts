@@ -11,31 +11,65 @@
 ;;                              (push path load-path)))
 ;;           slime-paths))
 
-;; Slime customizations
-(eval-after-load "slime"
-  '(progn
-     (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
-     (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
-     (slime-setup '(slime-fancy slime-asdf slime-banner slime-company))
-     ;; (global-set-key "\C-cs" 'slime-selector)
-     (setq slime-complete-symbol*-fancy t)
-     (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-     (setq slime-multiprocessing t)
-     (setq slime-net-coding-system 'utf-8-unix)
-     (add-to-list 'slime-contribs 'slime-autodoc)))
+(cond ((eq system-type 'darwin)
+       (setq slime-lisp-implementations
+             '((ccl ("ccl64")
+                    (sbcl ("sbcl"))
+                    (lispworks ("~/Development/lw-console"))))
+             inferior-lisp-program "sbcl"))
+      ((eq system-type 'gnu/linux)
+       ;;(setq inferior-lisp-program "sbcl")
+       (setq inferior-lisp-program "/home/fourier/Applications/ccl/lx86cl64")))
+(add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
+(add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
 
-(when (or (eq system-type 'gnu/linux)
-          (eq system-type 'darwin))
-  (setq slime-lisp-implementations
-        '((ccl ("ccl64")
-          (sbcl ("sbcl"))
-          (lispworks ("~/Development/lw-console")))))
-  (setq inferior-lisp-program "ccl64")
+
+;; SLIME customizations
+(if (fboundp 'slime)
+    (progn
+      ;; Slime customizations
+      (eval-after-load "slime"
+        '(progn
+           (slime-setup '(slime-fancy slime-asdf slime-banner slime-company))
+           ;; (global-set-key "\C-cs" 'slime-selector)
+           (setq slime-complete-symbol*-fancy t)
+           (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+           (setq slime-multiprocessing t)
+           (setq slime-net-coding-system 'utf-8-unix)
+           (define-key slime-repl-mode-map "\C-c<\C-i>" '(lambda () (interactive) (slime-repl-inspect "*")))
+
+           (add-to-list 'slime-contribs 'slime-autodoc)))))
+
+(require 'sly)
+(eval-after-load "sly"
+  `(progn
+     (setq sly-lisp-implementations
+           '((sbcl ("sbcl"))
+             (ccl ("/home/fourier/Applications/ccl/lx86cl64"))))
+     (setq sly-net-coding-system 'utf-8-unix)
+     (define-key sly-mode-map "\C-c\C-l" 'sly-mrepl-sync)
+     ;; who calls
+     (define-key sly-mode-map (kbd "<M-f3>") 'sly-who-calls)
+     ;; key binding example: C-c M-h
+     (define-key sly-prefix-map (kbd "M-h") 'sly-documentation-lookup)
+     (define-key sly-inspector-mode-map (kbd "<M-left>") 'sly-inspector-pop)
+     (define-key sly-inspector-mode-map (kbd "<M-right>") 'sly-inspector-next)
+     ))
+
+(eval-after-load "sly-mrepl"
+  `(progn
+     (define-key sly-mrepl-mode-map (kbd "<C-down>") 'sly-mrepl-next-input-or-button)
+     (define-key sly-mrepl-mode-map (kbd "<C-up>") 'sly-mrepl-previous-input-or-button)
+     (define-key sly-mrepl-mode-map (kbd "C-c <C-i>") '(lambda () (interactive) (sly-inspect "*")))))
+
+
+
   ;; (setq inferior-lisp-program (substitute-in-file-name "~/AllegroCL/mlisp"))
   ;;(setq inferior-lisp-program (substitute-in-file-name "~/Development/abcl-bin-1.4.0/abcl"))
   ;; (setq inferior-lisp-program "~/Development/lw-console")
   ;; (setq inferior-lisp-program "~/Sources/sbcl-1.0.29-x86-darwin/run-sbcl.sh")
   ;; (setq inferior-lisp-program "clisp -K full")
+(when (eq system-type 'darwin)
   (setq ns-use-system-highlight-color nil))
 
 (let ((clhs-el-file (substitute-in-file-name "~/.quicklisp/clhs-use-local.el")))
@@ -60,5 +94,8 @@
                                      ("\\(@export-class\\)" 1 lisp-font-lock-annotation-face prepend)
                                      ("\\(@export-structure\\)" 1 lisp-font-lock-annotation-face prepend)))
 
+
+
+(load "/home/fourier/quicklisp/clhs-use-local.el" t)
 
 (provide 'txm-lisp)

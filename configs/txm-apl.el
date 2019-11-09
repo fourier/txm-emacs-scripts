@@ -122,4 +122,15 @@ gnu-apl--symbols-old"
 ;; it is now t by default, keep just in case
 (setf gnu-apl-keyboard-simplified-mouse-action-mode t)
 
+(defun gnu-apl-find-function-at-point-or-open-editor ()
+  "In APL source files jump to the function definition under the cursor.
+In APL interactive mode open the function editor"
+  (interactive)
+  (let* ((name (gnu-apl--name-at-point))
+         (buffer (current-buffer)))
+    (gnu-apl-find-function-at-point)
+    (when (eq buffer (current-buffer))
+      (gnu-apl-edit-function name))))
+
+
 (provide 'txm-apl)

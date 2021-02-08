@@ -1,5 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
+;; for CMake projects run the command
+;;
+;;  cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+;; 
+;; in your build directory (assuming you can build successfully)
 
 (require 'lsp-mode)
 (require 'lsp-ui)

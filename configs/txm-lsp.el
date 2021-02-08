@@ -5,6 +5,11 @@
 (require 'lsp-ui)
 (when (eq system-type 'windows) 
   (setq lsp-clients-clangd-executable "c:/Program Files/LLVM/bin/clangd.exe"))
+(setq lsp-clients-clangd-executable
+ (case system-type
+   ('windows "c:/Program Files/LLVM/bin/clangd.exe")
+   ('gnu/linux "/usr/lib/llvm-11/bin/clangd")))
+
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'c++-mode-hook #'lsp)
 

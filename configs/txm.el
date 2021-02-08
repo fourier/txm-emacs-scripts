@@ -81,7 +81,9 @@ Return t if any of windows were closed."
                    (eq major-mode 'Man-mode)
                    (eq major-mode 'apropos-mode)
                    (eq major-mode 'grep-mode)
-                   (string= (buffer-name) "*slime-description*"))
+                   (eq major-mode 'xref--xref-buffer-mode)
+                   (string= (buffer-name) "*slime-description*")
+                   (string= (buffer-name) "*Warnings*"))
                (quit-window)
                (setf result t))
               ((eq major-mode 'magit-popup-mode)
@@ -208,7 +210,12 @@ Use in `isearch-mode-end-hook'."
      ;; redefine
      (define-key c-mode-map [(f1)] 'man)
      (define-key c-mode-map [(ctrl .)] 'txm-goto-tag-at-point)
-     (define-key c++-mode-map [(ctrl .)] 'txm-goto-tag-at-point)))
+     (define-key c++-mode-map [(ctrl .)] 'txm-goto-tag-at-point)
+     (define-key c-mode-map [M-f3] 'lsp-ui-peek-find-references)
+     (define-key c++-mode-map [M-f3] 'lsp-ui-peek-find-references)
+     (define-key c-mode-map [S-f6] 'lsp-rename)
+     (define-key c++-mode-map [S-f6] 'lsp-rename)
+     ))
      ;; (define-key c-mode-map [(ctrl ,)] 'pop-tag-mark)
      ;; (define-key c++-mode-map [(ctrl ,)] 'pop-tag-mark)))
 
@@ -217,8 +224,8 @@ Use in `isearch-mode-end-hook'."
 ;;
 (defun txm-c-mode-customization ()
   ;; set tab size to 4 columns
-  (setq tab-width 4)
-  (setq c-basic-offset 4)
+  ;; (setq tab-width 4)
+  ;; (setq c-basic-offset 4)
   ;; always insert spaces signs when TAB is pressed
   (setq indent-tabs-mode nil)
   (c-set-offset 'innamespace 0)
@@ -240,6 +247,12 @@ Use in `isearch-mode-end-hook'."
 (add-hook 'makefile-mode-hook
 	  (function (lambda ()
 		      (define-key makefile-mode-map [f7] 'compile))))
+;;
+;; Yasnippets
+;;
+(global-set-key (kbd "C-c TAB") 'yas-expand)
+(global-set-key (kbd "C-n") 'yas-expand)
+
 
 ;;
 ;; LaTeX customizations
@@ -327,7 +340,10 @@ Use in `isearch-mode-end-hook'."
            (setq mac-allow-anti-aliasing t)
            (set-frame-font "Menlo-14" nil (list (selected-frame)))))
         ((eq system-type 'windows-nt)
-         (message "windows-nt")))))
+         ;;(set-frame-font "Consolas-16:antialias=none" t frame-to-use)
+         ;; set from https://fonts.google.com/specimen/Roboto+Mono
+         (set-frame-font "Roboto Mono-14" t frame-to-use)))))
+         ;;
 
 (add-hook 'after-make-frame-functions 'txm-set-frame-font t)
 (txm-set-frame-font)
@@ -371,29 +387,31 @@ Only when 2 windows active"
       (set-window-buffer other this-buffer)
       (set-window-buffer this other-buffer))))
 
-(setq compilation-filenames '("Makefile" "makefile"))
+(defvar txm-compilation-filenames '("Makefile" "makefile" "wscript"))
+(defvar txm-compile-command "cd %s && make -f %s")
 
-(defun get-nearest-compilation-file ()
+(defun txm-get-nearest-compilation-file ()
   "Search for the compilation file traversing up the directory tree."
   (let ((dir default-directory)
-	(parent-dir (file-name-directory (directory-file-name default-directory)))
-	(nearest-compilation-file 'nil))
+        (parent-dir (file-name-directory
+                     (directory-file-name default-directory)))
+        (nearest-compilation-file 'nil))
     (while (and (not (string= dir parent-dir))
-		(not nearest-compilation-file))
-      (dolist (filename compilation-filenames)
-	(setq file-path (concat dir filename))
-	(when (file-readable-p file-path)
-	  (setq nearest-compilation-file file-path)))
+                (not nearest-compilation-file))
+      (dolist (filename txm-compilation-filenames)
+        (setq file-path (concat dir filename))
+        (when (file-readable-p file-path)
+          (setq nearest-compilation-file file-path)))
       (setq dir parent-dir
-	    parent-dir (file-name-directory (directory-file-name parent-dir))))
-    nearest-compilation-file))  
+            parent-dir (file-name-directory (directory-file-name parent-dir))))
+    nearest-compilation-file))
 
 (defun txm-compile ()
   (interactive)
-  (let ((makefile (get-nearest-compilation-file)))
+  (let ((makefile (txm-get-nearest-compilation-file)))
     (if (> (length makefile) 0)
         (let ((dir (file-name-directory makefile)))
-          (compile (format "cd %s && make -f %s" dir makefile)))
+          (compile (format txm-compile-command dir makefile)))
       (message "No makefile found in current or above directrories"))))
 
 ;;
@@ -413,6 +431,8 @@ Only when 2 windows active"
 ;; not buildin, requires hide-comnt
 (global-set-key (kbd "C-c xc") 'hide/show-comments-toggle)
 
+
+
 (defun revert-all-buffers ()
   "Refreshes all open buffers from their respective files"
   (interactive)
@@ -427,7 +447,6 @@ Only when 2 windows active"
       (setq list (cdr list))
       (setq buffer (car list))))
   (message "Refreshed open files"))
-
 
 (global-set-key [C-down-mouse-1]	'txm-highlight-symbol)
 
@@ -464,7 +483,12 @@ With argument ARG, do this that many times."
 (when (file-exists-p (substitute-in-file-name "~/.emacs.d/elisp/tmux-cfg.el"))
   (load "tmux-cfg.el"))
 
+;; clang-format configuration
+(when (eq system-type 'windows) 
+  (load "c:/Program Files/LLVM/share/clang/clang-format.el")
+  (setq clang-format-executable "C:/Program Files/LLVM/bin/clang-format.exe")
+  (define-key c-mode-base-map (kbd "<tab>") 'clang-format-region))
 
-
+(require 'txm-lsp)
 
 (provide 'txm)

@@ -100,6 +100,8 @@ will be expanded to:
 (when (eq system-type 'gnu/linux)
   (push "/home/fourier/Applications/sbt/bin" exec-path)
   (push "/home/fourier/Applications/scala-2.10.3/bin" exec-path))
+(when (eq system-type 'windows-nt)
+  (push "c:/Program Files/Git/bin" exec-path))
 
 ;; reddit api
 (let ((reddit-api-path (substitute-in-file-name "~/Sources/emacs-reddit-api")))
@@ -130,9 +132,6 @@ will be expanded to:
 (require 'ztree)
 (require 'shackle)
 (require 'hi-lock)
-;; helm customizations
-(require 'helm-config)
-(require 'helm-ls-git)
 (require 'ensime)
 (require 'cff)
 
@@ -188,7 +187,7 @@ will be expanded to:
 (global-set-key "\C-p" 'helm-git-grep-at-point)
 (global-set-key "\M-y" 'browse-kill-ring)
 ;; replace M-x with helm
-(global-set-key (kbd "M-x") 'helm-M-x)
+;;(global-set-key (kbd "M-x") 'helm-M-x)
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
@@ -243,6 +242,7 @@ will be expanded to:
 ;; magit
 (global-set-key [S-f1] 'magit-status)
 ;;(global-set-key [f1] 'magit-dispatch-popup)
+(global-set-key [S-f3] 'helm-imenu)
 (global-set-key [C-backspace] 'txm-backward-kill-word)
 
 ;;__________________________________________________________________________
@@ -254,7 +254,7 @@ will be expanded to:
 (transient-mark-mode 1)
 
 ;; Move and animate mouse then a text cursor is nearby
-(mouse-avoidance-mode 'cat-and-mouse)
+(mouse-avoidance-mode 'none)
 
 ;; turn on autocompletion in 'find file' and in 'switch-to-buffer' mode
 (ido-mode t)
@@ -324,14 +324,6 @@ will be expanded to:
 ;; Code display options (highlight parens & colorize)
 (show-paren-mode)
 
-                                        ; parenthesis mode. see mic-paren for description
-(when window-system
-	(paren-activate)     ; activating
-	;; (setq paren-match-face '(underline paren-face))
-	;; (setq paren-sexp-mode t)
-	(setq paren-sexp-mode nil)
-	(setq parse-sexp-ignore-comments t))
-
 
                                         ; set tab size to 2 columns
 (setq-default tab-width 2)
@@ -386,7 +378,7 @@ will be expanded to:
   (subword-mode)
   (define-key python-mode-map (kbd "<C-backspace>") 'subword-backward-kill))
 ;; set proper tab width in Python mode  
-(customize-set-variable 'py-indent-offset 2)
+(customize-set-variable 'py-indent-offset 4)
 ;; fontify class/method documentation
 (customize-set-variable 'py-use-font-lock-doc-face-p t)
 ;; turn off electric comment
@@ -587,6 +579,10 @@ will be expanded to:
 
 ;; nov epub reader customizations
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+;; toggle commets
+(require 'hide-comnt)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load all other configs
 ;; 
@@ -601,6 +597,8 @@ will be expanded to:
 (require 'txm-lisp)
 (require 'txm-apl)
 (require 'txm-haskell)
+(require 'txm-helm)
+(require 'txm-hydra)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

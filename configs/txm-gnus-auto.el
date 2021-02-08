@@ -296,7 +296,8 @@ This code could be later `eval'uated. "
   (eval (txm-gnus-create-message-dont-reply-to-names smtps))
   ;; the first smtp account in the list is the default one
   (setq smtpmail-multi-default-account (caar smtpmail-multi-accounts))
-  (setq user-mail-address (second (car smtpmail-multi-accounts))))
+  (unless user-mail-address
+    (setq user-mail-address (second (car smtpmail-multi-accounts)))))
 
 ;; set the first NNTP account as main
 (let ((nntps (remove-if-not 'txm-gnus-is-nntp (txm-gnus-auth-sources))))

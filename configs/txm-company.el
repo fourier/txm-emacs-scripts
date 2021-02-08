@@ -9,6 +9,9 @@
 (add-hook 'lisp-interaction-mode-hook 'company-mode)
 (add-hook 'sly-mode-hook 'sly-company-mode)
 
+;; remove company move in python-mode
+(add-hook 'python-mode-hook (company-mode -1))
+
 ;; install the company-quickhelp to get the documentation
 (company-quickhelp-mode 1)
 

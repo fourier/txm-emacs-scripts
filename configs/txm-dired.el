@@ -3,7 +3,7 @@
 ;;
 (load "dired-x.el")
 (when (eq system-type 'windows-nt)
-  (load "w32-browser.el"))
+  (load "w32-browser.el" t))
 ;; usefull for coloring of the dired buffer. possibly rewrite this
 ;; in future?
 (load "dired+.el")
@@ -290,6 +290,9 @@ in both of them."
 (setq dired-omit-files "^\\...+$")
 ;; hide hidden files by default
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+
+;; Dired remaps M-u to something else, so restore it here
+(define-key dired-mode-map "\M-u" 'execute-extended-command)
 
 ;; Alt-h toggle between hide/show hidden files
 (define-key dired-mode-map [(C-f5)] 'dired-omit-mode)

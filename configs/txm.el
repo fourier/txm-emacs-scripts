@@ -428,6 +428,7 @@ Only when 2 windows active"
       (setq buffer (car list))))
   (message "Refreshed open files"))
 
+
 (global-set-key [C-down-mouse-1]	'txm-highlight-symbol)
 
 (defface txm-highlight-symbol-face

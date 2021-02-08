@@ -18,8 +18,8 @@
                     (lispworks ("~/Development/lw-console"))))
              inferior-lisp-program "sbcl"))
       ((eq system-type 'gnu/linux)
-       ;;(setq inferior-lisp-program "sbcl")
-       (setq inferior-lisp-program "/home/fourier/Applications/ccl/lx86cl64")))
+       (setq inferior-lisp-program "sbcl")))
+       ;;(setq inferior-lisp-program "/home/fourier/Applications/ccl/lx86cl64")))
 (add-to-list 'auto-mode-alist '("\\.cl" . common-lisp-mode))
 (add-to-list 'auto-mode-alist '("\\.lisp" . common-lisp-mode))
 

@@ -27,7 +27,7 @@
 
 ;; where to get
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("melpa" . "https://melpa.org/")
                          ("org" . "http://orgmode.org/elpa/")))
 ;; initialize packages. Now all we need is require necessary packages
 ;; to have their variables etc availables
@@ -88,7 +88,7 @@ will be expanded to:
 
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+                         ("melpa" . "https://melpa.org/packages/")))
 
 ;; Configuration for MacPorts
 (when (eq system-type 'darwin)
@@ -120,7 +120,6 @@ will be expanded to:
 (require 'qt-pro)
 ;;(require 'w3m-load)
 (require 'cc-mode)
-(require 'mic-paren)
 (require 'recentf)
 (require 'fill-column-indicator)
 ;;(require 'cl)
@@ -503,6 +502,9 @@ will be expanded to:
 
 ;; OCAML mode
 (add-to-list 'auto-mode-alist '("\\.ml" . tuareg-mode))
+
+;; Haxe mode
+(add-to-list 'auto-mode-alist '("\\.hx" . haxe-mode))
 
 ;; MATLAB customizations
 (setq matlab-indent-function t)

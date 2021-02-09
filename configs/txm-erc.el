@@ -2,6 +2,8 @@
 ;; ERC customizations
 ;;
 
+;; set the ERC to fill the entire screen
+(setq erc-fill-column 125)
 
 ;; automatically join freenode
 (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "353" "366"))

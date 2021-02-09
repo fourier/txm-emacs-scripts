@@ -15,6 +15,7 @@
 ;; install the company-quickhelp to get the documentation
 (company-quickhelp-mode 1)
 
+
 ;; cycle through the completion list with TAB
 (eval-after-load 'company
   '(progn
@@ -23,6 +24,16 @@
      (define-key prog-mode-map [tab] 'txm-tab-indent-or-complete)
      (define-key message-mode-map [tab] 'txm-tab-indent-or-complete-message)))
 
+
+(defun txm-remove-company-backend (backend-symbol)
+  "Destructively remove backend from the list of backends"
+  (setq company-backends
+        (cl-remove-if (lambda (l) (typecase l
+                                    (atom (equal l backend-symbol))
+                                    (cons (equal (car l) backend-symbol))))
+                      company-backends)))
+;; remove company-clang backend as we use lsp-mode for C++
+(txm-remove-company-backend 'company-clang)
 
 ;; weight by frequency
 (setq company-transformers '(company-sort-by-occurrence))

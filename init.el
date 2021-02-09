@@ -587,7 +587,9 @@ will be expanded to:
 ;; Load all other configs
 ;; 
 
-(require 'txm)
+(require 'txm-misc)
+(require 'txm-cpp)
+(require 'txm-lsp)
 (require 'txm-erc)
 (require 'txm-gnus)
 (require 'txm-dired)
@@ -599,6 +601,7 @@ will be expanded to:
 (require 'txm-haskell)
 (require 'txm-helm)
 (require 'txm-hydra)
+(require 'txm-ux)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

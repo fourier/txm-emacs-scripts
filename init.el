@@ -10,7 +10,6 @@
                      dash-at-point
                      debbugs
                      enh-ruby-mode
-                     ensime
                      yasnippet
                      python-mode
                      helm
@@ -23,7 +22,9 @@
                      log4j-mode
                      matlab-mode
                      shackle
-                     tup-mode))      
+                     tup-mode
+                     rust-mode
+                     rustic))
 
 ;; where to get
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -132,7 +133,6 @@ will be expanded to:
 (require 'ztree)
 (require 'shackle)
 (require 'hi-lock)
-(require 'ensime)
 (require 'cff)
 
 ;; (load-file "~/.emacs.d/cedet-1.0pre6/contrib/eassist.el")
@@ -533,15 +533,6 @@ will be expanded to:
 (setq-default major-mode 'text-mode)
 
 
-;; Scala and Ensime customization
-;; This step causes the ensime-mode to be started whenever
-;; scala-mode is started for a buffer. You may have to customize this step
-;; if you're not using the standard scala mode.
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-(define-key ensime-mode-map [f7] 'ensime-sbt-do-compile)
-
-;;(setq ensime-default-server-cmd (substitute-in-file-name "~/.emacs.d/ensime/etc/scripts/server"))
-
 ;; Flex/jlex customization
 (autoload 'jflex-mode "jflex-mode" nil t)
 (setq auto-mode-alist (cons '("\\(\\.flex\\|\\.jflex\\|\\.jlex\\|\\.lex\\)\\'" . jflex-mode) auto-mode-alist))
@@ -589,12 +580,12 @@ will be expanded to:
 
 (require 'txm-misc)
 (require 'txm-cpp)
-(require 'txm-lsp)
+;;(require 'txm-lsp)
 (require 'txm-erc)
-(require 'txm-gnus)
-(require 'txm-dired)
+;;(require 'txm-gnus)
+;;(require 'txm-dired)
 (require 'txm-elisp)
-(require 'txm-company)
+;;(require 'txm-company)
 (require 'txm-ztree)
 (require 'txm-lisp)
 (require 'txm-apl)
@@ -602,6 +593,7 @@ will be expanded to:
 (require 'txm-helm)
 (require 'txm-hydra)
 (require 'txm-ux)
+(require 'txm-rust)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Drop occasional customizations into this file

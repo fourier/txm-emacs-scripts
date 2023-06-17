@@ -15,7 +15,7 @@
 (require 'erc-services nil t)
 (erc-services-mode 1)
 (setq erc-prompt-for-nickserv-password nil)
-(setq erc-autojoin-channels-alist '((".*freenode.net" "#emacs" "#lisp")))
+(setq erc-autojoin-channels-alist '((".*libera.chat" "#emacs" "#lisp")))
 
 
 ;; use the .authinfo file
@@ -29,7 +29,7 @@
 
 (defun run-irc ()
   (interactive)
-  (erc :server "irc.freenode.net" :nick "fourier" :password nil))
+  (erc :server "irc.libera.chat" :nick "fourier" :password nil))
 
 ;; Use ctrl up/down to move between users phrases of different users
 (define-key erc-mode-map [C-up] 'txm-goto-previous-phrase)
